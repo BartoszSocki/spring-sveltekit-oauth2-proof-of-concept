@@ -1,17 +1,21 @@
-import { PROD } from '$env/static/private'
+import { transports, format, createLogger } from 'winston'
 
-export function info(message) {
-    console.info(`[*] ${message}`)
-}
-
-export function log(message) {
-    console.log(`[*] ${message}`)
-}
-
-export function debug(message) {
-    if (PROD !== undefined && PROD === 'true') {
-        return
-    }
-
-    log(`[ debug ] ${message}`)
-}
+export const logger = createLogger({
+    level: 'silly',
+    transports: [
+        //
+        // - Write all logs with importance level of `error` or less to `error.log`
+        // - Write all logs with importance level of `info` or less to `combined.log`
+        //
+        // new winston.transports.File({ filename: 'error.log', level: 'error' }),
+        // new winston.transports.File({ filename: 'combined.log' }),
+        new transports.Console({})
+      ],
+      format: format.combine(
+        format.colorize(),
+        format.simple(),
+        format.timestamp({
+          format: "MMM-DD-YYYY HH:mm:ss",
+        }),
+      )
+})

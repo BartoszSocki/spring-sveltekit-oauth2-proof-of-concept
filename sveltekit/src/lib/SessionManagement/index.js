@@ -1,8 +1,8 @@
 import { Session } from "$lib/db";
-import { getRandomValues, randomUUID } from 'crypto'
+import { getRandomValues } from 'crypto'
 import dayjs from "dayjs";
 import { anonymousUserId } from "$lib/db";
-import { debug } from "$lib/Logger";
+import { logger } from "$lib/Logger";
 
 const alpha = 'abcdefghijklkmnopqrstuvwxyz12345ABCDEFGHIJKLKMNOPQRSTUVWXYZ67890'
 
@@ -24,8 +24,7 @@ function canSessionBeRenewed(session) {
 export async function newAnonymousSession({ ipAddress }) {
     const sessionId = generate32CharSessionId()
     const now = dayjs()
-    // const expirationDate = now.add(1, 'hour')
-    const expirationDate = now;
+    const expirationDate = now.add(1, 'hour')
     const expirationDateIdle = now.add(2, 'hour')
 
     const session = await Session.create({
@@ -47,7 +46,7 @@ export async function doesSessionExists(sessionId) {
 export async function renewSession(sessionId) {
     const session = await Session.findByPk(sessionId)
     if (session === null) {
-        debug(`failed attempt to renew session ${sessionId}`)
+        logger.info(`failed attempt to renew session ${sessionId}`)
         throw new Error('cannot find session')
     }
 

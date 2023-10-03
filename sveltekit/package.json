@@ -27,6 +27,7 @@
 		"jwt-decode": "^3.1.2",
 		"pg": "^8.11.3",
 		"pg-hstore": "^2.3.4",
-		"sequelize": "^6.33.0"
+		"sequelize": "^6.33.0",
+		"winston": "^3.10.0"
 	}
 }

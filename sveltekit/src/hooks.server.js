@@ -3,7 +3,7 @@ import { PROD } from '$env/static/private'
 import { sequence } from '@sveltejs/kit/hooks';
 import { Session } from '$lib/db';
 import { renewSession } from './lib/SessionManagement';
-import { debug } from '$lib/Logger'
+import { logger } from '$lib/Logger'
 
 // invalidates session
 async function invalidateSessionHandler({ event, resolve }) {
@@ -17,7 +17,7 @@ async function invalidateSessionHandler({ event, resolve }) {
         return await resolve(event)
     }
 
-    debug('invoked invalidateSessionHandler')
+    logger.debug('invoked invalidateSessionHandler')
 
     let headers = new Headers()
     headers.append('Location', '/')
@@ -36,7 +36,7 @@ async function invalidateSessionHandler({ event, resolve }) {
 
 // renew idle session if possible
 async function idleSessionHandler({ event, resolve }) {
-    debug('invoked idleSessionHandler')
+    logger.debug('invoked idleSessionHandler')
     const sessionId = event.cookies.get('sessionid')
 
     // continue anonymousSessionHandler will take care of it
@@ -45,16 +45,15 @@ async function idleSessionHandler({ event, resolve }) {
     }
 
     try {
-        debug(`trying to renew session: ${sessionId}`)
         const newSession = await renewSession(sessionId)
-        debug(`session renewal successful ${sessionId} -> ${newSession.id}`)
+        logger.info(`session renewal ${sessionId} -> ${newSession.id}`)
 
         event.cookies.set('sessionid', newSession.id, {
             expires: newSession.expirationDateIdle,
             httpOnly: PROD !== undefined && PROD === 'true'
         })
     } catch(e) {
-        debug(`attempt failed with message: ${e.message}`)
+        logger.debug(`session renewal attempt failed with message: ${e.message}`)
     }
 
     const response = await resolve(event)
@@ -63,7 +62,7 @@ async function idleSessionHandler({ event, resolve }) {
 
 // creates session when session is missing
 async function anonymousSessionHandler({ event, resolve }) {
-    debug('invoked anonymousSessionHandler')
+    logger.debug('invoked anonymousSessionHandler')
     const sessionId = event.cookies.get('sessionid')
 
     if (sessionId !== undefined) {
@@ -97,7 +96,7 @@ new Response(null, {
 
 // when session is active, it adds access_token to api requests
 async function activeSessionConsumer({ event, resolve }) {
-    debug('invoked activeSessionConsumer')
+    logger.debug('invoked activeSessionConsumer')
     const sessionId = event.cookies.get('sessionid')
 
     const response = await resolve(event)

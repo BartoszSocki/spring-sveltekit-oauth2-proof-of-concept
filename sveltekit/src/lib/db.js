@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes } from 'sequelize'
 import { DB_USER, DB_PASSWORD, DB_URL, DB_NAME } from '$env/static/private'
-import { info } from '$lib/Logger'
+import { logger } from '$lib/Logger'
 
 export const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_URL}/${DB_NAME}`)
 
@@ -71,16 +71,6 @@ export const Session = sequelize.define('Session', {
             return expirationDate > now
         }
     },
-    // canSessionBeRenewed: {
-    //     type: DataTypes.VIRTUAL,
-    //     get() {
-    //         const now = Date.now()
-    //         const expirationDate = this.expirationDate
-    //         const expirationDateIdle = this.expirationDateIdle
-
-    //         return expirationDate <= now && now < expirationDateIdle
-    //     }
-    // },
     isSessionDead: {
         type: DataTypes.VIRTUAL,
         get() {
@@ -95,10 +85,10 @@ export const Session = sequelize.define('Session', {
     underscored: true,
     hooks: {
         afterCreate: (session, options) => {
-            info(`session created: ${session.id} for user: ${session.userId}, expires at: ${session.expirationDate}`)
+            logger.info(`session created: ${session.id} for user: ${session.userId}, expires at: ${session.expirationDate}`)
         },
         beforeDestroy: (session, options) => {
-            info(`session deleted: ${session.id} for user: ${session.userId}`)
+            logger.info(`session deleted: ${session.id} for user: ${session.userId}`)
         }
     }
 })
