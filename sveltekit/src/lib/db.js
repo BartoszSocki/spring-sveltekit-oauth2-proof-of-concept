@@ -54,6 +54,9 @@ export const Session = sequelize.define('Session', {
             key: 'id'
         }
     },
+    state: {
+        type: DataTypes.TEXT
+    },
     expirationDate: {
         type: DataTypes.DATE,
         allowNull: false

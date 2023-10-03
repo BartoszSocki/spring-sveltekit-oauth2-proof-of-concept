@@ -2,7 +2,6 @@ import { Session } from "$lib/db";
 import { getRandomValues } from 'crypto'
 import dayjs from "dayjs";
 import { anonymousUserId } from "$lib/db";
-import { logger } from "$lib/Logger";
 
 const alpha = 'abcdefghijklkmnopqrstuvwxyz12345ABCDEFGHIJKLKMNOPQRSTUVWXYZ67890'
 
@@ -46,7 +45,6 @@ export async function doesSessionExists(sessionId) {
 export async function renewSession(sessionId) {
     const session = await Session.findByPk(sessionId)
     if (session === null) {
-        logger.info(`failed attempt to renew session ${sessionId}`)
         throw new Error('cannot find session')
     }
 
@@ -70,4 +68,19 @@ export async function renewSession(sessionId) {
     })
 
     return await Session.findByPk(newSessionId)
+}
+
+async function saveStateForSession(sessionId, state) {
+    await Session.update({ state }, { where: { id: sessionId } })
+}
+
+export async function generateAndSaveStateForSession(sessionId) {
+    const state = generate32CharSessionId() + generate32CharSessionId()
+    await saveStateForSession(sessionId, state)
+    return state
+}
+
+export async function isStateParameterValidForSession(sessionId, state) {
+    const session = await Session.findByPk(sessionId)
+    return session !== undefined && session !== null && session.state === state
 }

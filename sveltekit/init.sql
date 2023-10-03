@@ -15,6 +15,8 @@ create table if not exists sessions (
 	expiration_date_idle timestamp with time zone,
 	user_id uuid not null,
 
+	state text null,
+
 	created_at timestamp,
 	updated_at timestamp,
 

@@ -1,14 +1,26 @@
-import { CLIENT_ID, CLIENT_SECRET, PROD } from "$env/static/private"
-import jwtDecode from "jwt-decode"
+import { CLIENT_ID, CLIENT_SECRET, PROD } from '$env/static/private'
+import jwtDecode from 'jwt-decode'
 import { User, Session } from '$lib/db.js'
 import { logger } from '$lib/Logger'
+import { isStateParameterValidForSession } from '$lib/SessionManagement'
 
 export async function GET({ cookies, url }) {
-    const code = url.searchParams.get("code")
+    const code = url.searchParams.get('code')
     const sessionId = cookies.get('sessionid')
-    const redirectURL = new URL("http://localhost:3000")
+    const redirectURL = new URL('http://localhost:3000')
 
-    console.log(url)
+    const state = url.searchParams.get('state')
+    const isStateCorrect = isStateParameterValidForSession(sessionId, state)
+
+    logger.debug(isStateCorrect ? 'states are the same' : 'states are different')
+
+    if (!isStateCorrect) {
+        logger.info('not good :(')
+        
+        redirectURL.searchParams.set('success', 'false')
+        redirectURL.searchParams.set('error', 'states_missmatch')
+        return Response.redirect(redirectURL)
+    } 
 
     let response = null
 
@@ -16,7 +28,7 @@ export async function GET({ cookies, url }) {
         response = await getAccessToken(code)
         console.log(response)
     } catch (e) {
-        redirectURL.searchParams.set("success", "false")
+        redirectURL.searchParams.set('success', 'false')
         return Response.redirect(redirectURL)
     }
     
@@ -31,22 +43,22 @@ export async function GET({ cookies, url }) {
     // 2. change session id and log it
     const session = await Session.findByPk(sessionId)
 
-    redirectURL.searchParams.set("success", "true")
+    redirectURL.searchParams.set('success', 'true')
     return Response.redirect(redirectURL)
 }
 
 async function getAccessToken(code) {
     const basicAuth = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`)
 
-    const url = new URL("http://localhost:8080/oauth2/token")
-    url.searchParams.set("grant_type", "authorization_code")
-    url.searchParams.set("code", code)
-    url.searchParams.set("redirect_uri", "http://localhost:3000/login/oauth2/code/client")
+    const url = new URL('http://localhost:8080/oauth2/token')
+    url.searchParams.set('grant_type', 'authorization_code')
+    url.searchParams.set('code', code)
+    url.searchParams.set('redirect_uri', 'http://localhost:3000/login/oauth2/code/client')
 
     const res = await fetch(url, {
-        method: "POST",
+        method: 'POST',
         headers: {
-            "Authorization": `Basic ${basicAuth}`
+            'Authorization': `Basic ${basicAuth}`
         }
     })
 
