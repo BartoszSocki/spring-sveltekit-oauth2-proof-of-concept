@@ -1,11 +1,14 @@
 import { CLIENT_ID, CLIENT_SECRET, PROD } from "$env/static/private"
 import jwtDecode from "jwt-decode"
 import { User, Session } from '$lib/db.js'
+import { logger } from '$lib/Logger'
 
 export async function GET({ cookies, url }) {
     const code = url.searchParams.get("code")
     const sessionId = cookies.get('sessionid')
     const redirectURL = new URL("http://localhost:3000")
+
+    console.log(url)
 
     let response = null
 
@@ -23,10 +26,10 @@ export async function GET({ cookies, url }) {
     // 1. save user in db
     const email = jwtDecode(accessToken)['sub']
     const user = await saveUserIfNotPresent({ email, refreshToken, accessToken })
+    logger.debug(user)
 
     // 2. change session id and log it
     const session = await Session.findByPk(sessionId)
-    
 
     redirectURL.searchParams.set("success", "true")
     return Response.redirect(redirectURL)
@@ -53,12 +56,13 @@ async function getAccessToken(code) {
 
 async function saveUserIfNotPresent({ email, accessToken, refreshToken }) {
     const possibleUsers = await User.findAll({ where: { email } })
-    console.log(possibleUsers)
 
     if (possibleUsers !== null && possibleUsers.length !== 0) {
+        logger.debug(`user with email: ${possibleUsers.at(0).email} already exists`)
         return possibleUsers.at(0)
     }
 
+    logger.debug(`creating new user`)
     const user = User.create({
         email,
         accessToken,

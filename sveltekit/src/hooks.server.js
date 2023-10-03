@@ -84,15 +84,9 @@ async function anonymousSessionHandler({ event, resolve }) {
         httpOnly: PROD !== undefined && PROD === 'true'
     })
 
-    // TODO: start login flow
-
     const response = await resolve(event)
     return response
 }
-
-new Response(null, {
-    
-})
 
 // when session is active, it adds access_token to api requests
 async function activeSessionConsumer({ event, resolve }) {
