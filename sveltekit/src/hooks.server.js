@@ -1,8 +1,8 @@
 import { newAnonymousSession } from '$lib/SessionManagement';
 import { PROD } from '$env/static/private'
 import { sequence } from '@sveltejs/kit/hooks';
-import { Session } from '$lib/db';
-import { renewSession } from './lib/SessionManagement';
+import { Session, User } from '$lib/db';
+import { SessionStatus, getSessionStatus, renewSession, isSessionAnonymous } from './lib/SessionManagement';
 import { logger } from '$lib/Logger'
 
 // invalidates session
@@ -89,17 +89,28 @@ async function anonymousSessionHandler({ event, resolve }) {
 }
 
 // when session is active, it adds access_token to api requests
-async function activeSessionConsumer({ event, resolve }) {
-    logger.debug('invoked activeSessionConsumer')
+export async function handleFetch({ request, event, fetch }) {
+    logger.debug(`intercepted fetch request to ${request.url.toString()}`)
     const sessionId = event.cookies.get('sessionid')
 
-    const response = await resolve(event)
-    return response
+    const sessionStatus = await getSessionStatus(sessionId)
+    const isSessionActive = sessionStatus === SessionStatus.Active
+    const isUserAnonymous = await isSessionAnonymous(sessionId)
+
+    if (isSessionActive && !isUserAnonymous) {
+        const session = await Session.findByPk(sessionId)
+        const user = await User.findByPk(session.userId)
+        const accessToken = user.accessToken
+
+        logger.debug('adding access token to request')
+        request.headers.set('Authorization', `Bearer ${accessToken}`)
+    }
+
+    return fetch(request)
 }
 
 export const handle = sequence(
     invalidateSessionHandler,
     idleSessionHandler,
-    anonymousSessionHandler,
-    activeSessionConsumer
+    anonymousSessionHandler
 )

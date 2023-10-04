@@ -2,21 +2,19 @@ import { CLIENT_ID, CLIENT_SECRET, PROD } from '$env/static/private'
 import jwtDecode from 'jwt-decode'
 import { User, Session } from '$lib/db.js'
 import { logger } from '$lib/Logger'
-import { isStateParameterValidForSession } from '$lib/SessionManagement'
+import { isStateParameterValidForSession, rotateSession } from '$lib/SessionManagement'
 
 export async function GET({ cookies, url }) {
     const code = url.searchParams.get('code')
     const sessionId = cookies.get('sessionid')
     const redirectURL = new URL('http://localhost:3000')
-
     const state = url.searchParams.get('state')
-    const isStateCorrect = isStateParameterValidForSession(sessionId, state)
 
-    logger.debug(isStateCorrect ? 'states are the same' : 'states are different')
+    const isStateCorrect = await isStateParameterValidForSession(sessionId, state)
 
     if (!isStateCorrect) {
-        logger.info('not good :(')
-        
+        logger.debug('oauth2 states are not the same redirecting to home route with error')
+
         redirectURL.searchParams.set('success', 'false')
         redirectURL.searchParams.set('error', 'states_missmatch')
         return Response.redirect(redirectURL)
@@ -40,13 +38,22 @@ export async function GET({ cookies, url }) {
     // 1. save user in db
     const email = jwtDecode(accessToken)['sub']
     const user = await saveUserIfNotPresent({ email, refreshToken, accessToken })
-    logger.debug(user)
 
-    // 2. change session id and log it
-    const session = await Session.findByPk(sessionId)
+    // 2. rotate session
+    const session = await rotateSession({ oldSessionId: sessionId, userId: user.id })
+    // const session = await Session.findByPk(sessionId)
 
     redirectURL.searchParams.set('success', 'true')
-    return Response.redirect(redirectURL)
+    const headers = new Headers()
+    headers.append('Location', redirectURL.toString())
+    headers.append('Set-Cookie', `sessionid=${session.id}; expires=${session.expirationDateIdle.toUTCString()}; Path=/`)
+
+    const redirect = new Response(null, {
+        status: 302,
+        headers
+    })
+    
+    return redirect
 }
 
 async function getAccessToken(code) {
@@ -57,15 +64,20 @@ async function getAccessToken(code) {
     url.searchParams.set('code', code)
     url.searchParams.set('redirect_uri', 'http://localhost:3000/login/oauth2/code/client')
 
-    const res = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Basic ${basicAuth}`
-        }
-    })
+    try {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Basic ${basicAuth}`
+            }
+        })
 
-    const json = await res.json()
-    return json
+        const json = await res.json()
+        return json
+    } catch (e) {
+        logger.warn(`code exchange failed with message: ${e.toString()}`)
+        return null
+    }
 }
 
 async function saveUserIfNotPresent({ email, accessToken, refreshToken }) {
