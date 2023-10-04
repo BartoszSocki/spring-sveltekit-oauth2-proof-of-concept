@@ -120,7 +120,7 @@ public class AppConfig {
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .redirectUri("http://localhost:3000/login/oauth2/code/client")
                 .postLogoutRedirectUri("http://localhost:3000")
-                .scope(OidcScopes.EMAIL)
+//                .scope(OidcScopes.EMAIL)
                 .scope("test.read")
                 .tokenSettings(tokenSettings())
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
