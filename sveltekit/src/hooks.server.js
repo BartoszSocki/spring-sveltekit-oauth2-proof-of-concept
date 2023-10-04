@@ -102,7 +102,7 @@ export async function handleFetch({ request, event, fetch }) {
         const user = await User.findByPk(session.userId)
         const accessToken = user.accessToken
 
-        logger.debug('adding access token to request')
+        logger.debug('adding access token to API request')
         request.headers.set('Authorization', `Bearer ${accessToken}`)
     }
 

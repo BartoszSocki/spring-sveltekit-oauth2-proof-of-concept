@@ -2,7 +2,6 @@ import { Session } from '$lib/db';
 import { getRandomValues } from 'crypto'
 import dayjs from 'dayjs';
 import { anonymousUserId } from '$lib/db';
-import { logger } from '$lib/Logger'
 
 const alpha = 'abcdefghijklkmnopqrstuvwxyz12345ABCDEFGHIJKLKMNOPQRSTUVWXYZ67890'
 
@@ -141,15 +140,11 @@ async function saveStateForSession(sessionId, state) {
 
 export async function generateAndSaveStateForSession(sessionId) {
     const state = generate32CharSessionId() + generate32CharSessionId()
-
-    logger.debug(`session state setting for: ${sessionId}, state: ${state}`)
     await saveStateForSession(sessionId, state)
     return state
 }
 
 export async function isStateParameterValidForSession(sessionId, state) {
-    logger.debug(`session state retrieval for: ${sessionId}, state: ${state}`)
-
     const session = await Session.findByPk(sessionId)
     return session !== undefined && session !== null && session.state === state
 }

@@ -1,21 +1,18 @@
 import { transports, format, createLogger } from 'winston'
+import { LOG_LEVEL } from '$env/static/private'
 
 export const logger = createLogger({
-    level: 'silly',
+    level: LOG_LEVEL || 'info',
+    defaultMeta: {
+      service: 'logger'
+    },
     transports: [
-        //
-        // - Write all logs with importance level of `error` or less to `error.log`
-        // - Write all logs with importance level of `info` or less to `combined.log`
-        //
-        // new winston.transports.File({ filename: 'error.log', level: 'error' }),
-        // new winston.transports.File({ filename: 'combined.log' }),
         new transports.Console({})
       ],
       format: format.combine(
-        format.colorize(),
-        format.simple(),
-        format.timestamp({
-          format: "MMM-DD-YYYY HH:mm:ss",
-        }),
-      )
+        format.colorize({ level: true }),
+        format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
+        format.align(),
+        format.printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`)
+        ),
 })
