@@ -28,6 +28,8 @@ export async function GET({ cookies, url }) {
         response = await getAccessToken(code)
         console.log(response)
     } catch (e) {
+        logger.debug('failed to retrieve access token')
+
         redirectURL.searchParams.set('success', 'false')
         return Response.redirect(redirectURL)
     }

@@ -73,8 +73,8 @@ public class AppConfig {
                 .oauth2Login(x -> x
                         .authorizationEndpoint(w -> w.baseUri("/oauth2/login"))
                         .redirectionEndpoint(w -> w.baseUri("/oauth2/callback/**"))
-                        .successHandler(authenticationSuccessHandler())
-                ).build();
+                        .successHandler(authenticationSuccessHandler()))
+                .build();
     }
 
     AuthenticationSuccessHandler authenticationSuccessHandler() {
@@ -121,7 +121,7 @@ public class AppConfig {
                 .redirectUri("http://localhost:3000/login/oauth2/code/client")
                 .postLogoutRedirectUri("http://localhost:3000")
                 .scope(OidcScopes.EMAIL)
-                .scope("todos.read")
+                .scope("test.read")
                 .tokenSettings(tokenSettings())
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
                 .build();

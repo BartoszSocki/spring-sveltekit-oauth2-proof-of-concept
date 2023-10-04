@@ -10,7 +10,7 @@ export function GET({ url, cookies }) {
     redirectURL.searchParams.set('response_type', 'code')
     redirectURL.searchParams.set('client_id', CLIENT_ID)
     redirectURL.searchParams.set('redirect_uri', REDIRECT_URI)
-    redirectURL.searchParams.set('scope', ['email', 'todos.read'].join(' '))
+    redirectURL.searchParams.set('scope', ['email', 'test.read'].join(' '))
     redirectURL.searchParams.set('state', state)
     
     // why no Response.redirect? because we want to change headers
