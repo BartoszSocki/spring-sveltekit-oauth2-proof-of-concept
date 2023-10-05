@@ -1,4 +1,4 @@
-import { invalidateSession, findSessionById } from '$lib/SessionManagement';
+import { invalidateSession } from '$lib/SessionManagement';
 import { logger } from '$lib/Logger'
 
 export async function logoutHandler({ event, resolve }) {

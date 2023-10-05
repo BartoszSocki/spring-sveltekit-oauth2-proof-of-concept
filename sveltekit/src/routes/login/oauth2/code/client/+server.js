@@ -41,6 +41,7 @@ export async function GET({ cookies, url }) {
 
     // 2. rotate session
     const session = await rotateSession({ oldSessionId: sessionId, userId: user.id })
+    logger.info(`user logged in, user: ${user.id}, session rotation: ${sessionId} -> ${session.id}`)
     // const session = await Session.findByPk(sessionId)
 
     redirectURL.searchParams.set('success', 'true')

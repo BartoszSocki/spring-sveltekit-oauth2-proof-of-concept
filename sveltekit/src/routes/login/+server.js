@@ -6,6 +6,10 @@ export async function GET({ url, cookies }) {
     let redirectURL = new URL('http://localhost:8080/oauth2/authorize')
     const sessionId = cookies.get('sessionid')
 
+    // what will happen if session is missing or session is not existing?
+
+    console.log(sessionId)
+
     const state = await generateAndSaveStateForSession(sessionId)
 
     redirectURL.searchParams.set('response_type', 'code')
