@@ -2,9 +2,9 @@ import { newAnonymousSession } from '$lib/SessionManagement';
 import { PROD } from '$env/static/private'
 import { sequence } from '@sveltejs/kit/hooks';
 import { Session } from '$lib/db';
-import { SessionStatus, getSessionStatus, renewSession, isSessionAnonymous } from './lib/SessionManagement';
-import { logger } from '$lib/Logger'
+import { SessionStatus, getSessionStatus, renewSession, isSessionAnonymous } from '$lib/SessionManagement';
 import { findUserById } from '$lib/UserService';
+import { logger } from '$lib/Logger'
 
 // invalidates session
 async function invalidateSessionHandler({ event, resolve }) {
@@ -100,7 +100,7 @@ export async function handleFetch({ request, event, fetch }) {
 
     if (isSessionActive && !isUserAnonymous) {
         const session = await Session.findByPk(sessionId)
-        const user = await findUserById(session.userId)
+        const user = await findUserById({ id: session.userId })
         const accessToken = user.accessToken
 
         logger.debug('adding access token to API request')

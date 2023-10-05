@@ -1,8 +1,8 @@
-import { CLIENT_ID, CLIENT_SECRET, PROD } from '$env/static/private'
+import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private'
 import jwtDecode from 'jwt-decode'
-import { User, Session } from '$lib/db.js'
 import { logger } from '$lib/Logger'
 import { isStateParameterValidForSession, rotateSession } from '$lib/SessionManagement'
+import { createUser, findUserByEmail } from '$lib/UserService'
 
 export async function GET({ cookies, url }) {
     const code = url.searchParams.get('code')
@@ -81,21 +81,17 @@ async function getAccessToken(code) {
 }
 
 async function saveUserIfNotPresent({ email, accessToken, refreshToken }) {
-    const possibleUsers = await User.findAll({ where: { email } })
+    const possibleUser = await findUserByEmail({ email })
 
-    if (possibleUsers !== null && possibleUsers.length !== 0) {
-        logger.debug(`user with email: ${possibleUsers.at(0).email} already exists`)
-        return possibleUsers.at(0)
+    if (possibleUser !== null) {
+        logger.debug(`user with email: ${possibleUser.email} already exists`)
+        return possibleUser
     }
 
-    logger.debug(`creating new user`)
-    const user = User.create({
-        email,
-        accessToken,
-        refreshToken
-    }, {
-       skip: [PROD !== undefined && PROD === 'true' ? '' : 'email'] 
+    const user = await createUser({
+        email, accessToken, refreshToken
     })
-    
+
+    logger.debug(`created new user email: ${user.email}, id: ${user.id}`)
     return user
 }

@@ -12,7 +12,7 @@ export async function createUser({ email, accessToken, refreshToken }) {
 }
 
 export async function findUserByEmail({ email }) {
-    const users = await User.find({ where: { email } })
+    const users = await User.findAll({ where: { email } })
     if (users === null || users.length === 0) {
         return null
     }
