@@ -1,6 +1,6 @@
 import { logger } from '$lib/Logger'
 
-export async function load({ params,fetch }) {
+export async function load({ params, fetch }) {
     try {
         const response = await fetch('http://localhost:9090/api/test')
         return await response.json()
