@@ -1,7 +1,6 @@
 import { newAnonymousSession } from '$lib/SessionManagement';
 import { PROD } from '$env/static/private'
 import { sequence } from '@sveltejs/kit/hooks';
-// import { Session } from '$lib/db';
 import { SessionStatus, getSessionStatus, renewSession, isSessionAnonymous, findSessionById } from '$lib/SessionManagement';
 import { findUserById } from '$lib/UserService';
 import { logger } from '$lib/Logger'
@@ -41,7 +40,7 @@ async function idleSessionHandler({ event, resolve }) {
     const sessionId = event.cookies.get('sessionid')
 
     // continue anonymousSessionHandler will take care of it
-    if (sessionId === undefined) {
+    if (sessionId === undefined || sessionId === null) {
         return await resolve(event)
     }
 
