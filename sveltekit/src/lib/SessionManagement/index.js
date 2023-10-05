@@ -27,6 +27,10 @@ function configureExpiration() {
     }
 }
 
+export async function findSessionById(sessionId) {
+    return await Session.findByPk(sessionId)
+}
+
 export async function newAnonymousSession({ ipAddress }) {
     const id = generate32CharSessionId()
 
@@ -56,7 +60,7 @@ export async function rotateSession({ oldSessionId, userId, ipAddress }) {
 }
 
 export async function doesSessionExists(sessionId) {
-    const session = await Session.findByPk(sessionId)
+    const session = await findSessionById(sessionId)
     return session !== null
 }
 
@@ -83,7 +87,7 @@ function isSessionDead(session) {
 }
 
 export async function isSessionAnonymous(sessionId) {
-    const session = await Session.findByPk(sessionId)
+    const session = await findSessionById(sessionId)
     return session.userId === anonymousUserId
 }
 
@@ -105,7 +109,7 @@ export async function getSessionStatus(sessionId) {
 }
 
 export async function renewSession(sessionId) {
-    const session = await Session.findByPk(sessionId)
+    const session = await findSessionById(sessionId)
 
     if (session === null) {
         throw new Error('cannot find session')
@@ -140,6 +144,6 @@ export async function generateAndSaveStateForSession(sessionId) {
 }
 
 export async function isStateParameterValidForSession(sessionId, state) {
-    const session = await Session.findByPk(sessionId)
+    const session = await findSessionById(sessionId)
     return session !== undefined && session !== null && session.state === state
 }
