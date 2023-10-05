@@ -6,4 +6,5 @@
 
 <section>
     <h1>Test</h1>
+    <p>status: {data.success}</p>
 </section>

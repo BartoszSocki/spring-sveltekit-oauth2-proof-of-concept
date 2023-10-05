@@ -93,6 +93,7 @@ export async function isSessionAnonymous(sessionId) {
 
 export async function getSessionStatus(sessionId) {
     const session = await Session.findByPk(sessionId)
+
     if (isSessionActive(session)) {
         return SessionStatus.Active
     }
@@ -108,6 +109,11 @@ export async function getSessionStatus(sessionId) {
     return SessionStatus.NotExists
 }
 
+export async function invalidateSession(sessionId) {
+    const session = await findSessionById(sessionId)
+    await session.destroy()
+}
+
 export async function renewSession(sessionId) {
     const session = await findSessionById(sessionId)
 
@@ -121,6 +127,7 @@ export async function renewSession(sessionId) {
     }
 
     const newSessionId = generate32CharSessionId()
+
     await Session.update({
         id: newSessionId,
         ...configureExpiration()
