@@ -3,35 +3,38 @@ import { getRandomValues } from 'crypto'
 import dayjs from 'dayjs';
 import { anonymousUserId } from '$lib/db';
 
-const alpha = 'abcdefghijklkmnopqrstuvwxyz12345ABCDEFGHIJKLKMNOPQRSTUVWXYZ67890'
+const base64Alphabet = 'abcdefghijklkmnopqrstuvwxyz12345ABCDEFGHIJKLKMNOPQRSTUVWXYZ67890'
 
-function generate32CharSessionId() {
-    const entropy = new Uint8Array(32)
+function generateRandomBase64StringOfLength(length) {
+    const entropy = new Uint8Array(length)
     getRandomValues(entropy)
 
-    return Array.from(entropy).map(i => i >> 2).map(i => alpha.charAt(i)).join('')
+    return Array.from(entropy).map(i => i >> 2).map(i => base64Alphabet.charAt(i)).join('')
 }
 
-function canSessionBeRenewed(session) {
-    const now = Date.now()
-    const expirationDate = session.expirationDate
-    const expirationDateIdle = session.expirationDateIdle
-
-    return expirationDate <= now && now < expirationDateIdle
+function generate32CharSessionId() {
+    return generateRandomBase64StringOfLength(32)
 }
 
-export async function newAnonymousSession({ ipAddress }) {
-    const sessionId = generate32CharSessionId()
+function configureExpiration() {
     const now = dayjs()
     const expirationDate = now.add(1, 'hour').toDate()
     const expirationDateIdle = now.add(2, 'hour').toDate()
 
-    const session = await Session.create({
-        id: sessionId,
-        ipAddress,
-        userId: anonymousUserId,
+    return {
         expirationDate,
         expirationDateIdle
+    }
+}
+
+export async function newAnonymousSession({ ipAddress }) {
+    const id = generate32CharSessionId()
+
+    const session = await Session.create({
+        id,
+        ipAddress,
+        userId: anonymousUserId,
+        ...configureExpiration()
     })
 
     return session
@@ -39,18 +42,14 @@ export async function newAnonymousSession({ ipAddress }) {
 
 export async function rotateSession({ oldSessionId, userId, ipAddress }) {
     const newSessionId = generate32CharSessionId()
-    const now = dayjs()
-    const expirationDate = now.add(1, 'hour').toDate()
-    const expirationDateIdle = now.add(2, 'hour').toDate()
 
     await Session.destroy({ where: { id: oldSessionId } })
 
     const session = await Session.create({
         id: newSessionId,
-        userId: userId,
-        ipAddress: ipAddress ?? null,
-        expirationDate,
-        expirationDateIdle
+        userId,
+        ipAddress,
+        ...configureExpiration()
     })
 
     return session
@@ -60,7 +59,6 @@ export async function doesSessionExists(sessionId) {
     const session = await Session.findByPk(sessionId)
     return session !== null
 }
-
 
 export const SessionStatus = {
     Active: 'Active',
@@ -76,12 +74,12 @@ function isSessionActive(session) {
 
 function isSessionIdle(session) {
     const now = dayjs()
-    return session !== null && now.isSameOrAfter(session.expirationDate) && now.isBefore(session.expirationDateIdle)
+    return session !== null && now.isAfter(session.expirationDate) && now.isBefore(session.expirationDateIdle)
 }
 
 function isSessionDead(session) {
     const now = dayjs()
-    return session !== null && now.isSameOrAfter(session.expirationDateIdle)
+    return session !== null && now.isAfter(session.expirationDateIdle)
 }
 
 export async function isSessionAnonymous(sessionId) {
@@ -108,23 +106,20 @@ export async function getSessionStatus(sessionId) {
 
 export async function renewSession(sessionId) {
     const session = await Session.findByPk(sessionId)
+
     if (session === null) {
         throw new Error('cannot find session')
     }
 
-    if (!canSessionBeRenewed(session)) {
+    const sessionStatus = await getSessionStatus(sessionId)
+    if (sessionStatus !== SessionStatus.Idle) {
         throw new Error('session is not in idle state')
     }
 
-    const now = dayjs()
-    const expirationDate = now.add(1, 'hour').toDate()
-    const expirationDateIdle = now.add(2, 'hour').toDate()
     const newSessionId = generate32CharSessionId()
-
-    const newSession = await Session.update({
+    await Session.update({
         id: newSessionId,
-        expirationDate,
-        expirationDateIdle
+        ...configureExpiration()
     }, {
         where: {
             id: sessionId
@@ -139,7 +134,7 @@ async function saveStateForSession(sessionId, state) {
 }
 
 export async function generateAndSaveStateForSession(sessionId) {
-    const state = generate32CharSessionId() + generate32CharSessionId()
+    const state = generateRandomBase64StringOfLength(64)
     await saveStateForSession(sessionId, state)
     return state
 }
