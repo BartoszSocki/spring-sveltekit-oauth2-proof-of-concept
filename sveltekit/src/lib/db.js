@@ -27,6 +27,7 @@ export const User = sequelize.define('User', {
         type: DataTypes.TEXT
     }
 }, {
+    schema: 'sveltekit',
     tableName: 'users',
     underscored: true
 });
@@ -84,6 +85,7 @@ export const Session = sequelize.define('Session', {
         }
     }
 }, {
+    schema: 'sveltekit',
     tableName: 'sessions',
     underscored: true,
     hooks: {

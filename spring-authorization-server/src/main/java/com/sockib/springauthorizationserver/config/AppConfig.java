@@ -1,6 +1,7 @@
 package com.sockib.springauthorizationserver.config;
 
 import com.sockib.springauthorizationserver.handlers.FederatedIdentityAuthenticationSuccessHandler;
+import com.sockib.springauthorizationserver.handlers.OidcUserSuccessAuthenticationConsumer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -12,7 +13,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
-import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
@@ -73,23 +73,17 @@ public class AppConfig {
                 .oauth2Login(x -> x
                         .authorizationEndpoint(w -> w.baseUri("/oauth2/login"))
                         .redirectionEndpoint(w -> w.baseUri("/oauth2/callback/**"))
-                        .successHandler(authenticationSuccessHandler()))
+                        .successHandler(oidcUserAuthenticationSuccessHandler()))
                 .build();
     }
 
-    AuthenticationSuccessHandler authenticationSuccessHandler() {
-        var federatedIdentityAuthenticationSuccessHandler = new FederatedIdentityAuthenticationSuccessHandler();
-        federatedIdentityAuthenticationSuccessHandler.setOidcUserHandler(oidcUser -> {
-                var email = (String) oidcUser.getClaims().get("email");
-                var user = User.builder()
-                        .username(email)
-                        .password("[]")
-                        .roles("USER")
-                        .build();
+    AuthenticationSuccessHandler oidcUserAuthenticationSuccessHandler() {
+        var oidcSuccessAuthenticationConsumer = new OidcUserSuccessAuthenticationConsumer(userDetailsManager());
 
-                userDetailsManager().createUser(user);
-        });
-        return federatedIdentityAuthenticationSuccessHandler;
+        var authenticationSuccessHandler = new FederatedIdentityAuthenticationSuccessHandler();
+        authenticationSuccessHandler.setOidcUserConsumer(oidcSuccessAuthenticationConsumer);
+
+        return authenticationSuccessHandler;
     }
 
     @Bean

@@ -20,16 +20,19 @@ public class FederatedIdentityAuthenticationSuccessHandler implements Authentica
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        if (authentication instanceof OAuth2AuthenticationToken) {
-            if (authentication.getPrincipal() instanceof OidcUser) {
-                oidcUserHandler.accept((OidcUser) authentication.getPrincipal());
-            }
+        if (!(authentication instanceof OAuth2AuthenticationToken)) {
+            delegate.onAuthenticationSuccess(request, response, authentication);
+            return;
+        }
+
+        if (authentication.getPrincipal() instanceof OidcUser) {
+            oidcUserHandler.accept((OidcUser) authentication.getPrincipal());
         }
 
         delegate.onAuthenticationSuccess(request, response, authentication);
     }
 
-    public void setOidcUserHandler(Consumer<OidcUser> oidcUserHandler) {
+    public void setOidcUserConsumer(Consumer<OidcUser> oidcUserHandler) {
         this.oidcUserHandler = oidcUserHandler;
     }
 

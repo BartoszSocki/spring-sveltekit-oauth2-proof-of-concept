@@ -4,11 +4,12 @@ services:
     container_name: postgress
     environment:
       POSTGRES_PASSWORD: password
-      POSTGRES_USER: app
+      POSTGRES_USER: admin
     ports:
       - 5432:5432
     volumes:
-      - ./sveltekit/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres:/docker-entrypoint-initdb.d
+      # - ./sveltekit/init.sql:/docker-entrypoint-initdb.d/init.sql
       # - pgdata:/var/lib/postgresql/data
 # volumes:
 #   pgdata:
