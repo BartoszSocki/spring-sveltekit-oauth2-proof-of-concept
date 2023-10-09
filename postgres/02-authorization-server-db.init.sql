@@ -36,3 +36,10 @@ create table if not exists authorization_server.user_role (
 grant all privileges on schema authorization_server to authorization_server;
 grant all privileges on database authorization_server_db to authorization_server;
 grant all privileges on all tables in schema authorization_server to authorization_server;
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+insert into authorization_server.users (id, email, password) values (1, 'user', 'password');
+insert into authorization_server.roles (id, name) values (1, 'USER');
+insert into authorization_server.user_role (user_id, role_id) values (1, 1);
+
