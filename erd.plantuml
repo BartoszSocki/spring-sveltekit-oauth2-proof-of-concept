@@ -1,0 +1,115 @@
+@startuml
+' skinparam linetype ortho
+
+entity "Product" as product {
+  *id : number <<generated>>
+  *creationDate : date
+  *updateDate : date
+  *lastSaleDate : date
+  --
+  *seller : number <<FK>>
+  *productDetails : number <<FK>>
+  *name : text
+  *quantity : number
+  *price : Price
+}
+
+entity "ProductDetails" as productDetails {
+  *id : number <<generated>>
+  --
+  *description : string
+  *productId : number <<FK>>
+}
+
+entity "ProductDetails_Category" as productDetails_Category {
+  *id : number <<generated>>
+  --
+  *productDetailsId : number <<FK>>
+  *categoryId : number <<FK>>
+}
+
+entity "ProductDetails_Tag" as productDetails_Tag {
+  *id : number <<generated>>
+  --
+  *productDetailsId : number <<FK>>
+  *tagId : number <<FK>>
+}
+
+entity "Tag" as tag {
+  *id : number <<generated>>
+  --
+  *name : string
+}
+
+entity "Category" as category {
+  *id : number <<generated>>
+  --
+  *name : string
+}
+
+entity "Review" as review {
+  *id : number <<generated>>
+  *creationDate : date
+  *updateDate : date
+  --
+  *fiveStarScore : number
+  *description : string
+}
+
+entity "Review_Product" as review_Product {
+  *id : number <<generated>>
+  --
+  *reviewId : number <<FK>>
+  *productId : number <<FK>>
+}
+
+entity "Review_User" as review_User {
+  *id : number <<generated>>
+  --
+  *reviewId : number <<FK>>
+  *userId : number <<FK>>
+}
+
+entity "User" as user {
+  *id : number <<generated>>
+  *creationDate : date  
+  --
+  *username : string
+  *avgFiveStarScore : number
+}
+
+entity "Order" as order {
+  *id : number <<generated>>
+  *creationDate : date
+  *updateDate : date
+  --
+  *productId : number <<FK>>
+  *lineItemId : number <<FK>>
+  *sellerId : number <<FK>>
+  *buyerId : number <<FK>>
+  *address : Address
+  *status : string
+}
+
+entity "LineItem" as lineItem {
+  *id : number <<generated>>
+  *creationDate : date
+  *updateDate : date
+  --
+  *price : Price
+}
+
+productDetails_Tag ||--o{ tag
+productDetails_Tag ||--o{ productDetails
+productDetails_Category ||--o{ category
+productDetails_Category ||--o{ productDetails
+productDetails ||--|| product
+review_Product ||--|| product
+review_User ||--|| user
+review ||--|| review_User
+review ||--|| review_Product
+order ||--|| lineItem
+order ||--|| user
+product ||--|| user
+product ||--|| order
+@enduml
