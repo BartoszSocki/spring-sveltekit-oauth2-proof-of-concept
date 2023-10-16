@@ -1,4 +1,6 @@
 # Ecommerce Shop
+Simple ecommerce shop web application written in java using spring boot. Main goal of this project was to fix mistakes from previous projects and learn some new technologies along the way.
+
 ## Technologies Used:
 - Java
 - Spring Boot
