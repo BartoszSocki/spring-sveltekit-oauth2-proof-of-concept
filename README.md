@@ -18,4 +18,4 @@ Simple ecommerce shop web application written in java using spring boot. Main go
 
 ## Architecture
 ### ERD
-![erd](https://github.com/BartoszSocki/spring-sveltekit-oauth2-proof-of-concept/blob/main/images/erd-v0.2.png)
+![erd](https://github.com/BartoszSocki/spring-sveltekit-oauth2-proof-of-concept/blob/main/images/erd.png)

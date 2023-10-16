@@ -8,7 +8,7 @@ entity "Product" as product {
   *lastSaleDate : date
   --
   *seller : number <<FK>>
-  *productDetails : number <<FK>>
+  *productDetailsId : number <<FK>>
   *name : text
   *quantity : number
   *price : Price
@@ -18,6 +18,7 @@ entity "ProductDetails" as productDetails {
   *id : number <<generated>>
   --
   *description : string
+  *imageUrl : URL
   *productId : number <<FK>>
 }
 
@@ -38,7 +39,7 @@ entity "Review" as review {
   *creationDate : date
   *updateDate : date
   --
-  *fiveStarScore : number
+  *fiveStarScore : FiveStarScore
   *description : string
 }
 
@@ -47,7 +48,7 @@ entity "User" as user {
   *creationDate : date
   --
   *username : string
-  *avgFiveStarScore : number
+  *avgFiveStarScore : FiveStarScore
 }
 
 entity "Order" as order {
@@ -56,19 +57,11 @@ entity "Order" as order {
   *updateDate : date
   --
   *productId : number <<FK>>
-  *lineItemId : number <<FK>>
+  *price: Price
   *sellerId : number <<FK>>
   *buyerId : number <<FK>>
   *address : Address
-  *status : string
-}
-
-entity "LineItem" as lineItem {
-  *id : number <<generated>>
-  *creationDate : date
-  *updateDate : date
-  --
-  *price : Price
+  *status : OrderStatus
 }
 
 'productDetails_Tag ||--o{ tag
@@ -83,7 +76,6 @@ entity "LineItem" as lineItem {
 productDetails }o--o{ tag
 productDetails }o--|| category
 productDetails ||--|| product
-order ||--|| lineItem
 order }o--|| user
 product }o--|| user
 product ||--|| order
