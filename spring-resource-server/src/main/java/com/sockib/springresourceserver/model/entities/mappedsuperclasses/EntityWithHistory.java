@@ -7,15 +7,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 
 @MappedSuperclass
-public abstract class Resource {
+public abstract class EntityWithHistory {
 
+    // TODO: add required annotations
     @Id
     private Long id;
+    private LocalDate creationDate;
+    private LocalDate lastModificationDate;
 
 }

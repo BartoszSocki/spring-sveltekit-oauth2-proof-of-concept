@@ -1,11 +1,11 @@
 package com.sockib.springresourceserver.model.entities;
 
 import com.sockib.springresourceserver.model.entities.embedable.Price;
-import com.sockib.springresourceserver.model.entities.mappedsuperclasses.ResourceWithHistory;
+import com.sockib.springresourceserver.model.entities.mappedsuperclasses.EntityWithHistory;
 import jakarta.persistence.Entity;
 
 @Entity
-public class Product extends ResourceWithHistory {
+public class Product extends EntityWithHistory {
 
     // TODO: add required annotations
     private User seller;
