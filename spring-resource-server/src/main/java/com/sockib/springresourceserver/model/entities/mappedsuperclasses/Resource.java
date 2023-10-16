@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.entities.mappedsuperclasses;
+package com.sockib.springresourceserver.model.entities.mappedsuperclasses;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;

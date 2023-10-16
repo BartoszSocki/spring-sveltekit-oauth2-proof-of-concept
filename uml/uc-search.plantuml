@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+:user: ---> (show product list)
+(show product list) ---> (search by product name) : <<invokes>>
+(show product list) ---> (search by tag) : <<invokes>>
+(show product list) ---> (search with filter) : <<invokes>>
+(show product list) ---> (search by category) : <<invokes>>
+(show product list) ---> (show product details) : <<invokes>>
+(show product list) ---> (add to cart) : <<invokes>>
+(show product details) ---> (add to cart) : <<invokes>>
+@enduml

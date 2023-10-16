@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+:user: ---> (show account details)
+:user: ---> (show account stats)
+:user: ---> (change account details)
+:user: ---> (show seller reviews)
+:user: ---> (show seller rating)
+@enduml

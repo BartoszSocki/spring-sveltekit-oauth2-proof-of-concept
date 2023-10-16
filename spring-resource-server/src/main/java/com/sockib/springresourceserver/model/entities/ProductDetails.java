@@ -1,6 +1,6 @@
-package com.sockib.springresourceserver.entities;
+package com.sockib.springresourceserver.model.entities;
 
-import com.sockib.springresourceserver.entities.mappedsuperclasses.Resource;
+import com.sockib.springresourceserver.model.entities.mappedsuperclasses.Resource;
 import jakarta.persistence.Entity;
 
 import java.net.URL;

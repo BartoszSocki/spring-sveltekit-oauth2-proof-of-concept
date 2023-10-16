@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.entities;
+package com.sockib.springresourceserver.model.entities;
 
 import jakarta.persistence.Entity;
 

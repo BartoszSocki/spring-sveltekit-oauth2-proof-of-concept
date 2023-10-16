@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+:user: ---> (add product to cart)
+:user: ---> (show cart)
+(show cart) ---> (remove product from cart) : <<invokes>>
+(show cart) ---> (change product quantity) : <<invokes>>
+(show cart) ---> (buy cart) : <<invokes>>
+@enduml

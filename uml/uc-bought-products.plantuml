@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+:user: ---> (show bought products)
+(show bought products) ---> (seach by name) : <<invokes>>
+(show bought products) ---> (seach with filter) : <<invokes>>
+(show bought products) ---> (seach by tag) : <<invokes>>
+(show bought products) ---> (seach by category) : <<invokes>>
+:user: ---> (add bought product review)
+:user: ---> (add seller review)
+:user: ---> (modify bought product review) 
+:user: ---> (modify seller review)
+@enduml

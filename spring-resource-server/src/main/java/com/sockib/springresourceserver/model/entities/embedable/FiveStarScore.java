@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.entities.embedable;
+package com.sockib.springresourceserver.model.entities.embedable;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -12,9 +12,8 @@ import lombok.Setter;
 @Setter
 
 @Embeddable
-public class Price {
+public class FiveStarScore {
 
-    private String currency;
-    private Double quantity;
+    private Integer score;
 
 }
