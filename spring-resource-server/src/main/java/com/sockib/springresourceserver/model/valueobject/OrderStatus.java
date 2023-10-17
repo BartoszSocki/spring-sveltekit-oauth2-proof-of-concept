@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.model.entities.embedable;
+package com.sockib.springresourceserver.model.valueobject;
 
 import jakarta.persistence.Embeddable;
 

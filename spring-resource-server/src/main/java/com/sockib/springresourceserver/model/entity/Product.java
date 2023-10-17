@@ -1,7 +1,7 @@
-package com.sockib.springresourceserver.model.entities;
+package com.sockib.springresourceserver.model.entity;
 
-import com.sockib.springresourceserver.model.entities.embedable.Price;
-import com.sockib.springresourceserver.model.entities.mappedsuperclasses.EntityWithHistory;
+import com.sockib.springresourceserver.model.valueobject.Price;
+import com.sockib.springresourceserver.model.entity.mappedsuperclass.EntityWithHistory;
 import jakarta.persistence.Entity;
 
 @Entity
