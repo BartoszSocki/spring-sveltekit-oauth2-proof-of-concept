@@ -1,7 +1,5 @@
 package com.sockib.springresourceserver.model.entity;
 
-import com.sockib.springresourceserver.model.valueobject.Category;
-import com.sockib.springresourceserver.model.valueobject.Tag;
 import jakarta.persistence.Entity;
 
 import java.net.URL;
