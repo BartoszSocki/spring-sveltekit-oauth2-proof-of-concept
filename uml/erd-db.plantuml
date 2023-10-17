@@ -4,21 +4,28 @@
 entity "Product" as product {
   *id : number <<generated>>
   *creationDate : date
-  *updateDate : date
-  *lastSaleDate : date
   --
   *seller : number <<FK>>
   *productDetailsId : number <<FK>>
   *name : string
   *quantity : number
-  *price : Price
 }
 
 entity "ProductDetails" as productDetails {
   *id : number <<generated>>
+  *creationDate : date
   --
   *description : string
-  *productId : number <<FK>>
+  *price : Price
+}
+
+entity "ConcreteProduct" as concreteProduct {
+  *id : number <<generated>>
+  *creationDate : date
+  --
+  *product_id : number <<FK>>
+  *product_details_id : number <<FK>>
+  *status : ConcreteProductStatus
 }
 
 entity "ProductDetails_Category" as productDetails_Category {
@@ -60,7 +67,7 @@ entity "Review_Product" as review_Product {
   *id : number <<generated>>
   --
   *reviewId : number <<FK>>
-  *productId : number <<FK>>
+  *concreteProductId : number <<FK>>
 }
 
 entity "Review_User" as review_User {
@@ -72,7 +79,7 @@ entity "Review_User" as review_User {
 
 entity "User" as user {
   *id : number <<generated>>
-  *creationDate : date  
+  *creationDate : date
   --
   *username : string
   *avgFiveStarScore : FiveStarScore
@@ -83,7 +90,7 @@ entity "Order" as order {
   *creationDate : date
   *updateDate : date
   --
-  *productId : number <<FK>>
+  *concreteProductId : number <<FK>>
   *price : Price
   *sellerId : number <<FK>>
   *buyerId : number <<FK>>
@@ -91,16 +98,21 @@ entity "Order" as order {
   *status : OrderStatus
 }
 
-productDetails_Tag ||--o{ tag
-productDetails_Tag ||--o{ productDetails
-productDetails_Category ||--o{ category
-productDetails_Category ||--o{ productDetails
+productDetails_Tag ||--|| tag
+productDetails_Tag ||--|| productDetails
+productDetails_Category ||--|| category
+productDetails_Category ||--|| productDetails
 productDetails ||--|| product
-review_Product ||--|| product
+
+review_Product ||--|| concreteProduct
 review_User ||--|| user
 review ||--|| review_User
 review ||--|| review_Product
+
 order ||--|| user
 product ||--|| user
-product ||--|| order
+
+concreteProduct ||--|| product
+concreteProduct ||--|| productDetails
+concreteProduct ||--|| order
 @enduml

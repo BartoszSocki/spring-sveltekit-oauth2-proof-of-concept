@@ -7,42 +7,61 @@ create user resource_server with password 'Password1!';
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
-create table if not exists resource_server.product(
+-- ok
+create table if not exists resource_server.user (
 	id int generated always as identity primary key,
-	created_at timestamp not null default now(),
-	last_changed_at timestamp null,
 
-	last_sale_at timestamp null,
-	seller int not null,
-	product_details int not null,
-	name text not null,
-	quantity int not null,
+	email text not null unique
+);
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+-- ok
+create table if not exists resource_server.product_details (
+	id int generated always as identity primary key,
+
+	description text null,
 
 	price int not null,
 	currency text not null
 );
 
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-
-create table if not exists resource_server.product_details (
+-- ok
+create table if not exists resource_server.product(
 	id int generated always as identity primary key,
 	created_at timestamp not null default now(),
-	last_changed_at timestamp null,
+
+	seller_id int not null,
+	product_details_id int not null,
+	name text not null,
+	quantity int not null,
+
+	constraint fk_seller foreign key (seller_id) references resource_server.user(id),
+	constraint fk_product_details foreign key (product_details_id) references resource_server.product_details(id)
+);
+
+-- ok
+create table if not exists resource_server.concrete_product (
+	id int generated always as identity primary key,
+	created_at timestamp not null default now(),
 
 	product_id int not null,
-	description text null,
-	five_star_score int not null,
+	product_details_id int not null,
+	concrete_product_status text not null,
 
-	constraint fk_product foreign key (product_id) references resource_server.product(id)
+	constraint fk_product foreign key (product_id) references resource_server.product(id),
+	constraint fk_product_details foreign key (product_details_id) references resource_server.product_details(id)
 );
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
+-- ok
 create table if not exists resource_server.category (
 	id int generated always as identity primary key,
 	name text not null
 );
 
+-- ok
 create table if not exists resource_server.tag (
 	id int generated always as identity primary key,
 	name text not null
@@ -50,6 +69,7 @@ create table if not exists resource_server.tag (
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
+-- ok
 create table if not exists resource_server.product_details_tag (
 	id int generated always as identity primary key,
 	product_details_id int not null,
@@ -59,6 +79,7 @@ create table if not exists resource_server.product_details_tag (
 	constraint fk_tag foreign key (tag_id) references resource_server.tag(id)
 );
 
+-- ok
 create table if not exists resource_server.product_details_category (
 	id int generated always as identity primary key,
 	product_details_id int not null,
@@ -70,14 +91,58 @@ create table if not exists resource_server.product_details_category (
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
-/* create table if not exists resource_server.user_role ( */
-/* 	id serial primary key, */
-/* 	user_id int not null, */
-/* 	role_id int not null, */ 
+-- ok
+create table if not exists resource_server.review (
+	id int generated always as identity primary key,
+	created_at timestamp not null default now(),
+	last_changed_at timestamp null,
 
-/* 	constraint fk_user_id foreign key (user_id) references resource_server.users(id), */
-/* 	constraint fk_role_id foreign key (role_id) references resource_server.roles(id) */
-/* ); */
+	five_star_score int not null,
+	description text null
+);
+
+-- ok
+create table if not exists resource_server.product_review (
+	id int generated always as identity primary key,
+
+	review_id int not null,
+	concrete_product_id int not null,
+
+	constraint fk_concrete_product foreign key (concrete_product_id) references resource_server.concrete_product(id),
+	constraint fk_review foreign key (review_id) references resource_server.review(id)
+);
+
+-- ok
+create table if not exists resource_server.user_review (
+	id int generated always as identity primary key,
+
+	review_id int not null,
+	user_id int not null,
+
+	constraint fk_user foreign key (user_id) references resource_server.user(id),
+	constraint fk_review foreign key (review_id) references resource_server.review(id)
+);
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+-- ok
+create table if not exists resource_server.order (
+	id int generated always as identity primary key,
+	created_at timestamp not null default now(),
+
+	concrete_product_id int not null,
+	seller_id int not null,
+	buyer_id int not null,
+	address text not null,
+	status text not null,
+
+	price int not null,
+	currency text not null,
+
+	constraint fk_seller foreign key (seller_id) references resource_server.user(id),
+	constraint fk_buyer foreign key (buyer_id) references resource_server.user(id),
+	constraint fk_concrete_product foreign key (concrete_product_id) references resource_server.concrete_product(id)
+);
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
