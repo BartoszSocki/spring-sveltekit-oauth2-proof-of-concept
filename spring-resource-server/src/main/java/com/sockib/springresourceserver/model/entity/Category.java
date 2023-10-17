@@ -1,13 +1,11 @@
 package com.sockib.springresourceserver.model.entity;
 
+import com.sockib.springresourceserver.model.entity.mappedsuperclass.Resource;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 
 @Entity
-public class Category {
+public class Category extends Resource {
 
-    @Id
-    private Long id;
     private String name;
 
 }

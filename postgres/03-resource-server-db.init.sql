@@ -19,17 +19,18 @@ create table if not exists resource_server.user (
 -- ok
 create table if not exists resource_server.product_details (
 	id int generated always as identity primary key,
+	created_at timestamp null default now(),
 
 	description text null,
 
-	price int not null,
+	price numeric(10, 2) not null,
 	currency text not null
 );
 
 -- ok
 create table if not exists resource_server.product(
 	id int generated always as identity primary key,
-	created_at timestamp not null default now(),
+	created_at timestamp null default now(),
 
 	seller_id int not null,
 	product_details_id int not null,
@@ -43,7 +44,7 @@ create table if not exists resource_server.product(
 -- ok
 create table if not exists resource_server.concrete_product (
 	id int generated always as identity primary key,
-	created_at timestamp not null default now(),
+	created_at timestamp null default now(),
 
 	product_id int not null,
 	product_details_id int not null,
@@ -58,12 +59,16 @@ create table if not exists resource_server.concrete_product (
 -- ok
 create table if not exists resource_server.category (
 	id int generated always as identity primary key,
+	created_at timestamp null default now(),
+
 	name text not null
 );
 
 -- ok
 create table if not exists resource_server.tag (
 	id int generated always as identity primary key,
+	created_at timestamp null default now(),
+
 	name text not null
 );
 
@@ -94,7 +99,7 @@ create table if not exists resource_server.product_details_category (
 -- ok
 create table if not exists resource_server.review (
 	id int generated always as identity primary key,
-	created_at timestamp not null default now(),
+	created_at timestamp null default now(),
 	last_changed_at timestamp null,
 
 	five_star_score int not null,
@@ -128,7 +133,7 @@ create table if not exists resource_server.user_review (
 -- ok
 create table if not exists resource_server.order (
 	id int generated always as identity primary key,
-	created_at timestamp not null default now(),
+	created_at timestamp null default now(),
 
 	concrete_product_id int not null,
 	seller_id int not null,
@@ -136,7 +141,7 @@ create table if not exists resource_server.order (
 	address text not null,
 	status text not null,
 
-	price int not null,
+	price numeric(10, 2) not null,
 	currency text not null,
 
 	constraint fk_seller foreign key (seller_id) references resource_server.user(id),

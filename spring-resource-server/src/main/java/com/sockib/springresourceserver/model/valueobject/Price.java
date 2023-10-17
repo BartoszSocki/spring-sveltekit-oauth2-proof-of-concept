@@ -15,6 +15,6 @@ import lombok.Setter;
 public class Price {
 
     private String currency;
-    private Double quantity;
+    private Double price;
 
 }
