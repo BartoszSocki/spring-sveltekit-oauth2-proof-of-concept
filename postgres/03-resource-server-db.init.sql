@@ -10,6 +10,7 @@ create user resource_server with password 'Password1!';
 -- ok
 create table if not exists resource_server.user (
 	id int generated always as identity primary key,
+	created_at timestamp null default now(),
 
 	email text not null unique
 );
