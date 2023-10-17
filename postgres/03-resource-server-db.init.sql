@@ -38,6 +38,38 @@ create table if not exists resource_server.product_details (
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
+create table if not exists resource_server.category (
+	id int generated always as identity primary key,
+	name text not null
+);
+
+create table if not exists resource_server.tag (
+	id int generated always as identity primary key,
+	name text not null
+);
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+create table if not exists resource_server.product_details_tag (
+	id int generated always as identity primary key,
+	product_details_id int not null,
+	tag_id int not null,
+
+	constraint fk_product_details foreign key (product_details_id) references resource_server.product_details(id),
+	constraint fk_tag foreign key (tag_id) references resource_server.tag(id)
+);
+
+create table if not exists resource_server.product_details_category (
+	id int generated always as identity primary key,
+	product_details_id int not null,
+	category_id int not null,
+
+	constraint fk_product_details foreign key (product_details_id) references resource_server.product_details(id),
+	constraint fk_category foreign key (category_id) references resource_server.category(id)
+);
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
 /* create table if not exists resource_server.user_role ( */
 /* 	id serial primary key, */
 /* 	user_id int not null, */
