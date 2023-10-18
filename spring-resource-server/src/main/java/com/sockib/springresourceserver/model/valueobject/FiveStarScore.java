@@ -14,6 +14,6 @@ import lombok.Setter;
 @Embeddable
 public class FiveStarScore {
 
-    private Integer score;
+    private Integer fiveStarScore;
 
 }

@@ -109,9 +109,7 @@ create table if not exists resource_server.review (
 
 -- ok
 create table if not exists resource_server.product_review (
-	id int generated always as identity primary key,
-
-	review_id int not null,
+	review_id int not null primary key,
 	concrete_product_id int not null,
 
 	constraint fk_concrete_product foreign key (concrete_product_id) references resource_server.concrete_product(id),
@@ -120,9 +118,7 @@ create table if not exists resource_server.product_review (
 
 -- ok
 create table if not exists resource_server.user_review (
-	id int generated always as identity primary key,
-
-	review_id int not null,
+	review_id int not null primary key,
 	user_id int not null,
 
 	constraint fk_user foreign key (user_id) references resource_server.user(id),
