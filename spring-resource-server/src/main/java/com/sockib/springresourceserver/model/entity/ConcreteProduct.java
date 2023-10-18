@@ -15,9 +15,6 @@ import java.util.Set;
 public class ConcreteProduct extends Resource {
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Product product;
-
-    @OneToOne(cascade = CascadeType.ALL)
     private ProductDetails productDetails;
 
     @OneToMany(mappedBy = "concreteProduct")

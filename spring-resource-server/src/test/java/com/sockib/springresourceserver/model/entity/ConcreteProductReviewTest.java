@@ -55,7 +55,6 @@ public class ConcreteProductReviewTest {
         product.setProductDetails(productDetails);
 
         concreteProduct = new ConcreteProduct();
-        concreteProduct.setProduct(product);
         concreteProduct.setProductDetails(productDetails);
         concreteProduct.setConcreteProductStatus(STATUS);
 

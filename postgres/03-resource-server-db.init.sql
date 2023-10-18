@@ -48,11 +48,9 @@ create table if not exists resource_server.concrete_product (
 	id int generated always as identity primary key,
 	created_at timestamp null default now(),
 
-	product_id int not null,
 	product_details_id int not null,
 	concrete_product_status text not null,
 
-	constraint fk_product foreign key (product_id) references resource_server.product(id),
 	constraint fk_product_details foreign key (product_details_id) references resource_server.product_details(id)
 );
 

@@ -50,7 +50,6 @@ public class ConcreteProductTest {
     void givenConcreteProduct_whenPersist_thenSuccess() {
         // given
         var concreteProduct = new ConcreteProduct();
-        concreteProduct.setProduct(product);
         concreteProduct.setProductDetails(productDetails);
         concreteProduct.setConcreteProductStatus(ConcreteProductStatus.DEFAULT);
 
@@ -62,7 +61,6 @@ public class ConcreteProductTest {
 
         assertThat(retrieved).isPresent();
         assertThat(retrieved.get().getConcreteProductStatus()).isEqualTo(ConcreteProductStatus.DEFAULT);
-        assertThat(retrieved.get().getProduct().getQuantity()).isEqualTo(PRODUCT_QUANTITY);
         assertThat(retrieved.get().getProductDetails().getName()).isEqualTo(NAME);
         assertThat(retrieved.get().getProductDetails().getDescription()).isEqualTo(DESCRIPTION);
         assertThat(retrieved.get().getProductDetails().getPrice()).isEqualTo(PRICE);
