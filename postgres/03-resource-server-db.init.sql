@@ -22,6 +22,7 @@ create table if not exists resource_server.product_details (
 	id int generated always as identity primary key,
 	created_at timestamp null default now(),
 
+	name text not null,
 	description text null,
 	image_url text null,
 
@@ -36,7 +37,6 @@ create table if not exists resource_server.product(
 
 	seller_id int not null,
 	product_details_id int not null,
-	name text not null,
 	quantity int not null,
 
 	constraint fk_seller foreign key (seller_id) references resource_server.user(id),
