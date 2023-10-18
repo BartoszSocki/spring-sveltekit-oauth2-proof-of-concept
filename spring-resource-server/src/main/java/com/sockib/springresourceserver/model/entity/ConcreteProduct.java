@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 
@@ -17,6 +19,9 @@ public class ConcreteProduct extends Resource {
 
     @OneToOne(cascade = CascadeType.ALL)
     private ProductDetails productDetails;
+
+    @OneToMany(mappedBy = "concreteProduct")
+    private Set<ProductReview> productReviews;
 
     @Enumerated(EnumType.STRING)
     private ConcreteProductStatus concreteProductStatus;
