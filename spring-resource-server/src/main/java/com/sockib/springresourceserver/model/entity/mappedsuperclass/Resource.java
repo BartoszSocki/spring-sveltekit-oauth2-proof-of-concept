@@ -23,8 +23,8 @@ public abstract class Resource {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "created_at")
-//    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
     private LocalDate creationDate;
 
 }

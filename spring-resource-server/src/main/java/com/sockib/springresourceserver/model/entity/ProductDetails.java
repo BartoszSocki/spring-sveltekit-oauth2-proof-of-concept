@@ -15,8 +15,12 @@ import java.util.Set;
 public class ProductDetails extends Resource {
 
     // TODO: add required annotations
+//    private Product product;
     private String description;
-//    private String imageURL;
+
+    @Column(name = "image_url")
+    private String imageURL;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "product_details_tag",
@@ -24,14 +28,14 @@ public class ProductDetails extends Resource {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private Set<Tag> tags;
-    @ManyToMany
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "product_details_category",
             joinColumns = @JoinColumn(name = "product_details_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories;
-//    private Product product;
     private Price price;
 
 }

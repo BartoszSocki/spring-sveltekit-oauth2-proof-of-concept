@@ -1,5 +1,6 @@
 package com.sockib.springresourceserver.model.entity;
 
+import com.sockib.springresourceserver.model.entity.mappedsuperclass.Resource;
 import com.sockib.springresourceserver.model.valueobject.Price;
 import com.sockib.springresourceserver.repositories.ProductDetailsRepository;
 import org.junit.jupiter.api.Test;
@@ -72,5 +73,98 @@ public class ProductDetailsTest {
         assertThat(retrievedProductDetails.get().getTags()).doesNotContainNull();
         assertThat(retrievedProductDetails.get().getTags().stream().map(Tag::getName).collect(Collectors.toSet())).contains("tag1", "tag2");
     }
+    @Test
+    void givenProductDetailsWithDescriptionAndPriceAndTagsAndCategories_whenPersisting_thenSuccess() {
+        // given
+        var price = new Price();
+        price.setPrice(120.0D);
+        price.setCurrency("PLN");
 
+        var categories = new HashSet<Category>();
+        var cat1 = new Category("cat1");
+        categories.add(cat1);
+
+        var tags = new HashSet<Tag>();
+        var tag1 = new Tag("tag1");
+        tags.add(tag1);
+
+        final String description = "desc";
+        var productDetails = new ProductDetails();
+        productDetails.setDescription(description);
+        productDetails.setPrice(price);
+        productDetails.setCategories(categories);
+        productDetails.setTags(tags);
+
+        // when
+        var persistedProductDetails = productDetailsRepository.save(productDetails);
+
+        // then
+        var retrievedProductDetails = productDetailsRepository.findById(persistedProductDetails.getId());
+
+        assertThat(retrievedProductDetails).isPresent();
+        assertThat(retrievedProductDetails.get().getCategories().stream().map(Resource::getCreationDate).collect(Collectors.toList())).doesNotContainNull();
+        assertThat(retrievedProductDetails.get().getTags().stream().map(Resource::getCreationDate).collect(Collectors.toList())).doesNotContainNull();
+        assertThat(retrievedProductDetails.get().getDescription()).isEqualTo(description);
+        assertThat(retrievedProductDetails.get().getPrice()).isEqualTo(price);
+        assertThat(retrievedProductDetails.get().getCategories()).hasSize(categories.size());
+        assertThat(retrievedProductDetails.get().getTags()).hasSize(categories.size());
+        assertThat(retrievedProductDetails.get().getCategories()).doesNotContainNull();
+        assertThat(retrievedProductDetails.get().getTags()).doesNotContainNull();
+        assertThat(retrievedProductDetails.get().getCategories().stream().map(Category::getName).collect(Collectors.toSet())).contains("cat1");
+        assertThat(retrievedProductDetails.get().getTags().stream().map(Tag::getName).collect(Collectors.toSet())).contains("tag1");
+    }
+
+    @Test
+    void givenProductDetailsWithDuplicateCategories_whenPersist_thenError() {
+        // given
+        var price = new Price();
+        price.setPrice(120.0D);
+        price.setCurrency("PLN");
+
+        var categories = new HashSet<Category>();
+        var cat1 = new Category("cat1");
+        var cat2 = new Category("cat1");
+
+        categories.add(cat1);
+        categories.add(cat2);
+
+        final String description = "desc";
+        var productDetails = new ProductDetails();
+        productDetails.setDescription(description);
+        productDetails.setPrice(price);
+        productDetails.setCategories(categories);
+
+        // then
+        assertThatThrownBy(() -> {
+            // when
+            productDetailsRepository.save(productDetails);
+        }).isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    void givenProductDetailsWithDuplicateTags_whenPersist_thenError() {
+        // given
+        var price = new Price();
+        price.setPrice(120.0D);
+        price.setCurrency("PLN");
+
+        var tags = new HashSet<Tag>();
+        var tag1 = new Tag("tag1");
+        var tag2 = new Tag("tag1");
+
+        tags.add(tag1);
+        tags.add(tag2);
+
+        final String description = "desc";
+        var productDetails = new ProductDetails();
+        productDetails.setDescription(description);
+        productDetails.setPrice(price);
+        productDetails.setTags(tags);
+
+        // then
+        assertThatThrownBy(() -> {
+            // when
+            productDetailsRepository.save(productDetails);
+        }).isInstanceOf(RuntimeException.class);
+    }
 }

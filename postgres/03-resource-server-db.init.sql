@@ -23,6 +23,7 @@ create table if not exists resource_server.product_details (
 	created_at timestamp null default now(),
 
 	description text null,
+	image_url text null,
 
 	price numeric(10, 2) not null,
 	currency text not null
@@ -62,7 +63,7 @@ create table if not exists resource_server.category (
 	id int generated always as identity primary key,
 	created_at timestamp null default now(),
 
-	name text not null
+	name text not null unique
 );
 
 -- ok
@@ -70,7 +71,7 @@ create table if not exists resource_server.tag (
 	id int generated always as identity primary key,
 	created_at timestamp null default now(),
 
-	name text not null
+	name text not null unique
 );
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
