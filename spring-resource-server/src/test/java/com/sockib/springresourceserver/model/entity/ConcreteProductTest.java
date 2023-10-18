@@ -20,13 +20,13 @@ public class ConcreteProductTest {
 
     ProductDetails productDetails;
     final static Price PRICE = new Price(120D, "PLN");
+    final static String NAME = "name";
     final static String DESCRIPTION = "desc";
 
     User seller;
     final static String SELLER_EMAIL = "email.com";
 
     Product product;
-    final static String PRODUCT_NAME = "name";
     static final Integer PRODUCT_QUANTITY = 100;
 
 
@@ -35,12 +35,12 @@ public class ConcreteProductTest {
         productDetails = new ProductDetails();
         productDetails.setDescription(DESCRIPTION);
         productDetails.setPrice(PRICE);
+        productDetails.setName(NAME);
 
         seller = new User();
         seller.setEmail(SELLER_EMAIL);
 
         product = new Product();
-        product.setName(PRODUCT_NAME);
         product.setQuantity(PRODUCT_QUANTITY);
         product.setSeller(seller);
         product.setProductDetails(productDetails);
@@ -62,8 +62,8 @@ public class ConcreteProductTest {
 
         assertThat(retrieved).isPresent();
         assertThat(retrieved.get().getConcreteProductStatus()).isEqualTo(ConcreteProductStatus.DEFAULT);
-        assertThat(retrieved.get().getProduct().getName()).isEqualTo(PRODUCT_NAME);
         assertThat(retrieved.get().getProduct().getQuantity()).isEqualTo(PRODUCT_QUANTITY);
+        assertThat(retrieved.get().getProductDetails().getName()).isEqualTo(NAME);
         assertThat(retrieved.get().getProductDetails().getDescription()).isEqualTo(DESCRIPTION);
         assertThat(retrieved.get().getProductDetails().getPrice()).isEqualTo(PRICE);
     }

@@ -23,13 +23,13 @@ public class ConcreteProductReviewTest {
 
     ProductDetails productDetails;
     final static Price PRICE = new Price(120D, "PLN");
+    final static String NAME = "name";
     final static String DESCRIPTION = "desc";
 
     User seller;
     final static String SELLER_EMAIL = "email.com";
 
     Product product;
-    final static String PRODUCT_NAME = "name";
     final static Integer PRODUCT_QUANTITY = 100;
 
     ConcreteProduct concreteProduct;
@@ -44,12 +44,12 @@ public class ConcreteProductReviewTest {
         productDetails = new ProductDetails();
         productDetails.setDescription(DESCRIPTION);
         productDetails.setPrice(PRICE);
+        productDetails.setName(NAME);
 
         seller = new User();
         seller.setEmail(SELLER_EMAIL);
 
         product = new Product();
-        product.setName(PRODUCT_NAME);
         product.setQuantity(PRODUCT_QUANTITY);
         product.setSeller(seller);
         product.setProductDetails(productDetails);

@@ -29,6 +29,7 @@ public class ProductDetailsTest {
         price.setCurrency("PLN");
 
         var productDetails = new ProductDetails();
+        productDetails.setName("name");
         productDetails.setDescription("description");
         productDetails.setPrice(price);
 
@@ -55,6 +56,7 @@ public class ProductDetailsTest {
 
         final String description = "desc";
         var productDetails = new ProductDetails();
+        productDetails.setName("name");
         productDetails.setDescription(description);
         productDetails.setPrice(price);
         productDetails.setTags(tags);
@@ -89,6 +91,7 @@ public class ProductDetailsTest {
 
         final String description = "desc";
         var productDetails = new ProductDetails();
+        productDetails.setName("name");
         productDetails.setDescription(description);
         productDetails.setPrice(price);
         productDetails.setCategories(categories);
@@ -129,6 +132,7 @@ public class ProductDetailsTest {
 
         final String description = "desc";
         var productDetails = new ProductDetails();
+        productDetails.setName("name");
         productDetails.setDescription(description);
         productDetails.setPrice(price);
         productDetails.setCategories(categories);
@@ -156,6 +160,7 @@ public class ProductDetailsTest {
 
         final String description = "desc";
         var productDetails = new ProductDetails();
+        productDetails.setName("name");
         productDetails.setDescription(description);
         productDetails.setPrice(price);
         productDetails.setTags(tags);

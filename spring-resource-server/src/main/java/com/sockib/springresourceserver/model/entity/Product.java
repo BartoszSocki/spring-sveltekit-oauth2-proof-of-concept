@@ -17,7 +17,6 @@ public class Product extends Resource {
     @OneToOne(cascade = CascadeType.ALL)
     private ProductDetails productDetails;
 
-    private String name;
     private Integer quantity;
 
 }

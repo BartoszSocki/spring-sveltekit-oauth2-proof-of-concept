@@ -17,6 +17,7 @@ public class ProductDetails extends Resource {
     @OneToOne(mappedBy = "productDetails")
     private Product product;
 
+    private String name;
     private String description;
 
     @Column(name = "image_url")

@@ -28,11 +28,14 @@ class ProductTest {
     User seller;
     final static String SELLER_EMAIL = "email.com";
 
+    final static String NAME = "name";
+
     @BeforeEach
     void init() {
         productDetails = new ProductDetails();
         productDetails.setDescription(DESCRIPTION);
         productDetails.setPrice(PRICE);
+        productDetails.setName(NAME);
 
         seller = new User();
         seller.setEmail(SELLER_EMAIL);
@@ -41,11 +44,9 @@ class ProductTest {
     @Test
     void givenProduct_whenPersist_thenSuccess() {
         // given
-        final String name = "name";
         final Integer quantity = 100;
 
         var product = new Product();
-        product.setName(name);
         product.setQuantity(quantity);
         product.setProductDetails(productDetails);
         product.setSeller(seller);
@@ -57,9 +58,10 @@ class ProductTest {
         var retrieved = productRepository.findById(persisted.getId());
 
         assertThat(retrieved).isPresent();
-        assertThat(retrieved.get().getName()).isEqualTo(name);
         assertThat(retrieved.get().getQuantity()).isEqualTo(quantity);
         assertThat(retrieved.get().getSeller().getEmail()).isEqualTo(SELLER_EMAIL);
         assertThat(retrieved.get().getProductDetails().getDescription()).isEqualTo(DESCRIPTION);
+        assertThat(retrieved.get().getProductDetails().getName()).isEqualTo(NAME);
+
     }
 }
