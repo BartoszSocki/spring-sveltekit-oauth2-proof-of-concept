@@ -7,7 +7,6 @@ entity "Product" as product {
   --
   *seller : number <<FK>>
   *productDetailsId : number <<FK>>
-  *name : string
   *quantity : number
 }
 
@@ -15,7 +14,9 @@ entity "ProductDetails" as productDetails {
   *id : number <<generated>>
   *creationDate : date
   --
+  *name : string
   *description : string
+  *imageUrl : string
   *price : Price
 }
 
@@ -23,8 +24,7 @@ entity "ConcreteProduct" as concreteProduct {
   *id : number <<generated>>
   *creationDate : date
   --
-  *product_id : number <<FK>>
-  *product_details_id : number <<FK>>
+  *productDetailsId : number <<FK>>
   *status : ConcreteProductStatus
 }
 
@@ -112,7 +112,6 @@ review ||--|| review_Product
 order ||--|| user
 product ||--|| user
 
-concreteProduct ||--|| product
 concreteProduct ||--|| productDetails
 concreteProduct ||--|| order
 @enduml
