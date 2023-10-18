@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.repositories;
+package com.sockib.springresourceserver.model.repository;
 
 import com.sockib.springresourceserver.model.entity.ProductDetails;
 import org.springframework.data.jpa.repository.JpaRepository;

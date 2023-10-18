@@ -1,8 +1,7 @@
 package com.sockib.springresourceserver.model.entity;
-
 import com.sockib.springresourceserver.model.entity.mappedsuperclass.Resource;
 import com.sockib.springresourceserver.model.valueobject.Price;
-import com.sockib.springresourceserver.repositories.ProductDetailsRepository;
+import com.sockib.springresourceserver.model.repository.ProductDetailsRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

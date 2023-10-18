@@ -17,7 +17,6 @@ import java.time.LocalDate;
 @MappedSuperclass
 public abstract class Resource {
 
-    // TODO: add required annotations
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

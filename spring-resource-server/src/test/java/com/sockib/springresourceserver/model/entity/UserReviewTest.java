@@ -1,8 +1,8 @@
 package com.sockib.springresourceserver.model.entity;
 
 import com.sockib.springresourceserver.model.valueobject.FiveStarScore;
-import com.sockib.springresourceserver.repositories.ReviewRepository;
-import com.sockib.springresourceserver.repositories.UserRepository;
+import com.sockib.springresourceserver.model.repository.ReviewRepository;
+import com.sockib.springresourceserver.model.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

@@ -14,8 +14,9 @@ import java.util.Set;
 @Entity
 public class ProductDetails extends Resource {
 
-    // TODO: add required annotations
-//    private Product product;
+    @OneToOne(mappedBy = "productDetails")
+    private Product product;
+
     private String description;
 
     @Column(name = "image_url")
