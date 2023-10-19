@@ -4,28 +4,28 @@ import com.sockib.springresourceserver.model.valueobject.Address;
 import com.sockib.springresourceserver.model.valueobject.OrderStatus;
 import com.sockib.springresourceserver.model.valueobject.Price;
 import com.sockib.springresourceserver.model.entity.mappedsuperclass.Resource;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToOne;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 
-@Entity
+@Entity(name = "`order`")
 public class Order extends Resource {
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Product product;
     private Price price;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private User seller;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private User buyer;
+
     private Address address;
 
     @Enumerated(EnumType.STRING)

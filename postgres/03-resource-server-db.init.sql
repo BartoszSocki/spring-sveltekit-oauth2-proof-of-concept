@@ -135,7 +135,7 @@ create table if not exists resource_server.order (
 	seller_id int not null,
 	buyer_id int not null,
 	address text not null,
-	status text not null,
+	order_status text not null,
 
 	price numeric(10, 2) not null,
 	currency text not null,
