@@ -9,7 +9,7 @@ import com.sockib.springresourceserver.model.entity.mappedsuperclass.Resource;
 public class Order extends Resource {
 
     // TODO: add required annotations
-    private Product product;
+    private ProductStock product;
     private Price price;
     private User seller;
     private User buyer;

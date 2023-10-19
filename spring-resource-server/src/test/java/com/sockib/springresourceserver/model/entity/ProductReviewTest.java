@@ -1,7 +1,7 @@
 package com.sockib.springresourceserver.model.entity;
-import com.sockib.springresourceserver.model.repository.ConcreteProductRepository;
+import com.sockib.springresourceserver.model.repository.ProductRepository;
 import com.sockib.springresourceserver.model.repository.ReviewRepository;
-import com.sockib.springresourceserver.model.valueobject.ConcreteProductStatus;
+import com.sockib.springresourceserver.model.valueobject.ProductStatus;
 import com.sockib.springresourceserver.model.valueobject.FiveStarScore;
 import com.sockib.springresourceserver.model.valueobject.Price;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,10 +14,10 @@ import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class ConcreteProductReviewTest {
+public class ProductReviewTest {
 
     @Autowired
-    ConcreteProductRepository concreteProductRepository;
+    ProductRepository productRepository;
     @Autowired
     ReviewRepository reviewRepository;
 
@@ -29,13 +29,13 @@ public class ConcreteProductReviewTest {
     User seller;
     final static String SELLER_EMAIL = "email.com";
 
-    Product product;
+    ProductStock productStock;
     final static Integer PRODUCT_QUANTITY = 100;
 
-    ConcreteProduct concreteProduct;
-    final static ConcreteProductStatus STATUS = ConcreteProductStatus.DEFAULT;
+    Product product;
+    final static ProductStatus STATUS = ProductStatus.DEFAULT;
 
-    ConcreteProduct persistedConcreteProduct;
+    Product persistedProduct;
 
     final static FiveStarScore FIVE_STAR_SCORE = new FiveStarScore(3);
 
@@ -49,24 +49,24 @@ public class ConcreteProductReviewTest {
         seller = new User();
         seller.setEmail(SELLER_EMAIL);
 
+        productStock = new ProductStock();
+        productStock.setQuantity(PRODUCT_QUANTITY);
+        productStock.setSeller(seller);
+        productStock.setProductDetails(productDetails);
+
         product = new Product();
-        product.setQuantity(PRODUCT_QUANTITY);
-        product.setSeller(seller);
         product.setProductDetails(productDetails);
+        product.setProductStatus(STATUS);
 
-        concreteProduct = new ConcreteProduct();
-        concreteProduct.setProductDetails(productDetails);
-        concreteProduct.setConcreteProductStatus(STATUS);
-
-        persistedConcreteProduct = concreteProductRepository.save(concreteProduct);
+        persistedProduct = productRepository.save(product);
     }
 
     @Test
-    void givenConcreteProductReview_whenPersist_thenSuccess() {
+    void givenProductReview_whenPersist_thenSuccess() {
         // given
         var productReview = new ProductReview();
         productReview.setFiveStarScore(FIVE_STAR_SCORE);
-        productReview.setConcreteProduct(concreteProduct);
+        productReview.setProduct(product);
 
         // when
         var persisted = reviewRepository.save(productReview);
@@ -76,6 +76,6 @@ public class ConcreteProductReviewTest {
 
         assertThat(retrieved).isPresent();
         assertThat(retrieved.get().getFiveStarScore()).isEqualTo(FIVE_STAR_SCORE);
-        assertThat(((ProductReview) retrieved.get()).getConcreteProduct().getConcreteProductStatus()).isEqualTo(STATUS);
+        assertThat(((ProductReview) retrieved.get()).getProduct().getProductStatus()).isEqualTo(STATUS);
     }
 }

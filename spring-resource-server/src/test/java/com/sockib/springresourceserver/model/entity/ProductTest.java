@@ -1,7 +1,7 @@
 package com.sockib.springresourceserver.model.entity;
 
-import com.sockib.springresourceserver.model.repository.ProductDetailsRepository;
 import com.sockib.springresourceserver.model.repository.ProductRepository;
+import com.sockib.springresourceserver.model.valueobject.ProductStatus;
 import com.sockib.springresourceserver.model.valueobject.Price;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,22 +13,22 @@ import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class ProductTest {
+public class ProductTest {
 
     @Autowired
     ProductRepository productRepository;
 
-    @Autowired
-    ProductDetailsRepository productDetailsRepository;
-
     ProductDetails productDetails;
     final static Price PRICE = new Price(120D, "PLN");
+    final static String NAME = "name";
     final static String DESCRIPTION = "desc";
 
     User seller;
     final static String SELLER_EMAIL = "email.com";
 
-    final static String NAME = "name";
+    ProductStock productStock;
+    static final Integer PRODUCT_QUANTITY = 100;
+
 
     @BeforeEach
     void init() {
@@ -39,17 +39,19 @@ class ProductTest {
 
         seller = new User();
         seller.setEmail(SELLER_EMAIL);
+
+        productStock = new ProductStock();
+        productStock.setQuantity(PRODUCT_QUANTITY);
+        productStock.setSeller(seller);
+        productStock.setProductDetails(productDetails);
     }
 
     @Test
     void givenProduct_whenPersist_thenSuccess() {
         // given
-        final Integer quantity = 100;
-
         var product = new Product();
-        product.setQuantity(quantity);
         product.setProductDetails(productDetails);
-        product.setSeller(seller);
+        product.setProductStatus(ProductStatus.DEFAULT);
 
         // when
         var persisted = productRepository.save(product);
@@ -58,10 +60,10 @@ class ProductTest {
         var retrieved = productRepository.findById(persisted.getId());
 
         assertThat(retrieved).isPresent();
-        assertThat(retrieved.get().getQuantity()).isEqualTo(quantity);
-        assertThat(retrieved.get().getSeller().getEmail()).isEqualTo(SELLER_EMAIL);
-        assertThat(retrieved.get().getProductDetails().getDescription()).isEqualTo(DESCRIPTION);
+        assertThat(retrieved.get().getProductStatus()).isEqualTo(ProductStatus.DEFAULT);
         assertThat(retrieved.get().getProductDetails().getName()).isEqualTo(NAME);
-
+        assertThat(retrieved.get().getProductDetails().getDescription()).isEqualTo(DESCRIPTION);
+        assertThat(retrieved.get().getProductDetails().getPrice()).isEqualTo(PRICE);
     }
+
 }

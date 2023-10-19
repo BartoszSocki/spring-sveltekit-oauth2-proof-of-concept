@@ -14,6 +14,6 @@ import lombok.Setter;
 public class ProductReview extends Review {
 
     @ManyToOne
-    private ConcreteProduct concreteProduct;
+    private Product product;
 
 }

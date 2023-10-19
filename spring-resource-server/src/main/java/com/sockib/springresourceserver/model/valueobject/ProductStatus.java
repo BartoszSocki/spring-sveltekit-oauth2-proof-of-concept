@@ -1,5 +1,5 @@
 package com.sockib.springresourceserver.model.valueobject;
 
-public enum ConcreteProductStatus {
+public enum ProductStatus {
     DEFAULT
 }

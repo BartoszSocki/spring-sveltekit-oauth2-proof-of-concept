@@ -15,7 +15,7 @@ import java.util.Set;
 public class ProductDetails extends Resource {
 
     @OneToOne(mappedBy = "productDetails")
-    private Product product;
+    private ProductStock productStock;
 
     private String name;
     private String description;

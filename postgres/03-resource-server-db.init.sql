@@ -49,7 +49,7 @@ create table if not exists resource_server.product (
 	created_at timestamp null default now(),
 
 	product_details_id int not null,
-	concrete_product_status text not null,
+	product_status text not null,
 
 	constraint fk_product_details foreign key (product_details_id) references resource_server.product_details(id)
 );
@@ -109,9 +109,9 @@ create table if not exists resource_server.review (
 -- ok
 create table if not exists resource_server.product_review (
 	review_id int not null primary key,
-	concrete_product_id int not null,
+	product_id int not null,
 
-	constraint fk_concrete_product foreign key (concrete_product_id) references resource_server.product(id),
+	constraint fk_product foreign key (product_id) references resource_server.product(id),
 	constraint fk_review foreign key (review_id) references resource_server.review(id)
 );
 
@@ -131,7 +131,7 @@ create table if not exists resource_server.order (
 	id int generated always as identity primary key,
 	created_at timestamp null default now(),
 
-	concrete_product_id int not null,
+	product_id int not null,
 	seller_id int not null,
 	buyer_id int not null,
 	address text not null,
@@ -142,7 +142,7 @@ create table if not exists resource_server.order (
 
 	constraint fk_seller foreign key (seller_id) references resource_server.user(id),
 	constraint fk_buyer foreign key (buyer_id) references resource_server.user(id),
-	constraint fk_concrete_product foreign key (concrete_product_id) references resource_server.product(id)
+	constraint fk_product foreign key (product_id) references resource_server.product(id)
 );
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
