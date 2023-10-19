@@ -17,13 +17,16 @@ import lombok.*;
 public class Order extends Resource {
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id")
     private Product product;
     private Price price;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "seller_id")
     private User seller;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "buyer_id")
     private User buyer;
 
     private Address address;

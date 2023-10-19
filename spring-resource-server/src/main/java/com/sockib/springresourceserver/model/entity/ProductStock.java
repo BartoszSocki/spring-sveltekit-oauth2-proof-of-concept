@@ -12,9 +12,11 @@ import lombok.Setter;
 public class ProductStock extends Resource {
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "seller_id")
     private User seller;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_details_id")
     private ProductDetails productDetails;
 
     private Integer quantity;

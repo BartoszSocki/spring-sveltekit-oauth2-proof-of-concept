@@ -15,6 +15,7 @@ import java.util.Set;
 public class Product extends Resource {
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_details_id")
     private ProductDetails productDetails;
 
     @OneToMany(mappedBy = "product")

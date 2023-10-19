@@ -1,6 +1,7 @@
 package com.sockib.springresourceserver.model.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import lombok.Setter;
 public class ProductReview extends Review {
 
     @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
 
 }
