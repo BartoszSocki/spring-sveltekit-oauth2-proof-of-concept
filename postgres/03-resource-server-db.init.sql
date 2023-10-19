@@ -26,7 +26,7 @@ create table if not exists resource_server.product_details (
 	description text null,
 	image_url text null,
 
-	price numeric(10, 2) not null,
+	price numeric(10, 2) not null check (price > 0),
 	currency text not null
 );
 
@@ -137,7 +137,7 @@ create table if not exists resource_server.order (
 	address text not null,
 	order_status text not null,
 
-	price numeric(10, 2) not null,
+	price numeric(10, 2) not null check (price > 0),
 	currency text not null,
 
 	constraint fk_seller foreign key (seller_id) references resource_server.user(id),
