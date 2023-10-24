@@ -1,7 +1,6 @@
 package com.sockib.springresourceserver.service.product;
 
 import com.sockib.springresourceserver.model.respository.ProductRepository;
-import com.sockib.springresourceserver.model.respository.SearchableProductRepository;
 import com.sockib.springresourceserver.util.search.SearchFilter;
 import com.sockib.springresourceserver.util.search.SearchOperation;
 import org.junit.jupiter.api.Test;
@@ -33,13 +32,13 @@ class ProductServiceImplTest {
         );
 
         var specification = ProductSearch.resolve(filters);
-        var page = Pageable.ofSize(2);
+        var page = Pageable.ofSize(10);
 
         // when
-        var products = productRepository.findProducts(specification, page);
+        var products = productRepository.findProducts(specification, page, "product[category]");
 
         // then
-//        products.forEach(System.out::println);
+        assert true;
     }
 
 }
