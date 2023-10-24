@@ -5,6 +5,7 @@ import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.util.search.SearchFilter;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -17,18 +18,19 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final SearchFilterToProductSpecificationConverter searchFilterToProductSpecificationConverter;
+    private final ModelMapper modelMapper;
 
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, ModelMapper modelMapper) {
         this.productRepository = productRepository;
         this.searchFilterToProductSpecificationConverter = new SearchFilterToProductSpecificationConverterImpl();
+        this.modelMapper = modelMapper;
     }
 
     @Override
     public List<Product> searchProduct(List<SearchFilter> filters, Pageable pageable) {
-
         var specification = searchFilterToProductSpecificationConverter.convert(filters);
 
-        return null;
+        return productRepository.findProducts(specification, Pageable.ofSize(10), "product[ForDisplay]");
     }
 
     @Override

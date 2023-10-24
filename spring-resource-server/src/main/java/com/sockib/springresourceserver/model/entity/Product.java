@@ -22,6 +22,13 @@ import java.util.List;
 @NamedEntityGraph(name = "product[category]",
         attributeNodes = @NamedAttributeNode("category")
 )
+@NamedEntityGraph(name = "product[ForDisplay]",
+        attributeNodes = {
+                @NamedAttributeNode("owner"),
+                @NamedAttributeNode("category"),
+                @NamedAttributeNode("inventory")
+        }
+)
 public class Product extends WithCreationAndUpdateTimestamp {
 
     private String name;
