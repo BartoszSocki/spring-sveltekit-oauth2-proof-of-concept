@@ -9,6 +9,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,6 @@ public class ProductServiceImpl implements ProductService {
 
     private final EntityManagerFactory entityManagerFactory;
 
-    @Override
     @SuppressWarnings("unchecked")
     public List<Product> searchProduct(List<SearchFilter> filters) {
         var specification = ProductSearch.resolve(filters);
@@ -40,15 +40,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> searchProduct(List<SearchFilter> filters, Sort sort) {
-        return null;
+    @SuppressWarnings("unchecked")
+    public List<Product> searchProduct(List<SearchFilter> filters, Pageable pageable) {
+        var specification = ProductSearch.resolve(filters);
+
+        var em = entityManagerFactory.createEntityManager();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<?> criteriaQuery = criteriaBuilder.createQuery();
+        Root<Product> root = criteriaQuery.from(Product.class);
+
+        var predicate = specification.toPredicate(root, criteriaQuery, criteriaBuilder);
+        var query = criteriaQuery.where(predicate);
+
+        return (List<Product>) em.createQuery(query).getResultList();
     }
 
     @Override
-    public List<Product> searchProduct(List<SearchFilter> filters, Sort sort, Pageable pageable) {
+    public List<Product> searchProduct(List<SearchFilter> filters, Pageable pageable, Sort sort) {
         return null;
     }
-
-
 
 }

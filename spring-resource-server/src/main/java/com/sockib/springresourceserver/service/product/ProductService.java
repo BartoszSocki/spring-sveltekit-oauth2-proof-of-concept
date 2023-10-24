@@ -9,8 +9,7 @@ import java.util.List;
 
 public interface ProductService {
 
-    List<Product> searchProduct(List<SearchFilter> filters);
-    List<Product> searchProduct(List<SearchFilter> filters, Sort sort);
-    List<Product> searchProduct(List<SearchFilter> filters, Sort sort, Pageable pageable);
+    List<Product> searchProduct(List<SearchFilter> filters, Pageable pageable);
+    List<Product> searchProduct(List<SearchFilter> filters, Pageable pageable, Sort sort);
 
 }
