@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.model.valueobject;
+package com.sockib.springresourceserver.model.embeddable;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

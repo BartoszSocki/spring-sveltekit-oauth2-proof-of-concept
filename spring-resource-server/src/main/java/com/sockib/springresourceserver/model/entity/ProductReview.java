@@ -1,9 +1,8 @@
 package com.sockib.springresourceserver.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
+import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreationAndUpdateTimestamp;
+import com.sockib.springresourceserver.model.embeddable.FiveStarScore;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,11 +10,16 @@ import lombok.Setter;
 @Setter
 
 @Entity
-@PrimaryKeyJoinColumn(name = "review_id")
-public class ProductReview extends Review {
+public class ProductReview extends WithCreationAndUpdateTimestamp {
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_catalog_id")
     private Product product;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private User reviewer;
+
+    private FiveStarScore fiveStarScore;
+    private String review;
 
 }

@@ -1,24 +1,24 @@
 package com.sockib.springresourceserver.model.entity;
 
-import com.sockib.springresourceserver.model.entity.mappedsuperclass.Resource;
+import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreationTimestamp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
 @Setter
 
 @Entity
-public class Tag extends Resource {
+public class Tag extends WithCreationTimestamp {
 
-    @Column(unique = true)
     private String name;
-
-    public Tag(String name) {
-        this.name = name;
-    }
+    private String value;
 
 }

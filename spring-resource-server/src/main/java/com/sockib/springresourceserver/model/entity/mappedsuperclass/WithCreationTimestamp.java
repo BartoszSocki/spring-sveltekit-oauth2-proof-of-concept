@@ -9,13 +9,13 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 
 @MappedSuperclass
-public abstract class Resource {
+public abstract class WithCreationTimestamp {
 
     @Id
     @Column(name = "id")

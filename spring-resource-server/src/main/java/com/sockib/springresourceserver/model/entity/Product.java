@@ -1,27 +1,30 @@
 package com.sockib.springresourceserver.model.entity;
 
-import com.sockib.springresourceserver.model.entity.mappedsuperclass.Resource;
-import com.sockib.springresourceserver.model.valueobject.ProductStatus;
+import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreationAndUpdateTimestamp;
+import com.sockib.springresourceserver.model.embeddable.Money;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
-
 @Getter
 @Setter
 
-@Entity
-public class Product extends Resource {
+@Entity(name = "`product_catalog`")
+public class Product extends WithCreationAndUpdateTimestamp {
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_details_id")
-    private ProductDetails productDetails;
+    private String name;
+    private Money price;
 
-    @OneToMany(mappedBy = "product")
-    private Set<ProductReview> productReviews;
+    @OneToOne(fetch = FetchType.LAZY)
+    private User owner;
 
-    @Enumerated(EnumType.STRING)
-    private ProductStatus productStatus;
+    @OneToOne(fetch = FetchType.LAZY)
+    private ProductInventory inventory;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Category category;
+
+    private String description;
+    private String imageUrl;
 
 }

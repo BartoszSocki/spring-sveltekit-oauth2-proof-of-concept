@@ -42,8 +42,8 @@ create table if not exists resource_server.product_inventory (
 	created_at timestamp null default now(),
 	updated_at timestamp null default now(),
 
-	quantity int not null,
-	products_bought int not null
+	quantity int not null check (quantity >= 0),
+	products_bought int not null check (products_bought >= 0)
 );
 
 create table if not exists resource_server.product_catalog (
@@ -65,7 +65,6 @@ create table if not exists resource_server.product_catalog (
 	constraint fk_inventory foreign key (inventory_id) references resource_server.product_inventory(id),
 	constraint fk_category foreign key (category_id) references resource_server.category(id)
 );
-
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
