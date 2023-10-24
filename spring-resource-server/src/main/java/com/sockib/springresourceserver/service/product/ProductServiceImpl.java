@@ -46,28 +46,9 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> searchProduct(List<SearchFilter> filters, Pageable pageable) {
         var specification = ProductSearch.resolve(filters);
 
-        var em = entityManagerFactory.createEntityManager();
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        CriteriaQuery<?> criteriaQuery = criteriaBuilder.createQuery();
-        Root<Product> root = criteriaQuery.from(Product.class);
 
-        var predicate = specification.toPredicate(root, criteriaQuery, criteriaBuilder);
-        var query = criteriaQuery
-                .multiselect(
-                        root.get(Product_.ID),
-                        criteriaBuilder.avg(
-                                root.get(Product_.PRODUCT_REVIEWS).get(ProductReview_.FIVE_STAR_SCORE)
-                        )
-                )
-                .where(predicate)
-                .groupBy(
-                        root.get(Product_.ID)
-                );
 
-        return (List<Product>) em.createQuery(query)
-                .setFirstResult((int) pageable.getOffset())
-                .setMaxResults(pageable.getPageSize())
-                .getResultList();
+        return null;
     }
 
     @Override

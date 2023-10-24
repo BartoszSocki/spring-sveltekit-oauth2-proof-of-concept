@@ -27,7 +27,7 @@ public class Product extends WithCreationAndUpdateTimestamp {
     @OneToOne(fetch = FetchType.LAZY)
     private Category category;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     private List<ProductReview> productReviews;
 
     private String description;
