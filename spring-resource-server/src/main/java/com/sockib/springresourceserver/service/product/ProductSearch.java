@@ -1,6 +1,6 @@
 package com.sockib.springresourceserver.service.product;
 
-import com.sockib.springresourceserver.model.embeddable.Price_;
+//import com.sockib.springresourceserver.model.embeddable.Price_;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Product_;
 import com.sockib.springresourceserver.util.search.SearchFilter;
@@ -45,11 +45,11 @@ public class ProductSearch {
     }
 
     public static Specification<Product> priceGreaterThan(Integer value) {
-        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.greaterThan(path.get(Product_.PRICE).get(Price_.PRICE), max(0, value));
+        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.greaterThan(path.get(Product_.PRICE).get("price"), max(0, value));
     }
 
     public static Specification<Product> priceLessThan(Integer value) {
-        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.lessThan(path.get(Product_.PRICE).get(Price_.PRICE), max(0, value));
+        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.lessThan(path.get(Product_.PRICE).get("price"), max(0, value));
     }
 
 }

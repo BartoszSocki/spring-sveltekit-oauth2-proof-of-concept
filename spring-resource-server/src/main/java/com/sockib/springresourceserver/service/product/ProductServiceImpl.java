@@ -1,6 +1,8 @@
 package com.sockib.springresourceserver.service.product;
 
 import com.sockib.springresourceserver.model.entity.Product;
+import com.sockib.springresourceserver.model.entity.ProductReview_;
+import com.sockib.springresourceserver.model.entity.Product_;
 import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.util.search.SearchFilter;
 import jakarta.persistence.EntityManagerFactory;
@@ -50,9 +52,22 @@ public class ProductServiceImpl implements ProductService {
         Root<Product> root = criteriaQuery.from(Product.class);
 
         var predicate = specification.toPredicate(root, criteriaQuery, criteriaBuilder);
-        var query = criteriaQuery.where(predicate);
+        var query = criteriaQuery
+                .multiselect(
+                        root.get(Product_.ID),
+                        criteriaBuilder.avg(
+                                root.get(Product_.PRODUCT_REVIEWS).get(ProductReview_.FIVE_STAR_SCORE)
+                        )
+                )
+                .where(predicate)
+                .groupBy(
+                        root.get(Product_.ID)
+                );
 
-        return (List<Product>) em.createQuery(query).getResultList();
+        return (List<Product>) em.createQuery(query)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .getResultList();
     }
 
     @Override
