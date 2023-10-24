@@ -1,0 +1,31 @@
+enum SearchOperator {
+    GT, LT, EQ, LIKE, IN
+}
+
+type Price {
+    price: Float!
+    currency: String
+}
+
+input SearchFilter {
+    fieldName: String!
+    searchOperator: SearchOperator!
+    fieldValue: String!
+}
+
+type Product {
+    id: ID!
+    ownerId: Int!
+    name: String!
+    price: Price!
+    quantity: Int!
+    category: String!
+
+    description: String
+    avgFiveStarScore: Float
+    reviewsCount: Int
+}
+
+type Query {
+    searchProducts(filters: [SearchFilter]!): [Product]!
+}
