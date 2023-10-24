@@ -14,7 +14,7 @@ import lombok.*;
 public class ProductScore {
 
     @Transient
-    private Long numberOfReviews;
+    private Long reviewsCount;
 
     @Transient
     private Double averageScore;

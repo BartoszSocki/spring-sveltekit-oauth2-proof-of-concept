@@ -3,6 +3,8 @@ package com.sockib.springresourceserver.service.product;
 import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.util.search.SearchFilter;
 import com.sockib.springresourceserver.util.search.SearchOperation;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -19,6 +21,13 @@ class ProductServiceImplTest {
     @Autowired
     ProductRepository productRepository;
 
+    SearchFilterToProductSpecificationConverter searchFilterToProductSpecificationConverter;
+
+    @BeforeEach
+    void init() {
+        searchFilterToProductSpecificationConverter = new SearchFilterToProductSpecificationConverterImpl();
+    }
+
     @Test
     @Sql("/service/product/data1.sql")
     void givenSearchFiltersAndPage_whenSearch_thenSuccess() {
@@ -31,11 +40,11 @@ class ProductServiceImplTest {
                         .build()
         );
 
-        var specification = ProductSearch.resolve(filters);
+        var specification = searchFilterToProductSpecificationConverter.convert(filters);
         var page = Pageable.ofSize(10);
 
         // when
-        var products = productRepository.findProducts(specification, page, "product[category]");
+        productRepository.findProducts(specification, page, "product[category]");
 
         // then
         assert true;

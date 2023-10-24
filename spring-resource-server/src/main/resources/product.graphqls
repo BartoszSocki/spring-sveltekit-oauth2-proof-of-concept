@@ -2,9 +2,14 @@ enum SearchOperator {
     GT, LT, EQ, LIKE, IN
 }
 
-type Price {
-    price: Float!
-    currency: String
+type Money {
+    amount: Float!
+    currency: String!
+}
+
+type ProductScore {
+    averageScore: Float
+    reviewsCount: Int
 }
 
 input SearchFilter {
@@ -17,13 +22,12 @@ type Product {
     id: ID!
     ownerId: Int!
     name: String!
-    price: Price!
+    price: Money!
     quantity: Int!
     category: String!
+    productScore: ProductScore!
 
     description: String
-    avgFiveStarScore: Float
-    reviewsCount: Int
 }
 
 type Query {
