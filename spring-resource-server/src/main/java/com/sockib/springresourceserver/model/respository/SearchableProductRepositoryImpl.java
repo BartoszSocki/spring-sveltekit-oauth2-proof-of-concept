@@ -67,7 +67,7 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
         var graph = entityManager.getEntityGraph(entityGraphName);
 
         var products = entityManager.createQuery(productQuery)
-                .setHint("javax.persistence.fetchgraph", graph)
+                .setHint("jakarta.persistence.fetchgraph", graph)
                 .getResultList();
 
         products.forEach(p -> p.setProductScore(productScores.get(p.getId())));

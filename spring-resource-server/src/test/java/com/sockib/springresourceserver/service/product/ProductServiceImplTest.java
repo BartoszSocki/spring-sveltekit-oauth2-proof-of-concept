@@ -3,7 +3,6 @@ package com.sockib.springresourceserver.service.product;
 import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.util.search.SearchFilter;
 import com.sockib.springresourceserver.util.search.SearchOperation;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -44,10 +45,10 @@ class ProductServiceImplTest {
         var page = Pageable.ofSize(10);
 
         // when
-        productRepository.findProducts(specification, page, "product[category]");
+        var products = productRepository.findProducts(specification, page, "product[category]");
 
         // then
-        assert true;
+        assertThat(products).isNotEmpty();
     }
 
 }

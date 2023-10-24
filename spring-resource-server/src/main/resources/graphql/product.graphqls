@@ -1,4 +1,4 @@
-enum SearchOperator {
+enum SearchOperation {
     GT, LT, EQ, LIKE, IN
 }
 
@@ -14,7 +14,7 @@ type ProductScore {
 
 input SearchFilter {
     fieldName: String!
-    searchOperator: SearchOperator!
+    searchOperation: SearchOperation!
     fieldValue: String!
 }
 

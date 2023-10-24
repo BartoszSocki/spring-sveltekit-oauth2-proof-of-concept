@@ -13,12 +13,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableMethodSecurity
 @EnableWebSecurity(debug = true)
-public class ResourceServerConfig {
+public class ResourceServerSecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(x -> x.anyRequest().authenticated())
+//                .authorizeHttpRequests(x -> x.anyRequest().authenticated())
+                .authorizeHttpRequests(x -> x.anyRequest().permitAll())
                 .oauth2ResourceServer(x -> x.jwt(y -> y
 //                        .authenticationManager()
                         .jwkSetUri("http://localhost:8080/oauth2/jwks")
