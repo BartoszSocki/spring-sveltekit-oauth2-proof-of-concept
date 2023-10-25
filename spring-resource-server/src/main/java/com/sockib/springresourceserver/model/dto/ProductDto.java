@@ -1,6 +1,5 @@
 package com.sockib.springresourceserver.model.dto;
 
-import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.embeddable.ProductScore;
 import com.sockib.springresourceserver.model.entity.Product;
 import lombok.Getter;
