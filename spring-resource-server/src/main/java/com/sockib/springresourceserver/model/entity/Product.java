@@ -42,6 +42,15 @@ public class Product extends WithCreationAndUpdateTimestamp {
     @OneToOne(fetch = FetchType.LAZY)
     private ProductInventory inventory;
 
+    @ToString.Exclude
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "product_catalog_tag",
+            joinColumns = @JoinColumn(name = "product_catalog_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> tags;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;

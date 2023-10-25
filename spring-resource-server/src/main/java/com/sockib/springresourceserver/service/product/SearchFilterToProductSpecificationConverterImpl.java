@@ -3,11 +3,11 @@ package com.sockib.springresourceserver.service.product;
 import com.sockib.springresourceserver.model.entity.Category_;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Product_;
-import com.sockib.springresourceserver.model.entity.Tag;
 import com.sockib.springresourceserver.util.search.SearchFilter;
 import com.sockib.springresourceserver.util.search.SearchOperation;
 import com.sockib.springresourceserver.util.search.Specification;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.Math.max;
@@ -36,6 +36,11 @@ public class SearchFilterToProductSpecificationConverterImpl implements SearchFi
             return withCategory(value);
         }
 
+        if ("tag".equals(field) && SearchOperation.IN.equals(op)) {
+            List<String> tags = Arrays.stream(value.split(" ")).toList();
+            return withTags(tags);
+        }
+
         throw new RuntimeException("combination of field name: " + field + " and operator: " + op + " not found");
     }
 
@@ -61,6 +66,11 @@ public class SearchFilterToProductSpecificationConverterImpl implements SearchFi
 
     private Specification<Product> withCategory(String name) {
         return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(path.get(Product_.CATEGORY).get(Category_.NAME), name);
+    }
+
+    private Specification<Product> withTags(List<String> tags) {
+        return null;
+//        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.in(path.get(Product_.).get(Category_.NAME)).value(tags);
     }
 
 }
