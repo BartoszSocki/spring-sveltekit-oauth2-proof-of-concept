@@ -79,4 +79,26 @@ class ProductRepositoryTest {
         assertThat(productCategories).containsOnly(category);
     }
 
+    @Test
+    @Sql("/repository/tags_test_1.sql")
+    void givenTagsFilter_whenSearch_thenSuccess() {
+        // given
+        final String tags = "Poland";
+
+        var filter = SearchFilter.builder()
+                .fieldName("tag")
+                .searchOperation(SearchOperation.IN)
+                .fieldValue(tags)
+                .build();
+
+        var specification = searchFilterToProductSpecificationConverter.convert(filter);
+        var page = Pageable.ofSize(10);
+
+        // when
+        var products = productRepository.findProducts(specification, page, "product[all]");
+
+        // then
+        assertThat(products).isNotEmpty();
+    }
+
 }
