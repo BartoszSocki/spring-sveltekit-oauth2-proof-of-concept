@@ -2,19 +2,19 @@ package com.sockib.springresourceserver.model.respository;
 
 import com.sockib.springresourceserver.model.embeddable.ProductScore;
 import com.sockib.springresourceserver.model.entity.Product;
+import com.sockib.springresourceserver.model.entity.ProductReview;
 import com.sockib.springresourceserver.model.entity.ProductReview_;
 import com.sockib.springresourceserver.model.entity.Product_;
 import com.sockib.springresourceserver.util.search.Specification;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -29,15 +29,16 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
         Root<Product> root = criteriaQuery.from(Product.class);
 
         var predicate = specification.toPredicate(root, criteriaQuery, criteriaBuilder);
+        Path<ProductReview> reviewJoin = root.join(Product_.PRODUCT_REVIEWS, JoinType.LEFT);
 
         var query = criteriaQuery
                 .multiselect(
                         root.get(Product_.ID),
                         criteriaBuilder.avg(
-                                root.get(Product_.PRODUCT_REVIEWS).get(ProductReview_.FIVE_STAR_SCORE)
+                                reviewJoin.get(ProductReview_.FIVE_STAR_SCORE)
                         ),
                         criteriaBuilder.count(
-                                root.get(Product_.ID)
+                                reviewJoin.get(ProductReview_.FIVE_STAR_SCORE)
                         )
                 )
                 .where(predicate)

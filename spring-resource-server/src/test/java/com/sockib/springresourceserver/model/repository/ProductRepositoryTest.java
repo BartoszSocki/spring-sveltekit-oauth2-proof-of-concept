@@ -32,7 +32,7 @@ class ProductRepositoryTest {
     }
 
     @Test
-    @Sql("/service/product/data1.sql")
+    @Sql("/repository/name_test_1.sql")
     void givenSearchFiltersAndPage_whenSearch_thenSuccess() {
         // given
         var filters = List.of(
@@ -51,6 +51,32 @@ class ProductRepositoryTest {
 
         // then
         assertThat(products).isNotEmpty();
+    }
+
+    @Test
+    @Sql("/repository/category_test_1.sql")
+    void givenCategoryFilter_whenSearch_thenSuccess() {
+        // given
+        final String category = "Chairs";
+
+        var filter = SearchFilter.builder()
+                .fieldName("category")
+                .searchOperation(SearchOperation.EQ)
+                .fieldValue(category)
+                .build();
+
+        var specification = searchFilterToProductSpecificationConverter.convert(filter);
+        var page = Pageable.ofSize(10);
+
+        // when
+        var products = productRepository.findProducts(specification, page, "product[category]");
+
+        // then
+        var productCategories = products.stream().map(p -> p.getCategory().getName()).toList();
+
+        assertThat(productCategories).isNotEmpty();
+        assertThat(productCategories).hasSize(2);
+        assertThat(productCategories).containsOnly(category);
     }
 
 }
