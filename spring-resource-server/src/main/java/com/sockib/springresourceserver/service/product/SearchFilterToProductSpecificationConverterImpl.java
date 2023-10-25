@@ -1,7 +1,9 @@
 package com.sockib.springresourceserver.service.product;
 
+import com.sockib.springresourceserver.model.entity.Category_;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Product_;
+import com.sockib.springresourceserver.model.entity.Tag;
 import com.sockib.springresourceserver.util.search.SearchFilter;
 import com.sockib.springresourceserver.util.search.SearchOperation;
 import com.sockib.springresourceserver.util.search.Specification;
@@ -30,6 +32,10 @@ public class SearchFilterToProductSpecificationConverterImpl implements SearchFi
             return priceLessThan(Integer.valueOf(value));
         }
 
+        if ("category".equals(field) && SearchOperation.EQ.equals(op)) {
+            return withCategory(value);
+        }
+
         throw new RuntimeException("combination of field name: " + field + " and operator: " + op + " not found");
     }
 
@@ -51,6 +57,10 @@ public class SearchFilterToProductSpecificationConverterImpl implements SearchFi
 
     public Specification<Product> priceLessThan(Integer value) {
         return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.lessThan(path.get(Product_.PRICE).get("price"), max(0, value));
+    }
+
+    private Specification<Product> withCategory(String name) {
+        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(path.get(Product_.CATEGORY).get(Category_.NAME), name);
     }
 
 }
