@@ -3,6 +3,7 @@ package com.sockib.springresourceserver.service.product;
 import com.sockib.springresourceserver.model.entity.Category_;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Product_;
+import com.sockib.springresourceserver.model.entity.Tag_;
 import com.sockib.springresourceserver.util.search.SearchFilter;
 import com.sockib.springresourceserver.util.search.SearchOperation;
 import com.sockib.springresourceserver.util.search.Specification;
@@ -69,8 +70,7 @@ public class SearchFilterToProductSpecificationConverterImpl implements SearchFi
     }
 
     private Specification<Product> withTags(List<String> tags) {
-        return null;
-//        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.in(path.get(Product_.).get(Category_.NAME)).value(tags);
+        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.in(path.get(Product_.TAGS).get(Tag_.VALUE)).value(tags);
     }
 
 }
