@@ -1,5 +1,6 @@
 package com.sockib.springresourceserver.controllers;
 
+import com.sockib.springresourceserver.model.dto.ProductDto;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.service.product.ProductService;
 import com.sockib.springresourceserver.util.search.SearchFilter;
@@ -19,8 +20,10 @@ public class ProductController {
     private final ProductService productService;
 
     @QueryMapping
-    List<Product> searchProducts(@Argument List<SearchFilter> filters) {
-        return productService.searchProduct(filters, Pageable.ofSize(10));
+    List<ProductDto> searchProducts(@Argument List<SearchFilter> filters) {
+        return productService.searchProduct(filters, Pageable.ofSize(10)).stream()
+                .map(ProductDto::new)
+                .toList();
     }
 
 }

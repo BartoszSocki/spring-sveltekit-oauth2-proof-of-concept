@@ -50,6 +50,7 @@ public class Product extends WithCreationAndUpdateTimestamp {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     private List<ProductReview> productReviews;
 
+    @Basic(fetch = FetchType.LAZY)
     private String description;
     private String imageUrl;
 

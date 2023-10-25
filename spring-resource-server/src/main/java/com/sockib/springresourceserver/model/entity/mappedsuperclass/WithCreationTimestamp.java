@@ -1,5 +1,6 @@
 package com.sockib.springresourceserver.model.entity.mappedsuperclass;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
