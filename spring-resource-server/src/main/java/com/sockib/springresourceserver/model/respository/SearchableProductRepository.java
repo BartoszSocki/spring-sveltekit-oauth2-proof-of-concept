@@ -9,5 +9,6 @@ import java.util.List;
 public interface SearchableProductRepository {
 
     List<Product> findProducts(Specification<Product> specification, Pageable pageable, String entityGraphName);
+    List<Product> findProducts(Specification<Product> specification, Pageable pageable);
 
 }

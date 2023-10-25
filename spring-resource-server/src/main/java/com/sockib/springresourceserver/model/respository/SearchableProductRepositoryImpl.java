@@ -75,4 +75,9 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
         return products;
     }
 
+    @Override
+    public List<Product> findProducts(Specification<Product> specification, Pageable pageable) {
+        return findProducts(specification, pageable, "product[all]");
+    }
+
 }
