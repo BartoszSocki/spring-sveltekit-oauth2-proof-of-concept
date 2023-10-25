@@ -1,6 +1,8 @@
-package com.sockib.springresourceserver.service.product;
+package com.sockib.springresourceserver.model.repository;
 
 import com.sockib.springresourceserver.model.respository.ProductRepository;
+import com.sockib.springresourceserver.service.product.SearchFilterToProductSpecificationConverter;
+import com.sockib.springresourceserver.service.product.SearchFilterToProductSpecificationConverterImpl;
 import com.sockib.springresourceserver.util.search.SearchFilter;
 import com.sockib.springresourceserver.util.search.SearchOperation;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class ProductServiceImplTest {
+class ProductRepositoryTest {
 
     @Autowired
     ProductRepository productRepository;
