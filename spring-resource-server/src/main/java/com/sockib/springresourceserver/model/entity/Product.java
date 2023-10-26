@@ -5,15 +5,16 @@ import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreatio
 import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.respository.ProductRepository;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 
 @Entity(name = "`product_catalog`")
 @NamedEntityGraph(name = "product[owner]",
@@ -68,6 +69,7 @@ public class Product extends WithCreationAndUpdateTimestamp {
     private List<ProductReview> productReviews;
 
     @Basic(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private String description;
     private String imageUrl;
 

@@ -2,10 +2,8 @@ package com.sockib.springresourceserver.service.product;
 
 import com.sockib.springresourceserver.model.dto.ProductInputDto;
 import com.sockib.springresourceserver.model.dto.TagDto;
-import com.sockib.springresourceserver.model.entity.Category;
-import com.sockib.springresourceserver.model.entity.CategoryRepository;
-import com.sockib.springresourceserver.model.entity.Product;
-import com.sockib.springresourceserver.model.entity.Tag;
+import com.sockib.springresourceserver.model.embeddable.Money;
+import com.sockib.springresourceserver.model.entity.*;
 import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.model.respository.TagRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
@@ -21,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Transactional
 @Service
@@ -62,18 +61,26 @@ public class ProductServiceImpl implements ProductService {
 
         var tags = productInputDto.getTags().stream().map(TagDto::getName).toList();
         var fetchedTags = tagRepository.findAllByNameIn(tags);
-        var fetchedTagsNames = fetchedTags.stream().map(Tag::getName).collect(Collectors.toSet());
-        List<Tag> newTags = new ArrayList<>(tags.stream().filter(t -> !fetchedTagsNames.contains(t)).map(Tag::new).toList());
+        var fetchedTagsNames = fetchedTags.map(Tag::getName).collect(Collectors.toSet());
+        var newTags = tags.stream().filter(t -> !fetchedTagsNames.contains(t)).map(Tag::new);
 
-        var productTags = newTags.addAll(fetchedTags);
+        var productTags = Stream.concat(newTags, fetchedTags).toList();
 
-        var category = categoryRepository.findCategoryByName(productInputDto.getCategory())
+        var productCategory = categoryRepository.findCategoryByName(productInputDto.getCategory())
                 .orElse(new Category(productInputDto.getCategory()));
-        // if all is good then save tags if they don't exist
-        // save category
-        // create product entity
-        // save
-        return null;
+
+        var product = Product.builder()
+                .name(productInputDto.getName())
+                .category(productCategory)
+                .tags(productTags)
+                .description(productInputDto.getDescription())
+                .imageUrl(productInputDto.getImageUrl())
+                .owner(user)
+                .inventory(new ProductInventory(productInputDto.getQuantity()))
+                .price(productInputDto.getPrice().toMoney())
+                .build();
+
+        return productRepository.save(product);
     }
 
 }

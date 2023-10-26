@@ -17,4 +17,8 @@ public class MoneyDto {
         this.currency = money.getCurrency();
     }
 
+    public Money toMoney() {
+        return new Money(amount, currency);
+    }
+
 }

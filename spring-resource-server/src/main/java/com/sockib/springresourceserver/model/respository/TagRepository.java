@@ -4,10 +4,10 @@ import com.sockib.springresourceserver.model.entity.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.stream.Stream;
 
 public interface TagRepository extends JpaRepository<Tag, Long> {
 
-    List<Tag> findAllByNameIn(Collection<String> name);
+    Stream<Tag> findAllByNameIn(Collection<String> name);
 
 }
