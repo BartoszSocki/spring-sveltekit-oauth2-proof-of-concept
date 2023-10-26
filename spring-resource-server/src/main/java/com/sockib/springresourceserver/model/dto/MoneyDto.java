@@ -15,7 +15,7 @@ public class MoneyDto {
     private String currency;
 
     public MoneyDto(Money money) {
-        this.amount = money.getPrice();
+        this.amount = money.getAmount();
         this.currency = money.getCurrency();
     }
 

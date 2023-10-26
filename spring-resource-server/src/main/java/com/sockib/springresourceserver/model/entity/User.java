@@ -19,7 +19,7 @@ public class User extends WithCreationTimestamp {
     @Column(unique = true)
     private String email;
 
-    @AttributeOverride(name = "price", column = @Column(name = "user_money"))
+    @AttributeOverride(name = "amount", column = @Column(name = "user_money"))
     private Money userMoney;
 
 }

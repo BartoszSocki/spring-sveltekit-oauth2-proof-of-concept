@@ -41,6 +41,8 @@ import java.util.List;
 public class Product extends WithCreationAndUpdateTimestamp {
 
     private String name;
+
+    @AttributeOverride(name = "amount", column = @Column(name = "price"))
     private Money price;
 
     @ToString.Exclude

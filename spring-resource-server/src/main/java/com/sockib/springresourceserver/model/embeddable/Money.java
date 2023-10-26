@@ -14,7 +14,7 @@ import lombok.Setter;
 @Embeddable
 public class Money {
 
-    private Double price;
+    private Double amount;
     private String currency;
 
 }
