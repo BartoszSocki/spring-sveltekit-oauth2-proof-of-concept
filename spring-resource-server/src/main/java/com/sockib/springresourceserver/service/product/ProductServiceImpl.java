@@ -61,18 +61,9 @@ public class ProductServiceImpl implements ProductService {
         var email = authentication.getName();
         var user = userRepository.findUserByEmail(email).orElseThrow(() -> new RuntimeException("TODO: add User Not Found Exception"));
 
-        var tags = productInputDto.getTags().stream().map(TagDto::getName).toList();
-        List<Tag> fetchedTags = tagRepository.findAllByNameIn(tags);
-        Set<String> fetchedTagsNames = fetchedTags.stream()
-                .map(Tag::getName)
-                .collect(Collectors.toSet());
-
-        List<Tag> newTags = tags.stream()
-                .filter(t -> !fetchedTagsNames.contains(t))
-                .map(Tag::new)
-                .toList();
-
-        var productTags = tagRepository.saveAll(Stream.concat(newTags.stream(), fetchedTags.stream()).toList());
+        var tagNames = productInputDto.getTags().stream().map(TagDto::getName).toList();
+        List<Tag> existingTags = tagRepository.findAllByNameIn(tagNames);
+        var productTags = combineExistingTagsWithNewTags(tagNames, existingTags);
 
         var productCategory = categoryRepository.findCategoryByName(productInputDto.getCategory())
                 .orElse(new Category(productInputDto.getCategory()));
@@ -89,6 +80,19 @@ public class ProductServiceImpl implements ProductService {
                 .build();
 
         return productRepository.save(product);
+    }
+
+    private List<Tag> combineExistingTagsWithNewTags(List<String> allTagNames, List<Tag> existingTags) {
+        Set<String> alreadyExistingTagNames = existingTags.stream()
+                .map(Tag::getName)
+                .collect(Collectors.toSet());
+
+        List<Tag> newTags = allTagNames.stream()
+                .filter(t -> !alreadyExistingTagNames.contains(t))
+                .map(Tag::new)
+                .toList();
+
+        return Stream.concat(existingTags.stream(), newTags.stream()).toList();
     }
 
 }

@@ -25,4 +25,5 @@ public class Tag extends WithCreationTimestamp {
     public Tag(String name) {
         this.name = name;
     }
+
 }
