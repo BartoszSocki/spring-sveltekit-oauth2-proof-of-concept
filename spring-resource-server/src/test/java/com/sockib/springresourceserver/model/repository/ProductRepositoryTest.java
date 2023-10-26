@@ -1,6 +1,12 @@
 package com.sockib.springresourceserver.model.repository;
 
+import com.sockib.springresourceserver.model.embeddable.Money;
+import com.sockib.springresourceserver.model.entity.Category;
+import com.sockib.springresourceserver.model.entity.Product;
+import com.sockib.springresourceserver.model.entity.ProductInventory;
+import com.sockib.springresourceserver.model.entity.User;
 import com.sockib.springresourceserver.model.respository.ProductRepository;
+import com.sockib.springresourceserver.model.respository.UserRepository;
 import com.sockib.springresourceserver.service.product.SearchFilterToProductSpecificationConverter;
 import com.sockib.springresourceserver.service.product.SearchFilterToProductSpecificationConverterImpl;
 import com.sockib.springresourceserver.util.search.SearchFilter;
@@ -13,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 
+import javax.swing.text.html.InlineView;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -23,6 +30,9 @@ class ProductRepositoryTest {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     SearchFilterToProductSpecificationConverter searchFilterToProductSpecificationConverter;
 
@@ -99,6 +109,28 @@ class ProductRepositoryTest {
 
         // then
         assertThat(products).isNotEmpty();
+    }
+
+    @Test
+    @Sql("/repository/add_new_product_test_1.sql")
+    void givenProduct_whenPersist_thenSuccess() {
+        // given
+        var owner = userRepository.findById(100L).orElseThrow(RuntimeException::new);
+
+        var product = Product.builder()
+                .name("beer")
+                .description("students drink")
+                .inventory(new ProductInventory(1))
+                .category(new Category("beverage"))
+                .owner(owner)
+                .price(new Money(1.0, "USD"))
+                .build();
+
+        // when
+        productRepository.save(product);
+
+        // then
+        assert true;
     }
 
 }

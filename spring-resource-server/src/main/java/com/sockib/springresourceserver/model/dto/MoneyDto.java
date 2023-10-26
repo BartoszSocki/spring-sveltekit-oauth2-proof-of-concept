@@ -3,10 +3,12 @@ package com.sockib.springresourceserver.model.dto;
 
 import com.sockib.springresourceserver.model.embeddable.Money;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class MoneyDto {
 
     private Double amount;

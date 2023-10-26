@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -55,16 +56,23 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public Product addNewProduct(@Valid ProductInputDto productInputDto, Authentication authentication) {
         var email = authentication.getName();
         var user = userRepository.findUserByEmail(email).orElseThrow(() -> new RuntimeException("TODO: add User Not Found Exception"));
 
         var tags = productInputDto.getTags().stream().map(TagDto::getName).toList();
-        var fetchedTags = tagRepository.findAllByNameIn(tags);
-        var fetchedTagsNames = fetchedTags.map(Tag::getName).collect(Collectors.toSet());
-        var newTags = tags.stream().filter(t -> !fetchedTagsNames.contains(t)).map(Tag::new);
+        List<Tag> fetchedTags = tagRepository.findAllByNameIn(tags);
+        Set<String> fetchedTagsNames = fetchedTags.stream()
+                .map(Tag::getName)
+                .collect(Collectors.toSet());
 
-        var productTags = Stream.concat(newTags, fetchedTags).toList();
+        List<Tag> newTags = tags.stream()
+                .filter(t -> !fetchedTagsNames.contains(t))
+                .map(Tag::new)
+                .toList();
+
+        var productTags = tagRepository.saveAll(Stream.concat(newTags.stream(), fetchedTags.stream()).toList());
 
         var productCategory = categoryRepository.findCategoryByName(productInputDto.getCategory())
                 .orElse(new Category(productInputDto.getCategory()));

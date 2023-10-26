@@ -44,11 +44,11 @@ public class Product extends WithCreationAndUpdateTimestamp {
     private Money price;
 
     @ToString.Exclude
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch= FetchType.LAZY)
     private User owner;
 
     @ToString.Exclude
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch= FetchType.LAZY)
     private ProductInventory inventory;
 
     @ToString.Exclude
@@ -60,7 +60,7 @@ public class Product extends WithCreationAndUpdateTimestamp {
     )
     private List<Tag> tags;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch= FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 

@@ -5,11 +5,13 @@ import com.sockib.springresourceserver.model.embeddable.Money;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 
 @Entity(name = "`user`")
 public class User extends WithCreationTimestamp {

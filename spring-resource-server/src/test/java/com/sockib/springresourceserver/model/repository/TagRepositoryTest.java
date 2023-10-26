@@ -29,7 +29,7 @@ public class TagRepositoryTest {
         tagNames.add("USA");
 
         // when
-        var tags = tagRepository.findAllByNameIn(tagNames).toList();
+        var tags = tagRepository.findAllByNameIn(tagNames);
 
         // then
         assertThat(tags).hasSize(tagNames.size());
