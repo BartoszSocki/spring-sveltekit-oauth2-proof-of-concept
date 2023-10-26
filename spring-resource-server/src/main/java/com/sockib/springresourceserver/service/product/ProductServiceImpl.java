@@ -5,6 +5,7 @@ import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.util.search.SearchFilter;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
@@ -42,8 +43,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product addNewProduct(ProductInputDto productInputDto, Authentication authentication) {
-        // validation in dto
         // if all is good then save tags if they don't exist
+        // save category
         // create product entity
         // save
         return null;
