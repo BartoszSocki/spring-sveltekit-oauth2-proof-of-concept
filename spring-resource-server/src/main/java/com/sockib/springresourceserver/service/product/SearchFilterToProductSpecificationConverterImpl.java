@@ -70,7 +70,7 @@ public class SearchFilterToProductSpecificationConverterImpl implements SearchFi
     }
 
     private Specification<Product> withTags(List<String> tags) {
-        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.in(path.get(Product_.TAGS).get(Tag_.VALUE)).value(tags);
+        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.in(path.get(Product_.TAGS).get(Tag_.NAME)).value(tags);
     }
 
 }

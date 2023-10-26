@@ -21,6 +21,5 @@ import java.util.Set;
 public class Tag extends WithCreationTimestamp {
 
     private String name;
-    private String value;
 
 }
