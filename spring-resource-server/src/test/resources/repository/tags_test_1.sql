@@ -16,11 +16,11 @@ insert into resource_server.product_catalog (id, name, price, currency, owner_id
 insert into resource_server.product_catalog (id, name, price, currency, owner_id, inventory_id, category_id) values (400, 'Chair 2', 100.00, 'USD', 100, 400, 100);
 insert into resource_server.product_catalog (id, name, price, currency, owner_id, inventory_id, category_id) values (500, 'Game 1', 100.00, 'USD', 100, 500, 300);
 
-insert into resource_server.tag (id, name, value) values (100, 'Made in', 'China');
-insert into resource_server.tag (id, name, value) values (200, 'Made in', 'Poland');
-insert into resource_server.tag (id, name, value) values (300, 'Made in', 'Thailand');
-insert into resource_server.tag (id, name, value) values (400, 'Made in', 'Germany');
-insert into resource_server.tag (id, name, value) values (500, 'Made in', 'USA');
+insert into resource_server.tag (id, name, value) values (100, 'China');
+insert into resource_server.tag (id, name, value) values (200, 'Poland');
+insert into resource_server.tag (id, name, value) values (300, 'Thailand');
+insert into resource_server.tag (id, name, value) values (400, 'Germany');
+insert into resource_server.tag (id, name, value) values (500, 'USA');
 
 insert into resource_server.product_catalog_tag (product_catalog_id, tag_id) values (100, 100);
 insert into resource_server.product_catalog_tag (product_catalog_id, tag_id) values (100, 200);
