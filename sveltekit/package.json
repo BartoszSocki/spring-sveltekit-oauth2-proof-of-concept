@@ -1,33 +1,35 @@
 {
-	"name": "sveltekit",
-	"version": "0.0.1",
-	"scripts": {
-		"dev": "vite dev --port 3000",
-		"build": "vite build",
-		"preview": "vite preview",
-		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write ."
-	},
-	"devDependencies": {
-		"@fontsource/fira-mono": "^4.5.10",
-		"@neoconfetti/svelte": "^1.0.0",
-		"@sveltejs/adapter-auto": "^2.0.0",
-		"@sveltejs/kit": "^1.20.4",
-		"eslint": "^8.28.0",
-		"eslint-config-prettier": "^8.5.0",
-		"eslint-plugin-svelte": "^2.30.0",
-		"prettier": "^2.8.0",
-		"prettier-plugin-svelte": "^2.10.1",
-		"svelte": "^4.0.5",
-		"vite": "^4.4.2"
-	},
-	"type": "module",
-	"dependencies": {
-		"dayjs": "^1.11.10",
-		"jwt-decode": "^3.1.2",
-		"pg": "^8.11.3",
-		"pg-hstore": "^2.3.4",
-		"sequelize": "^6.33.0",
-		"winston": "^3.10.0"
-	}
+    "name": "sveltekit",
+    "version": "0.0.1",
+    "scripts": {
+        "dev": "vite dev --port 3000",
+        "build": "vite build",
+        "preview": "vite preview",
+        "lint": "prettier --plugin-search-dir . --check . && eslint .",
+        "format": "prettier --plugin-search-dir . --write ."
+    },
+    "devDependencies": {
+        "@fontsource/fira-mono": "^4.5.10",
+        "@neoconfetti/svelte": "^1.0.0",
+        "@sveltejs/adapter-auto": "^2.0.0",
+        "@sveltejs/kit": "^1.20.4",
+        "eslint": "^8.28.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-svelte": "^2.30.0",
+        "prettier": "^2.8.0",
+        "prettier-plugin-svelte": "^2.10.1",
+        "svelte": "^4.0.5",
+        "vite": "^4.4.2",
+        "houdini": "^1.2.31",
+        "houdini-svelte": "^1.2.31"
+    },
+    "type": "module",
+    "dependencies": {
+        "dayjs": "^1.11.10",
+        "jwt-decode": "^3.1.2",
+        "pg": "^8.11.3",
+        "pg-hstore": "^2.3.4",
+        "sequelize": "^6.33.0",
+        "winston": "^3.10.0"
+    }
 }

@@ -13,7 +13,6 @@ public interface ProductService {
 
     List<Product> searchProduct(List<SearchFilter> filters, Pageable pageable);
     List<Product> searchProduct(List<SearchFilter> filters, Pageable pageable, Sort sort);
-
     Product addNewProduct(ProductInputDto productInputDto, String email);
 
 }

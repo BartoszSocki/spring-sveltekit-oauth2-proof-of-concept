@@ -1,0 +1,38 @@
+type Money {
+  amount: Float!
+  currency: String!
+}
+
+type Product {
+  category: String!
+  description: String
+  id: ID!
+  name: String!
+  ownerId: Int!
+  price: Money!
+  productScore: ProductScore!
+  quantity: Int!
+}
+
+type ProductScore {
+  averageScore: Float
+  reviewsCount: Int
+}
+
+type Query {
+  searchProducts(filters: [SearchFilter]!): [Product]!
+}
+
+input SearchFilter {
+  fieldName: String!
+  fieldValue: String!
+  searchOperation: SearchOperation!
+}
+
+enum SearchOperation {
+  EQ
+  GT
+  IN
+  LIKE
+  LT
+}

@@ -87,10 +87,10 @@ public class AppConfig {
                 .authorizeHttpRequests(x -> x
                         .requestMatchers("/oauth2/callback/**").permitAll()
                         .anyRequest().authenticated())
-//                .formLogin(Customizer.withDefaults())
-                .formLogin(x -> x
-                        .successHandler((req, res, auth) -> log.info("success " +  auth.getName() + " " + auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(", "))))
-                )
+                .formLogin(Customizer.withDefaults())
+//                .formLogin(x -> x
+//                        .successHandler((req, res, auth) -> log.info("success " +  auth.getName() + " " + auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(", "))))
+//                )
                 .oauth2Login(x -> x
                         .authorizationEndpoint(w -> w.baseUri("/oauth2/login"))
                         .redirectionEndpoint(w -> w.baseUri("/oauth2/callback/**"))
@@ -144,7 +144,8 @@ public class AppConfig {
     RegisteredClientRepository registeredClientRepository() {
         RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("client")
-                .clientSecret("{noop}secret")
+//                .clientSecret("{noop}secret")
+                .clientSecret("secret")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
