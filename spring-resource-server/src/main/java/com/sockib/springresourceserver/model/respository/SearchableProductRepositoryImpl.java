@@ -5,6 +5,7 @@ import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.ProductReview;
 import com.sockib.springresourceserver.model.entity.ProductReview_;
 import com.sockib.springresourceserver.model.entity.Product_;
+import com.sockib.springresourceserver.util.search.Page;
 import com.sockib.springresourceserver.util.search.Specification;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
@@ -23,7 +24,7 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
     private final EntityManager entityManager;
 
     @Override
-    public List<Product> findProducts(Specification<Product> specification, Pageable pageable, String entityGraphName) {
+    public List<Product> findProducts(Specification<Product> specification, Page page, String entityGraphName) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> criteriaQuery = criteriaBuilder.createTupleQuery();
         Root<Product> root = criteriaQuery.from(Product.class);
@@ -46,13 +47,9 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
                         root.get(Product_.ID)
                 );
 
-        if (pageable.isUnpaged()) {
-            throw new RuntimeException("problem with paging");
-        }
-
         var list = entityManager.createQuery(query)
-                .setFirstResult((int) pageable.getOffset())
-                .setMaxResults(pageable.getPageSize())
+                .setFirstResult(page.getOffset())
+                .setMaxResults(page.getLimit())
                 .getResultList();
 
 //        List<Pair<Long, Double>> pairs = list.stream().map(t -> Pair.of((Long) t.get(0), (Double) t.get(1))).toList();
@@ -76,8 +73,8 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
     }
 
     @Override
-    public List<Product> findProducts(Specification<Product> specification, Pageable pageable) {
-        return findProducts(specification, pageable, "product[all]");
+    public List<Product> findProducts(Specification<Product> specification, Page page) {
+        return findProducts(specification, page, "product[all]");
     }
 
 }

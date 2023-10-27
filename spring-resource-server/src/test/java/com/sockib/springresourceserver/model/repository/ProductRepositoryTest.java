@@ -9,6 +9,7 @@ import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
 import com.sockib.springresourceserver.service.product.SearchFilterToProductSpecificationConverter;
 import com.sockib.springresourceserver.service.product.SearchFilterToProductSpecificationConverterImpl;
+import com.sockib.springresourceserver.util.search.Page;
 import com.sockib.springresourceserver.util.search.SearchFilter;
 import com.sockib.springresourceserver.util.search.SearchOperation;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +55,7 @@ class ProductRepositoryTest {
         );
 
         var specification = searchFilterToProductSpecificationConverter.convert(filters);
-        var page = Pageable.ofSize(10);
+        var page = Page.of(0, 10);
 
         // when
         var products = productRepository.findProducts(specification, page, "product[category]");
@@ -76,7 +77,7 @@ class ProductRepositoryTest {
                 .build();
 
         var specification = searchFilterToProductSpecificationConverter.convert(filter);
-        var page = Pageable.ofSize(10);
+        var page = Page.of(0, 10);
 
         // when
         var products = productRepository.findProducts(specification, page, "product[category]");
@@ -102,7 +103,7 @@ class ProductRepositoryTest {
                 .build();
 
         var specification = searchFilterToProductSpecificationConverter.convert(filter);
-        var page = Pageable.ofSize(10);
+        var page = Page.of(0, 10);
 
         // when
         var products = productRepository.findProducts(specification, page, "product[all]");

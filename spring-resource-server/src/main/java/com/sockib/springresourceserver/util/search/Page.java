@@ -12,4 +12,11 @@ public class Page {
     private Integer offset;
     private Integer limit;
 
+    public static Page of(Integer offset, Integer limit) {
+        return Page.builder()
+                .offset(offset)
+                .limit(limit)
+                .build();
+    }
+
 }

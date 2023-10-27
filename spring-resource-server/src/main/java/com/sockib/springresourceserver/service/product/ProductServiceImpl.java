@@ -7,12 +7,13 @@ import com.sockib.springresourceserver.model.entity.*;
 import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.model.respository.TagRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
+import com.sockib.springresourceserver.util.search.Page;
 import com.sockib.springresourceserver.util.search.SearchFilter;
+import com.sockib.springresourceserver.util.search.Sort;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -44,14 +45,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> searchProduct(List<SearchFilter> filters, Pageable pageable) {
+    public List<Product> searchProduct(List<SearchFilter> filters, Page page) {
         var specification = searchFilterToProductSpecificationConverter.convert(filters);
 
-        return productRepository.findProducts(specification, Pageable.ofSize(10), "product[ForDisplay]");
+        return productRepository.findProducts(specification, page, "product[ForDisplay]");
     }
 
     @Override
-    public List<Product> searchProduct(List<SearchFilter> filters, Pageable pageable, Sort sort) {
+    public List<Product> searchProduct(List<SearchFilter> filters, Page page, Sort sort) {
         return null;
     }
 
