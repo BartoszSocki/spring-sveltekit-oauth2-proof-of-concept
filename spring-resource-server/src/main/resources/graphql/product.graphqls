@@ -2,6 +2,10 @@ enum SearchOperation {
     GT, LT, EQ, LIKE, IN
 }
 
+enum SortDirection {
+    ASC, DSC
+}
+
 type Money {
     amount: Float!
     currency: String!
@@ -18,6 +22,16 @@ input SearchFilter {
     fieldValue: String!
 }
 
+input Sort {
+    fieldName: String!
+    sortDirection: SortDirection!
+}
+
+input Page {
+    offset: Int!
+    limit: Int!
+}
+
 type Product {
     id: ID!
     ownerId: Int!
@@ -32,4 +46,5 @@ type Product {
 
 type Query {
     searchProducts(filters: [SearchFilter]!): [Product]!
+    searchProducts(filters: [SearchFilter]!, page: Page!, sort: Sort!): [Product]!
 }
