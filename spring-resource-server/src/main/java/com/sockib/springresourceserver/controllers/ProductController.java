@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
@@ -21,9 +22,11 @@ public class ProductController {
 
     @QueryMapping
     List<ProductDto> searchProducts(@Argument List<SearchFilter> filters) {
-        return productService.searchProduct(filters, Pageable.ofSize(10)).stream()
+        var products = productService.searchProduct(filters, Pageable.ofSize(10)).stream()
                 .map(ProductDto::new)
                 .toList();
+
+        return products;
     }
 
 }

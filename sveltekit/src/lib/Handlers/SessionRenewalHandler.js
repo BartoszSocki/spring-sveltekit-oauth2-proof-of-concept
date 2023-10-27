@@ -17,6 +17,7 @@ export async function sessionRenewalHandler({ event, resolve }) {
         logger.info(`session renewal ${sessionId} -> ${newSession.id}`)
 
         event.cookies.set('sessionid', newSession.id, {
+            path: "/",
             expires: newSession.expirationDateIdle,
             httpOnly: PROD !== undefined && PROD === 'true'
         })

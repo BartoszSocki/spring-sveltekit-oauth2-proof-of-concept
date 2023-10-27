@@ -1,0 +1,12 @@
+query SearchProducts {
+    searchProducts(filters: [
+        {
+            fieldName: "name"
+            searchOperation: LIKE
+            fieldValue: "a"
+        }
+    ]) {
+        id
+        name
+    }
+}
