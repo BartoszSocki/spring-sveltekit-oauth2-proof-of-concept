@@ -57,8 +57,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Product addNewProduct(@Valid ProductInputDto productInputDto, Authentication authentication) {
-        var email = authentication.getName();
+    public Product addNewProduct(@Valid ProductInputDto productInputDto, String email) {
         var user = userRepository.findUserByEmail(email).orElseThrow(() -> new RuntimeException("TODO: add User Not Found Exception"));
 
         var tagNames = productInputDto.getTags().stream().map(TagDto::getName).toList();
