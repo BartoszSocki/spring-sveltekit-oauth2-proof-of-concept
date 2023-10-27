@@ -9,9 +9,7 @@ import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
 import com.sockib.springresourceserver.service.product.SearchFilterToProductSpecificationConverter;
 import com.sockib.springresourceserver.service.product.SearchFilterToProductSpecificationConverterImpl;
-import com.sockib.springresourceserver.util.search.Page;
-import com.sockib.springresourceserver.util.search.SearchFilter;
-import com.sockib.springresourceserver.util.search.SearchOperation;
+import com.sockib.springresourceserver.util.search.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,4 +132,63 @@ class ProductRepositoryTest {
         assert true;
     }
 
+    @Test
+    @Sql("/repository/name_test_1.sql")
+    void givenAscSortByName_whenSearch_thenSuccess() {
+        // given
+        Sort sort = Sort.of("name", SortDirection.ASC);
+        Page page = Page.of(0, 10);
+
+        // when
+        var products = productRepository.findProducts(Specification.empty(), page, sort);
+
+        // then
+        assertThat(products).isNotEmpty();
+
+        var sortedNames = products.stream().map(Product::getName).sorted().toList();
+        var fetchedNames = products.stream().map(Product::getName).toList();
+
+        assertThat(sortedNames).isEqualTo(fetchedNames);
+    }
+
+    @Test
+    @Sql("/repository/name_test_1.sql")
+    void givenAscSortByPrice_whenSearch_thenSuccess() {
+        // given
+        Sort sort = Sort.of("price", SortDirection.ASC);
+        Page page = Page.of(0, 10);
+
+        // when
+        var products = productRepository.findProducts(Specification.empty(), page, sort);
+
+        // then
+        assertThat(products).isNotEmpty();
+
+        var sortedPrices = products.stream().map(p -> p.getPrice().getAmount()).sorted().toList();
+        var fetchedPrices = products.stream().map(p -> p.getPrice().getAmount()).toList();
+
+        sortedPrices.forEach(System.out::println);
+        fetchedPrices.forEach(System.out::println);
+
+        assertThat(sortedPrices).isEqualTo(fetchedPrices);
+    }
+
+    @Test
+    @Sql("/repository/name_test_1.sql")
+    void givenAscSortByScore_whenSearch_thenSuccess() {
+        // given
+        Sort sort = Sort.of("score", SortDirection.ASC);
+        Page page = Page.of(0, 10);
+
+        // when
+        var products = productRepository.findProducts(Specification.empty(), page, sort);
+
+        // then
+        assertThat(products).isNotEmpty();
+
+        var sortedScores = products.stream().map(p -> p.getProductScore().getAverageScore()).sorted().toList();
+        var fetchedScores = products.stream().map(p -> p.getProductScore().getAverageScore()).toList();
+
+        assertThat(sortedScores).isEqualTo(fetchedScores);
+    }
 }

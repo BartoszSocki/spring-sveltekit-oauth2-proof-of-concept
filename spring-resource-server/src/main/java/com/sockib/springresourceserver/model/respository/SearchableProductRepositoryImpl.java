@@ -13,11 +13,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
 import jakarta.persistence.criteria.*;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -41,10 +40,10 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
                         root.get(Product_.ID),
                         criteriaBuilder.avg(
                                 reviewJoin.get(ProductReview_.FIVE_STAR_SCORE)
-                        ).alias("average_score"),
+                        ),
                         criteriaBuilder.count(
                                 reviewJoin.get(ProductReview_.FIVE_STAR_SCORE)
-                        ).alias("reviews_count")
+                        )
                 )
                 .where(predicate)
                 .orderBy(order)
@@ -57,15 +56,14 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
                 .setMaxResults(page.getLimit())
                 .getResultList();
 
-//        List<Pair<Long, Double>> pairs = list.stream().map(t -> Pair.of((Long) t.get(0), (Double) t.get(1))).toList();
         Map<Long, ProductScore> productScores = list.stream().collect(Collectors.toMap(t -> (Long) t.get(0), t -> new ProductScore((Long) t.get(2), (Double) t.get(1))));
-        List<Long> ids = list.stream().map(t -> (Long) t.get(0)).toList();
+        List<Long> sortedProductsIds = list.stream().map(t -> (Long) t.get(0)).toList();
 
         CriteriaBuilder productCriteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Product> productCriteriaQuery = productCriteriaBuilder.createQuery(Product.class);
         Root<Product> productRoot = productCriteriaQuery.from(Product.class);
 
-        var productQuery = productCriteriaQuery.where(productRoot.get(Product_.ID).in(ids));
+        var productQuery = productCriteriaQuery.where(productRoot.get(Product_.ID).in(sortedProductsIds));
 
         var graph = entityManager.getEntityGraph(entityGraphName);
 
@@ -73,8 +71,18 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
                 .setHint("jakarta.persistence.fetchgraph", graph)
                 .getResultList();
 
-        products.forEach(p -> p.setProductScore(productScores.get(p.getId())));
-        return products;
+        Map<Long, Product> productMap = products.stream().collect(Collectors.toMap(p -> p.getId(), p -> p));
+
+        return sortedProductsIds.stream().map(i -> {
+            Product p = productMap.get(i);
+            p.setProductScore(productScores.get(i));
+            return p;
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Product> findProducts(Specification<Product> specification, Page page, Sort sort) {
+        return findProducts(specification, page, sort, "product[all]");
     }
 
     @Override
@@ -89,9 +97,9 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
 
     private Order getOrder(CriteriaBuilder criteriaBuilder, Path<Product> productPath, Sort sort) {
         var field = switch (sort.getFieldName()) {
-            case "price" -> productPath.get(Product_.PRICE).get("price");
+            case "price" -> productPath.get(Product_.PRICE).get("amount");
             case "name" -> productPath.get(Product_.NAME);
-            case "score" -> criteriaBuilder.literal(1);
+            case "score" -> criteriaBuilder.literal(2);
             default -> throw new RuntimeException("TODO: add custom exception");
         };
 
