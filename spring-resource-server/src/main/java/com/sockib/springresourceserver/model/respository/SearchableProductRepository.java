@@ -10,9 +10,8 @@ import java.util.List;
 
 public interface SearchableProductRepository {
 
+    List<Product> findProducts(Specification<Product> specification, Page page, Sort sort, String entityGraphName);
     List<Product> findProducts(Specification<Product> specification, Page page, String entityGraphName);
     List<Product> findProducts(Specification<Product> specification, Page page);
-
-    List<Product> findProducts(Specification<Product> specification, Page page, Sort sort, String entityGraphName);
 
 }

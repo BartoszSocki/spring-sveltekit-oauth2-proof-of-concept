@@ -6,6 +6,8 @@ import com.sockib.springresourceserver.model.entity.ProductReview;
 import com.sockib.springresourceserver.model.entity.ProductReview_;
 import com.sockib.springresourceserver.model.entity.Product_;
 import com.sockib.springresourceserver.util.search.Page;
+import com.sockib.springresourceserver.util.search.Sort;
+import com.sockib.springresourceserver.util.search.SortDirection;
 import com.sockib.springresourceserver.util.search.Specification;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
@@ -24,7 +26,7 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
     private final EntityManager entityManager;
 
     @Override
-    public List<Product> findProducts(Specification<Product> specification, Page page, String entityGraphName) {
+    public List<Product> findProducts(Specification<Product> specification, Page page, Sort sort, String entityGraphName) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> criteriaQuery = criteriaBuilder.createTupleQuery();
         Root<Product> root = criteriaQuery.from(Product.class);
@@ -32,17 +34,20 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
         var predicate = specification.toPredicate(root, criteriaQuery, criteriaBuilder);
         Path<ProductReview> reviewJoin = root.join(Product_.PRODUCT_REVIEWS, JoinType.LEFT);
 
+        var order = getOrder(criteriaBuilder, root, sort);
+
         var query = criteriaQuery
                 .multiselect(
                         root.get(Product_.ID),
                         criteriaBuilder.avg(
                                 reviewJoin.get(ProductReview_.FIVE_STAR_SCORE)
-                        ),
+                        ).alias("average_score"),
                         criteriaBuilder.count(
                                 reviewJoin.get(ProductReview_.FIVE_STAR_SCORE)
-                        )
+                        ).alias("reviews_count")
                 )
                 .where(predicate)
+                .orderBy(order)
                 .groupBy(
                         root.get(Product_.ID)
                 );
@@ -73,8 +78,24 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
     }
 
     @Override
+    public List<Product> findProducts(Specification<Product> specification, Page page, String entityGraphName) {
+        return findProducts(specification, page, Sort.of("name", SortDirection.ASC), entityGraphName);
+    }
+
+    @Override
     public List<Product> findProducts(Specification<Product> specification, Page page) {
         return findProducts(specification, page, "product[all]");
+    }
+
+    private Order getOrder(CriteriaBuilder criteriaBuilder, Path<Product> productPath, Sort sort) {
+        var field = switch (sort.getFieldName()) {
+            case "price" -> productPath.get(Product_.PRICE).get("price");
+            case "name" -> productPath.get(Product_.NAME);
+            case "score" -> criteriaBuilder.literal(1);
+            default -> throw new RuntimeException("TODO: add custom exception");
+        };
+
+        return sort.getSortDirection() == SortDirection.DSC ? criteriaBuilder.desc(field) : criteriaBuilder.asc(field);
     }
 
 }

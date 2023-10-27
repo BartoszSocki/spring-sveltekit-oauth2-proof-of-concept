@@ -11,4 +11,12 @@ public class Sort {
 
     private String fieldName;
     private SortDirection sortDirection;
+
+    public static Sort of(String fieldName, SortDirection sortDirection) {
+        return Sort.builder()
+                .fieldName(fieldName)
+                .sortDirection(sortDirection)
+                .build();
+    }
+
 }
