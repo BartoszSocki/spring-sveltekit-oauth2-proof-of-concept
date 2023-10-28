@@ -3,6 +3,11 @@ type Money {
   currency: String!
 }
 
+input Page {
+  limit: Int!
+  offset: Int!
+}
+
 type Product {
   category: String!
   description: String
@@ -20,7 +25,8 @@ type ProductScore {
 }
 
 type Query {
-  searchProducts(filters: [SearchFilter]!): [Product]!
+  """    searchProducts(filters: [SearchFilter]!): [Product]!"""
+  searchProducts(filters: [SearchFilter]!, page: Page!, sort: Sort!): [Product]!
 }
 
 input SearchFilter {
@@ -35,4 +41,14 @@ enum SearchOperation {
   IN
   LIKE
   LT
+}
+
+input Sort {
+  fieldName: String!
+  sortDirection: SortDirection!
+}
+
+enum SortDirection {
+  ASC
+  DSC
 }

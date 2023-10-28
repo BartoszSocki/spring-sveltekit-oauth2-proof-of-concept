@@ -56,7 +56,6 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
                 .setMaxResults(page.getLimit())
                 .getResultList();
 
-        Map<Long, ProductScore> productScores = list.stream().collect(Collectors.toMap(t -> (Long) t.get(0), t -> new ProductScore((Long) t.get(2), (Double) t.get(1))));
         List<Long> sortedProductsIds = list.stream().map(t -> (Long) t.get(0)).toList();
 
         CriteriaBuilder productCriteriaBuilder = entityManager.getCriteriaBuilder();
@@ -66,11 +65,11 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
         var productQuery = productCriteriaQuery.where(productRoot.get(Product_.ID).in(sortedProductsIds));
 
         var graph = entityManager.getEntityGraph(entityGraphName);
-
         var products = entityManager.createQuery(productQuery)
                 .setHint("jakarta.persistence.fetchgraph", graph)
                 .getResultList();
 
+        Map<Long, ProductScore> productScores = list.stream().collect(Collectors.toMap(t -> (Long) t.get(0), t -> new ProductScore((Long) t.get(2), (Double) t.get(1))));
         Map<Long, Product> productMap = products.stream().collect(Collectors.toMap(p -> p.getId(), p -> p));
 
         return sortedProductsIds.stream().map(i -> {

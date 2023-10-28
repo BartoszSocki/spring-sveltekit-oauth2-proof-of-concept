@@ -22,19 +22,21 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @QueryMapping
-    List<ProductDto> searchProducts(@Argument List<SearchFilter> filters) {
-        var products = productService.searchProduct(filters, Page.of(0, 10)).stream()
-                .map(ProductDto::new)
-                .toList();
-
-        return products;
-    }
+//    @QueryMapping
+//    List<ProductDto> searchProducts(@Argument List<SearchFilter> filters) {
+//        var products = productService.searchProduct(filters, Page.of(0, 10)).stream()
+//                .map(ProductDto::new)
+//                .toList();
+//
+//        return products;
+//    }
 
     @QueryMapping
     List<ProductDto> searchProducts(@Argument List<SearchFilter> filters, @Argument Page page, @Argument Sort sort) {
-//        productService.searchProduct()
-        return null;
+        List<ProductDto> list = productService.searchProduct(filters, page, sort).stream()
+                .map(ProductDto::new)
+                .toList();
+        return list;
     }
 
 }

@@ -53,7 +53,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> searchProduct(List<SearchFilter> filters, Page page, Sort sort) {
-        return null;
+        var specification = searchFilterToProductSpecificationConverter.convert(filters);
+
+        return productRepository.findProducts(specification, page, sort);
     }
 
     @Override

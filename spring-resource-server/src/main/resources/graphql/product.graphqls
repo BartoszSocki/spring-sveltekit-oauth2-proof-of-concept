@@ -45,6 +45,6 @@ type Product {
 }
 
 type Query {
-    searchProducts(filters: [SearchFilter]!): [Product]!
+#    searchProducts(filters: [SearchFilter]!): [Product]!
     searchProducts(filters: [SearchFilter]!, page: Page!, sort: Sort!): [Product]!
 }

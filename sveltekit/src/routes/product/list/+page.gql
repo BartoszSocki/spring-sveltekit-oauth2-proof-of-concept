@@ -5,7 +5,16 @@ query SearchProducts {
             searchOperation: LIKE
             fieldValue: "a"
         }
-    ]) {
+    ],
+    page: {
+        offset: 0,
+        limit: 10
+    },
+    sort: {
+        fieldName: "name"
+        sortDirection: ASC
+    }
+    ) {
         id
         name
     }
