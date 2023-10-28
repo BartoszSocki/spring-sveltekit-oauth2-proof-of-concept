@@ -16,15 +16,16 @@
         "eslint": "^8.28.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-svelte": "^2.30.0",
+        "houdini": "^1.2.31",
+        "houdini-svelte": "^1.2.31",
         "prettier": "^2.8.0",
         "prettier-plugin-svelte": "^2.10.1",
         "svelte": "^4.0.5",
-        "vite": "^4.4.2",
-        "houdini": "^1.2.31",
-        "houdini-svelte": "^1.2.31"
+        "vite": "^4.4.2"
     },
     "type": "module",
     "dependencies": {
+        "@picocss/pico": "^1.5.10",
         "dayjs": "^1.11.10",
         "jwt-decode": "^3.1.2",
         "pg": "^8.11.3",

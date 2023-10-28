@@ -3,14 +3,14 @@
     console.log({product})
 </script>
 
-<section>
+<div>
     <p>this is product</p>
     <p>{product.name}</p>
     <!-- <p>{product.score}</p> -->
-</section>
+</div>
 
 <style>
-    section {
+    div {
         padding: 1rem;
         border: 1px solid gray;
     }
