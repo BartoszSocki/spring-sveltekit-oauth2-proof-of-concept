@@ -1,5 +1,8 @@
 <script>
     import "@picocss/pico/css/pico.css"
+
+    export let data;
+    $: isUserAuthenticated = data.isUserAuthenticated;
 </script>
 
 <main>
@@ -19,7 +22,7 @@
             </li>
             <!-- TODO: add auth guard -->
             <li>
-            {#if true}
+            {#if !isUserAuthenticated}
                 <a href="/login">sign in</a>
             {:else}
                 <a href="/logout">sign out</a>

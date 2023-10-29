@@ -140,6 +140,11 @@ export async function renewSession(sessionId) {
     return await Session.findByPk(newSessionId)
 }
 
+export async function isUserAuthed(sessionId) {
+    const session = await findSessionById(sessionId)
+    return session.userId !== anonymousUserId && !isSessionDead(session)
+}
+
 async function saveStateForSession(sessionId, state) {
     await Session.update({ state }, { where: { id: sessionId } })
 }
