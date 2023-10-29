@@ -1,6 +1,6 @@
-import { newAnonymousSession } from '$lib/SessionManagement';
+import { newAnonymousSession } from '$lib/server/SessionManagement'
 import { PROD } from '$env/static/private'
-import { logger } from '$lib/Logger'
+import { logger } from '$lib/server/Logger'
 
 // creates session when session is missing
 export async function anonymousSessionHandler({ event, resolve }) {

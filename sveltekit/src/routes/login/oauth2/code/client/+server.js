@@ -1,8 +1,8 @@
 import { CLIENT_ID, CLIENT_SECRET } from '$env/static/private'
 import jwtDecode from 'jwt-decode'
-import { logger } from '$lib/Logger'
-import { isStateParameterValidForSession, rotateSession } from '$lib/SessionManagement'
-import { createUser, findUserByEmail } from '$lib/UserService'
+import { logger } from '$lib/server/Logger'
+import { isStateParameterValidForSession, rotateSession } from '$lib/server/SessionManagement'
+import { createUser, findUserByEmail } from '$lib/server/UserService'
 
 export async function GET({ cookies, url }) {
     const code = url.searchParams.get('code')

@@ -1,5 +1,5 @@
 import { CLIENT_ID, REDIRECT_URI } from '$env/static/private'
-import { generateAndSaveStateForSession } from '$lib/SessionManagement'
+import { generateAndSaveStateForSession } from '$lib/server/SessionManagement'
 import { redirect } from '@sveltejs/kit'
 
 export async function GET({ url, cookies }) {

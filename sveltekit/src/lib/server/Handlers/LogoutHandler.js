@@ -1,5 +1,5 @@
-import { invalidateSession } from '$lib/SessionManagement';
-import { logger } from '$lib/Logger'
+import { invalidateSession } from '$lib/server/SessionManagement';
+import { logger } from '$lib/server/Logger'
 
 export async function logoutHandler({ event, resolve }) {
     const sessionId = event.cookies.get('sessionid')

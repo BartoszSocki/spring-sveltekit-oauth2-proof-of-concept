@@ -1,6 +1,6 @@
 import { PROD } from '$env/static/private'
-import { renewSession } from '$lib/SessionManagement';
-import { logger } from '$lib/Logger'
+import { renewSession } from '$lib/server/SessionManagement';
+import { logger } from '$lib/server/Logger'
 
 // renew idle session if possible
 export async function sessionRenewalHandler({ event, resolve }) {

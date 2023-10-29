@@ -1,4 +1,4 @@
-import { logger } from '$lib/Logger'
+import { logger } from '$lib/server/Logger'
 
 export async function load({ params, fetch }) {
     try {

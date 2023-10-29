@@ -1,4 +1,4 @@
-import { getSessionStatus, isUserAuthed } from '$lib/SessionManagement/index.js'
+import { getSessionStatus, isUserAuthed } from '$lib/server/SessionManagement'
 
 export async function load({ cookies }) {
     const sessionId = cookies.get('sessionid')
