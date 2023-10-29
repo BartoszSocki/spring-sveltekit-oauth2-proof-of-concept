@@ -2,7 +2,9 @@ import { Sequelize, DataTypes } from 'sequelize'
 import { DB_USER, DB_PASSWORD, DB_URL, DB_NAME } from '$env/static/private'
 import { logger } from '$lib/Logger'
 
-export const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_URL}/${DB_NAME}`)
+export const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_URL}/${DB_NAME}`, {
+    logging: false
+})
 
 export const User = sequelize.define('User', {
     id: {

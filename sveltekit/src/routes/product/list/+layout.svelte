@@ -1,5 +1,5 @@
 <script>
-	import Filter from "$lib/Filter/Filter.svelte";
+	import Filter from "$lib/Filter/PriceFilter.svelte";
 </script>
 
 <main>

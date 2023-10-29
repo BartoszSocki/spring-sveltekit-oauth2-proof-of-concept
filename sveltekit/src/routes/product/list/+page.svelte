@@ -19,9 +19,11 @@
 <style>
     li {
         list-style: none;
+        list-style-position: inside;
     }
 
     ul {
+        padding-left: 0;
         display: flex;
         flex-direction: column;
         gap: 1rem;
