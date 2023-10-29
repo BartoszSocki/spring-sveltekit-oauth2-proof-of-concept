@@ -37,8 +37,13 @@
 </main>
 
 <style>
+    * {
+        box-sizing: border-box
+    }
+
     main {
         padding: 0.5rem;
+        height: 100vh;
     }
 
     ul {
