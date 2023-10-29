@@ -9,6 +9,9 @@
     <nav>
         <ul>
             <li>
+                <h1>Allegrisimo</h1>
+            </li>
+            <li>
                 <a href="/product/list">search</a>
             </li>
             <li>
@@ -17,10 +20,10 @@
             <li>
                 <a href="/bought-product">bought products</a>
             </li>
+            <div class="space" />
             <li>
                 <a href="/profile">profile</a>
             </li>
-            <!-- TODO: add auth guard -->
             <li>
             {#if !isUserAuthenticated}
                 <a href="/login">sign in</a>
@@ -39,9 +42,17 @@
     }
 
     ul {
-        width: auto;
+        width: 100%;
         display: flex;
         flex-direction: row;
     }
     
+    h1 {
+        margin: 0;
+    }
+
+    div.space {
+        flex-grow: 1
+    }
+
 </style>
