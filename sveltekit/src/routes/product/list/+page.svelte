@@ -4,12 +4,9 @@
     export let data;
 
     $: ({SearchProducts} = data);
-    $: console.log($SearchProducts.data)
 </script>
 
 <section>
-    hello this is the product list
-    <!-- {$SearchProducts.data.searchProducts} -->
     <ul>
         {#each $SearchProducts.data.searchProducts as product}
             <li>
@@ -20,7 +17,7 @@
 </section>
 
 <style>
-    ul {
+    li {
         list-style: none;
     }
 

@@ -1,21 +1,6 @@
-query SearchProducts {
-    searchProducts(filters: [
-        {
-            fieldName: "name"
-            searchOperation: LIKE
-            fieldValue: "a"
-        }
-    ],
-    page: {
-        offset: 0,
-        limit: 10
-    },
-    sort: {
-        fieldName: "name"
-        sortDirection: ASC
-    }
-    ) {
+query SearchProducts($filters: [SearchFilter]!, $page: Page!, $sort: Sort!) {
+    searchProducts(filters: $filters, page: $page, sort: $sort) {
         id
         name
     }
-}
+} 
