@@ -50,7 +50,7 @@ public class SearchFilterToProductSpecificationConverterImpl implements SearchFi
         return filters.stream()
                 .map(this::convert)
                 .reduce(Specification::and)
-                .orElseThrow(() -> new RuntimeException("TODO: add what went wrong"));
+                .orElse(Specification.empty());
     }
 
     public Specification<Product> nameLike(String name) {

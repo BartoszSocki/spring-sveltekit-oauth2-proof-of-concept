@@ -9,17 +9,21 @@
     <nav>
         <ul>
             <li>
-                <h1>Allegrisimo</h1>
+                <a href="/">
+                    <h1>Allegrisimo</h1>
+                </a>
             </li>
             <li>
                 <a href="/product/list">search</a>
             </li>
+            {#if isUserAuthenticated}
             <li>
                 <a href="/product/add">add new product</a>
             </li>
             <li>
                 <a href="/bought-product">bought products</a>
             </li>
+            {/if}
             <div class="space" />
             <li>
                 <a href="/profile">profile</a>
