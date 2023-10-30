@@ -39,8 +39,8 @@ type Product {
     price: Money!
     quantity: Int!
     category: String!
+    tags: [String]!
     productScore: ProductScore!
-
     description: String
 }
 

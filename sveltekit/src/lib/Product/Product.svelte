@@ -1,21 +1,38 @@
 <script>
     export let product
 
-    const score = product.productScore.averageScore;
+    const { category, price, quantity, productScore } = product;
 </script>
 
 <div class="wrapper">
-    <div class="score">
-        <i>
-            {score ?? 'no reviews'}
-        </i>
+    <h4>{product.name}</h4>
+    <div class="category">
+        {category}
     </div>
-    <span>{product.name}</span>
+    <div class="price">
+        {price.amount}
+        {price.currency}
+    </div>
+    <div class="quantity">
+        {quantity}
+    </div>
+    <div class="score">
+        {productScore.averageScore !== null ? productScore.averageScore.toFixed(2) : 'no reviews'}
+    </div>
 </div>
 
 <style>
     div.wrapper {
+        display: grid;
+        flex-direction: row;
+        gap: 1ch;
+        align-items: center;
+
         padding: 1rem;
         border: 1px solid gray;
+    }
+
+    h4 {
+        margin: 0;
     }
 </style>
