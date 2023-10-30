@@ -4,6 +4,7 @@
     export let data;
 
     $: ({SearchProducts} = data);
+    $: console.log($SearchProducts.data.searchProducts)
 </script>
 
 <section>
