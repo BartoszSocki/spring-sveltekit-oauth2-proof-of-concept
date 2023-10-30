@@ -42,6 +42,7 @@ type Product {
     tags: [String]!
     productScore: ProductScore!
     description: String
+    imageUrl: String
 }
 
 type Query {

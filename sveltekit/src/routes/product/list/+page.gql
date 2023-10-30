@@ -3,6 +3,7 @@ query SearchProducts($filters: [SearchFilter]!, $page: Page!, $sort: Sort!) {
         id
         name
         category
+        tags
         description
         ownerId
         price {
@@ -12,6 +13,8 @@ query SearchProducts($filters: [SearchFilter]!, $page: Page!, $sort: Sort!) {
         quantity
         productScore {
             averageScore
+            reviewsCount
         }
+        imageUrl
     }
 } 

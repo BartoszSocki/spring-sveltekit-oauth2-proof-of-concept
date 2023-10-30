@@ -12,11 +12,13 @@ type Product {
   category: String!
   description: String
   id: ID!
+  imageUrl: String
   name: String!
   ownerId: Int!
   price: Money!
   productScore: ProductScore!
   quantity: Int!
+  tags: [String]!
 }
 
 type ProductScore {
