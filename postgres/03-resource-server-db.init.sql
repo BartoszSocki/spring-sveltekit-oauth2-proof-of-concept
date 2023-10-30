@@ -42,7 +42,7 @@ create table if not exists resource_server.product_inventory (
 	updated_at timestamp null default now(),
 
 	quantity int not null check (quantity >= 0),
-	products_bought int not null check (products_bought >= 0)
+	products_bought int not null check (products_bought >= 0) default 0
 );
 
 create table if not exists resource_server.product_catalog (
