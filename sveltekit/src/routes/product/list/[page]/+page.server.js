@@ -1,7 +1,7 @@
 
 
 const query = `
-query SearchProducts($filters: [SearchFilter]!, $pageable: Pageable!, $sort: Sort!) {
+query SearchProducts($filters: [SearchFilterInput]!, $pageable: PageableInput!, $sort: SortInput!) {
     searchProducts(filters: $filters, pageable: $pageable, sort: $sort) {
         content {
             id

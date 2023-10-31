@@ -21,15 +21,15 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
     private final EntityManager entityManager;
 
     @Override
-    public Page<Product> findProducts(Specification<Product> specification, Pageable pageable, Sort sort, String entityGraphName) {
+    public Page<Product> findProducts(Specification<Product> specification, Pageable pageable, Sorter<Product> sorter, String entityGraphName) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> criteriaQuery = criteriaBuilder.createTupleQuery();
         Root<Product> root = criteriaQuery.from(Product.class);
 
         var predicate = specification.toPredicate(root, criteriaQuery, criteriaBuilder);
-        Path<ProductReview> reviewJoin = root.join(Product_.PRODUCT_REVIEWS, JoinType.LEFT);
+        var order = sorter.toOrder(root, criteriaQuery, criteriaBuilder);
 
-        var order = getOrder(criteriaBuilder, root, sort);
+        Path<ProductReview> reviewJoin = root.join(Product_.PRODUCT_REVIEWS, JoinType.LEFT);
 
         var query = criteriaQuery
                 .multiselect(
@@ -87,8 +87,8 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
     }
 
     @Override
-    public Page<Product> findProducts(Specification<Product> specification, Pageable pageable, Sort sort) {
-        return findProducts(specification, pageable, sort, "product[all]");
+    public Page<Product> findProducts(Specification<Product> specification, Pageable pageable, Sorter<Product> sorter) {
+        return findProducts(specification, pageable, sorter, "product[all]");
     }
 
     private Order getOrder(CriteriaBuilder criteriaBuilder, Path<Product> productPath, Sort sort) {

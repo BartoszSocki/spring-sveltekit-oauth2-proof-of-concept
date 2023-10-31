@@ -29,18 +29,18 @@ type ProductPage {
     content: [Product]!
 }
 
-input SearchFilter {
+input SearchFilterInput {
     fieldName: String!
     searchOperation: SearchOperation!
     fieldValue: String!
 }
 
-input Sort {
+input SortInput {
     fieldName: String!
     sortDirection: SortDirection!
 }
 
-input Pageable {
+input PageableInput {
     offset: Int!
     limit: Int!
 }
@@ -60,5 +60,5 @@ type Product {
 
 type Query {
 #    searchProducts(filters: [SearchFilter]!): [Product]!
-    searchProducts(filters: [SearchFilter]!, pageable: Pageable!, sort: Sort!): ProductPage!
+    searchProducts(filters: [SearchFilterInput]!, pageable: PageableInput!, sort: SortInput!): ProductPage!
 }

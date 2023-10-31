@@ -26,24 +26,25 @@ public class ProductServiceImpl implements ProductService {
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
     private final SearchFilterToProductSpecificationConverter searchFilterToProductSpecificationConverter;
-    private final ModelMapper modelMapper;
+    private final SortToProductSorterConverter sortToProductSorterConverter;
     private final CategoryRepository categoryRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository, TagRepository tagRepository, UserRepository userRepository, ModelMapper modelMapper,
-                              CategoryRepository categoryRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, TagRepository tagRepository, UserRepository userRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.tagRepository = tagRepository;
         this.userRepository = userRepository;
         this.searchFilterToProductSpecificationConverter = new SearchFilterToProductSpecificationConverterImpl();
-        this.modelMapper = modelMapper;
+        this.sortToProductSorterConverter = new SortToProductSorterConverterImpl();
+
         this.categoryRepository = categoryRepository;
     }
 
     @Override
     public Page<ProductDto> searchProduct(List<SearchFilter> filters, Pageable pageable, Sort sort) {
         var specification = searchFilterToProductSpecificationConverter.convert(filters);
+        var sorter = sortToProductSorterConverter.convert(sort);
 
-        var page = productRepository.findProducts(specification, pageable, sort);
+        var page = productRepository.findProducts(specification, pageable, sorter);
         var products = page.getContent()
                 .stream()
                 .map(ProductDto::new)
