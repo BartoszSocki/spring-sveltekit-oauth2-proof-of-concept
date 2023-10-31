@@ -1,14 +1,13 @@
 package com.sockib.springresourceserver.service.product;
 
+import com.sockib.springresourceserver.model.dto.ProductDto;
 import com.sockib.springresourceserver.model.dto.ProductInputDto;
 import com.sockib.springresourceserver.model.dto.TagDto;
 import com.sockib.springresourceserver.model.entity.*;
 import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.model.respository.TagRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
-import com.sockib.springresourceserver.util.search.Pageable;
-import com.sockib.springresourceserver.util.search.SearchFilter;
-import com.sockib.springresourceserver.util.search.Sort;
+import com.sockib.springresourceserver.util.search.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -41,17 +40,28 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> searchProduct(List<SearchFilter> filters, Pageable pageable) {
+    public Page<ProductDto> searchProduct(List<SearchFilter> filters, Pageable pageable) {
         var specification = searchFilterToProductSpecificationConverter.convert(filters);
 
-        return productRepository.findProducts(specification, pageable, "product[ForDisplay]");
+        var page = productRepository.findProducts(specification, pageable);
+        var products = page.getContent().stream()
+                .map(ProductDto::new)
+                .toList();
+
+        return new PageImpl<>(products, page.getPage(), page.getPages());
     }
 
     @Override
-    public List<Product> searchProduct(List<SearchFilter> filters, Pageable pageable, Sort sort) {
+    public Page<ProductDto> searchProduct(List<SearchFilter> filters, Pageable pageable, Sort sort) {
         var specification = searchFilterToProductSpecificationConverter.convert(filters);
 
-        return productRepository.findProducts(specification, pageable, sort);
+        var page = productRepository.findProducts(specification, pageable, sort);
+        var products = page.getContent()
+                .stream()
+                .map(ProductDto::new)
+                .toList();
+
+        return new PageImpl<>(products, page.getPage(), page.getTotal());
     }
 
     @Override

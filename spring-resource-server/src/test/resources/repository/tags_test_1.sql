@@ -1,8 +1,8 @@
 insert into resource_server.user (id, email, user_money, currency) values (100, 'email1.com', 1200.00, 'USD');
 
-insert into resource_server.category (id, name) values (100, 'Chairs');
-insert into resource_server.category (id, name) values (200, 'Food');
-insert into resource_server.category (id, name) values (300, 'Games');
+insert into resource_server.category (id, name) values (100, 'NotChairs');
+insert into resource_server.category (id, name) values (200, 'NotFood');
+insert into resource_server.category (id, name) values (300, 'NotGames');
 
 insert into resource_server.product_inventory (id, quantity, products_bought) values (100, 100, 0);
 insert into resource_server.product_inventory (id, quantity, products_bought) values (200, 100, 0);

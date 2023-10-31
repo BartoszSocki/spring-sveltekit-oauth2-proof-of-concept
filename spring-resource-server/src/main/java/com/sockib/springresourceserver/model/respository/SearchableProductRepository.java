@@ -1,10 +1,10 @@
 package com.sockib.springresourceserver.model.respository;
 
 import com.sockib.springresourceserver.model.entity.Product;
+import com.sockib.springresourceserver.util.search.Page;
 import com.sockib.springresourceserver.util.search.Pageable;
 import com.sockib.springresourceserver.util.search.Sort;
 import com.sockib.springresourceserver.util.search.Specification;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 

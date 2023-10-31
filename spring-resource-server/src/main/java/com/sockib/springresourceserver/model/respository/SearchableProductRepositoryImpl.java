@@ -5,10 +5,7 @@ import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.ProductReview;
 import com.sockib.springresourceserver.model.entity.ProductReview_;
 import com.sockib.springresourceserver.model.entity.Product_;
-import com.sockib.springresourceserver.util.search.Pageable;
-import com.sockib.springresourceserver.util.search.Sort;
-import com.sockib.springresourceserver.util.search.SortDirection;
-import com.sockib.springresourceserver.util.search.Specification;
+import com.sockib.springresourceserver.util.search.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
 import jakarta.persistence.criteria.*;
@@ -24,7 +21,7 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
     private final EntityManager entityManager;
 
     @Override
-    public List<Product> findProducts(Specification<Product> specification, Pageable pageable, Sort sort, String entityGraphName) {
+    public Page<Product> findProducts(Specification<Product> specification, Pageable pageable, Sort sort, String entityGraphName) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> criteriaQuery = criteriaBuilder.createTupleQuery();
         Root<Product> root = criteriaQuery.from(Product.class);
@@ -71,32 +68,43 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
         Map<Long, ProductScore> productScores = list.stream().collect(Collectors.toMap(t -> (Long) t.get(0), t -> new ProductScore((Long) t.get(2), (Double) t.get(1))));
         Map<Long, Product> productMap = products.stream().collect(Collectors.toMap(p -> p.getId(), p -> p));
 
-        return sortedProductsIds.stream().map(i -> {
+        var productsContent = sortedProductsIds.stream().map(i -> {
             Product p = productMap.get(i);
             p.setProductScore(productScores.get(i));
             return p;
-        }).collect(Collectors.toList());
+        }).toList();
+
+        // get how many products there are
+        CriteriaBuilder countCriteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> countCriteriaQuery = countCriteriaBuilder.createQuery(Long.class);
+        Root<Product> countRoot = countCriteriaQuery.from(Product.class);
+
+        var countPredicate = specification.toPredicate(countRoot, countCriteriaQuery, countCriteriaBuilder);
+        countCriteriaQuery.where(countPredicate).select(criteriaBuilder.count(countRoot.get(Product_.ID)));
+        Long count = entityManager.createQuery(countCriteriaQuery).getSingleResult();
+
+        return new PageImpl<>(productsContent, (long) pageable.getPage(), count);
     }
 
     @Override
-    public List<Product> findProducts(Specification<Product> specification, Pageable pageable, Sort sort) {
+    public Page<Product> findProducts(Specification<Product> specification, Pageable pageable, Sort sort) {
         return findProducts(specification, pageable, sort, "product[all]");
     }
 
     @Override
-    public List<Product> findProducts(Specification<Product> specification, Pageable pageable, String entityGraphName) {
+    public Page<Product> findProducts(Specification<Product> specification, Pageable pageable, String entityGraphName) {
         return findProducts(specification, pageable, Sort.of("name", SortDirection.ASC), entityGraphName);
     }
 
     @Override
-    public List<Product> findProducts(Specification<Product> specification, Pageable pageable) {
+    public Page<Product> findProducts(Specification<Product> specification, Pageable pageable) {
         return findProducts(specification, pageable, "product[all]");
     }
 
     private Order getOrder(CriteriaBuilder criteriaBuilder, Path<Product> productPath, Sort sort) {
         var field = switch (sort.getFieldName()) {
             case "price" -> productPath.get(Product_.PRICE).get("amount");
-            case "name" -> productPath.get(Product_.NAME);
+            case "name" -> criteriaBuilder.lower(productPath.get(Product_.NAME));
             case "score" -> criteriaBuilder.literal(2);
             default -> throw new RuntimeException("TODO: add custom exception");
         };

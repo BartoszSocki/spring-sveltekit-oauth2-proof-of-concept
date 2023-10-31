@@ -56,14 +56,14 @@ class ProductRepositoryTest {
         var products = productRepository.findProducts(specification, page, "product[category]");
 
         // then
-        assertThat(products).isNotEmpty();
+        assertThat(products.getContent()).isNotEmpty();
     }
 
     @Test
     @Sql("/repository/category_test_1.sql")
     void givenCategoryFilter_whenSearch_thenSuccess() {
         // given
-        final String category = "Chairs";
+        final String category = "NotChairs";
 
         var filter = SearchFilter.builder()
                 .fieldName("category")
@@ -75,7 +75,7 @@ class ProductRepositoryTest {
         var page = Pageable.of(0, 10);
 
         // when
-        var products = productRepository.findProducts(specification, page, "product[category]");
+        var products = productRepository.findProducts(specification, page, "product[category]").getContent();
 
         // then
         var productCategories = products.stream().map(p -> p.getCategory().getName()).toList();
@@ -101,7 +101,7 @@ class ProductRepositoryTest {
         var page = Pageable.of(0, 10);
 
         // when
-        var products = productRepository.findProducts(specification, page, "product[all]");
+        var products = productRepository.findProducts(specification, page, "product[all]").getContent();
 
         // then
         assertThat(products).isNotEmpty();
@@ -117,7 +117,7 @@ class ProductRepositoryTest {
                 .name("beer")
                 .description("students drink")
                 .inventory(new ProductInventory(1))
-                .category(new Category("beverage"))
+                .category(new Category("NotBeverage"))
                 .owner(owner)
                 .price(new Money(1.0, "USD"))
                 .build();
@@ -137,7 +137,7 @@ class ProductRepositoryTest {
         Pageable pageable = Pageable.of(0, 10);
 
         // when
-        var products = productRepository.findProducts(Specification.empty(), pageable, sort);
+        var products = productRepository.findProducts(Specification.empty(), pageable, sort).getContent();
 
         // then
         assertThat(products).isNotEmpty();
@@ -156,7 +156,7 @@ class ProductRepositoryTest {
         Pageable pageable = Pageable.of(0, 10);
 
         // when
-        var products = productRepository.findProducts(Specification.empty(), pageable, sort);
+        var products = productRepository.findProducts(Specification.empty(), pageable, sort).getContent();
 
         // then
         assertThat(products).isNotEmpty();
@@ -178,7 +178,7 @@ class ProductRepositoryTest {
         Pageable pageable = Pageable.of(0, 10);
 
         // when
-        var products = productRepository.findProducts(Specification.empty(), pageable, sort);
+        var products = productRepository.findProducts(Specification.empty(), pageable, sort).getContent();
 
         // then
         assertThat(products).isNotEmpty();

@@ -1,23 +1,19 @@
 <script>
 	import Product from "$lib/Product/Product.svelte";
     import { invalidateAll } from '$app/navigation'
+    import { page } from '$app/stores'
 
     export let data;
-
-    // const pageNumber = parseInt($page.params.page);
-    // let nextUrl, prevUrl;
-
-    // $: {
-    //     let url = $page.url
-    //     nextUrl = [url.origin, '/product/list/2', url.search].join('');
-    //     prevUrl = [url.origin, '/product/list/0', url.search].join('');
-    // } 
 
     const reload = async () => {
         invalidateAll()
     }
 
-    $: products = data.data.searchProducts
+    $: products = data.data.searchProducts.content
+    $: isLastPage = data.data.searchProducts.isLastPage
+    $: isFirstPage = data.data.searchProducts.isFirstPage
+    $: prevUrl = $page.url.origin + '/product/list/' + (parseInt($page.params.page) - 1) + $page.url.search;
+    $: nextUrl = $page.url.origin + '/product/list/' + (parseInt($page.params.page) + 1) + $page.url.search;
 
 </script>
 
@@ -33,13 +29,14 @@
                 <div>wow so empty here</div>
         {/if}
     </ul>
-    <a href="/product/list/1" on:click={reload}>next</a>
-    <!-- <footer>
-        {#if pageNumber > 0}
-        <a href={prevUrl} on:click={reload}>prev</a>
+    <footer>
+        {#if !isFirstPage}
+            <a href={prevUrl} on:click={reload}>prev</a>
         {/if}
-        <a href={nextUrl} on:click={reload}>next</a>
-    </footer> -->
+        {#if !isLastPage}
+            <a href={nextUrl} on:click={reload}>next</a>
+        {/if}
+    </footer>
 </section>
 
 <style>

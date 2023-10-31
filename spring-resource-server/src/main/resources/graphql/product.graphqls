@@ -16,6 +16,19 @@ type ProductScore {
     reviewsCount: Int
 }
 
+type Page {
+    pageNumber: Int!
+    isLastPage: Boolean!
+    isFirstPage: Boolean!
+}
+
+type ProductPage {
+    pageNumber: Int!
+    isLastPage: Boolean!
+    isFirstPage: Boolean!
+    content: [Product]!
+}
+
 input SearchFilter {
     fieldName: String!
     searchOperation: SearchOperation!
@@ -27,7 +40,7 @@ input Sort {
     sortDirection: SortDirection!
 }
 
-input Page {
+input Pageable {
     offset: Int!
     limit: Int!
 }
@@ -47,5 +60,5 @@ type Product {
 
 type Query {
 #    searchProducts(filters: [SearchFilter]!): [Product]!
-    searchProducts(filters: [SearchFilter]!, pageable: Page!, sort: Sort!): [Product]!
+    searchProducts(filters: [SearchFilter]!, pageable: Pageable!, sort: Sort!): ProductPage!
 }

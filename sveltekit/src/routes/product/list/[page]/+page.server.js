@@ -1,29 +1,31 @@
 const query = `
-query SearchProducts($filters: [SearchFilter]!, $page: Page!, $sort: Sort!) {
-    searchProducts(filters: $filters, page: $page, sort: $sort) {
-        id
-        name
-        category
-        tags
-        description
-        ownerId
-        price {
-            amount
-            currency
+query SearchProducts($filters: [SearchFilter]!, $pageable: Pageable!, $sort: Sort!) {
+    searchProducts(filters: $filters, pageable: $pageable, sort: $sort) {
+        content {
+            id
+            name
+            category
+            tags
+            description
+            ownerId
+            price {
+                amount
+                currency
+            }
+            quantity
+            productScore {
+                averageScore
+                reviewsCount
+            }
+            imageUrl
         }
-        quantity
-        productScore {
-            averageScore
-            reviewsCount
-        }
-        imageUrl
+        isLastPage
+        isFirstPage
     }
 } 
 `
 
 export async function load({ params, url }) {
-    console.log('SERVER.JS LOAD')
-
     let filters = [];
     for (const [key, value] of url.searchParams.entries()) {
         const filter = paramToFilterConverter(key, value)
@@ -38,7 +40,7 @@ export async function load({ params, url }) {
 
     const variables = {
         filters,
-        page: page(offset * 5, 5),
+        pageable: pageable(offset * 5, 5),
         sort: sort(sortField, sortDir)
     };
 
@@ -53,6 +55,8 @@ export async function load({ params, url }) {
     });
 
     const json = await response.json();
+
+    console.log(json)
 
     return json;
 }
@@ -74,7 +78,7 @@ function filter(fieldName, searchOperation, fieldValue) {
     }
 }
 
-function page(offset, limit) {
+function pageable(offset, limit) {
     return {
         offset, limit
     }

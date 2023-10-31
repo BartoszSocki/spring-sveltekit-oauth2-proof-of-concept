@@ -1,5 +1,6 @@
 package com.sockib.springresourceserver.controllers;
 
+import com.sockib.springresourceserver.model.dto.PageDto;
 import com.sockib.springresourceserver.model.dto.ProductDto;
 import com.sockib.springresourceserver.service.product.ProductService;
 import com.sockib.springresourceserver.util.search.Pageable;
@@ -29,11 +30,9 @@ public class ProductController {
 //    }
 
     @QueryMapping
-    List<ProductDto> searchProducts(@Argument List<SearchFilter> filters, @Argument Pageable pageable, @Argument Sort sort) {
-        List<ProductDto> list = productService.searchProduct(filters, pageable, sort).stream()
-                .map(ProductDto::new)
-                .toList();
-        return list;
+    PageDto<ProductDto> searchProducts(@Argument List<SearchFilter> filters, @Argument Pageable pageable, @Argument Sort sort) {
+        var page = productService.searchProduct(filters, pageable, sort);
+        return new PageDto<>(page);
     }
 
 }
