@@ -47,5 +47,5 @@ type Product {
 
 type Query {
 #    searchProducts(filters: [SearchFilter]!): [Product]!
-    searchProducts(filters: [SearchFilter]!, page: Page!, sort: Sort!): [Product]!
+    searchProducts(filters: [SearchFilter]!, pageable: Page!, sort: Sort!): [Product]!
 }

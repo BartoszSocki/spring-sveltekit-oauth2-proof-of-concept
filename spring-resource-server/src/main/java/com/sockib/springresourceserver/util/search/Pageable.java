@@ -9,13 +9,13 @@ import lombok.ToString;
 @Setter
 @Builder
 @ToString
-public class Page {
+public class Pageable {
 
     private Integer offset;
     private Integer limit;
 
-    public static Page of(Integer offset, Integer limit) {
-        return Page.builder()
+    public static Pageable of(Integer offset, Integer limit) {
+        return Pageable.builder()
                 .offset(offset)
                 .limit(limit)
                 .build();

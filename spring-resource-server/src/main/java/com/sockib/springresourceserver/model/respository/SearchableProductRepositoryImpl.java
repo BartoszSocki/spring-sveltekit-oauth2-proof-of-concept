@@ -5,7 +5,7 @@ import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.ProductReview;
 import com.sockib.springresourceserver.model.entity.ProductReview_;
 import com.sockib.springresourceserver.model.entity.Product_;
-import com.sockib.springresourceserver.util.search.Page;
+import com.sockib.springresourceserver.util.search.Pageable;
 import com.sockib.springresourceserver.util.search.Sort;
 import com.sockib.springresourceserver.util.search.SortDirection;
 import com.sockib.springresourceserver.util.search.Specification;
@@ -14,7 +14,6 @@ import jakarta.persistence.Tuple;
 import jakarta.persistence.criteria.*;
 import lombok.AllArgsConstructor;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,7 +24,7 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
     private final EntityManager entityManager;
 
     @Override
-    public List<Product> findProducts(Specification<Product> specification, Page page, Sort sort, String entityGraphName) {
+    public List<Product> findProducts(Specification<Product> specification, Pageable pageable, Sort sort, String entityGraphName) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> criteriaQuery = criteriaBuilder.createTupleQuery();
         Root<Product> root = criteriaQuery.from(Product.class);
@@ -52,8 +51,8 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
                 );
 
         var list = entityManager.createQuery(query)
-                .setFirstResult(page.getOffset())
-                .setMaxResults(page.getLimit())
+                .setFirstResult(pageable.getOffset())
+                .setMaxResults(pageable.getLimit())
                 .getResultList();
 
         List<Long> sortedProductsIds = list.stream().map(t -> (Long) t.get(0)).toList();
@@ -80,18 +79,18 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
     }
 
     @Override
-    public List<Product> findProducts(Specification<Product> specification, Page page, Sort sort) {
-        return findProducts(specification, page, sort, "product[all]");
+    public List<Product> findProducts(Specification<Product> specification, Pageable pageable, Sort sort) {
+        return findProducts(specification, pageable, sort, "product[all]");
     }
 
     @Override
-    public List<Product> findProducts(Specification<Product> specification, Page page, String entityGraphName) {
-        return findProducts(specification, page, Sort.of("name", SortDirection.ASC), entityGraphName);
+    public List<Product> findProducts(Specification<Product> specification, Pageable pageable, String entityGraphName) {
+        return findProducts(specification, pageable, Sort.of("name", SortDirection.ASC), entityGraphName);
     }
 
     @Override
-    public List<Product> findProducts(Specification<Product> specification, Page page) {
-        return findProducts(specification, page, "product[all]");
+    public List<Product> findProducts(Specification<Product> specification, Pageable pageable) {
+        return findProducts(specification, pageable, "product[all]");
     }
 
     private Order getOrder(CriteriaBuilder criteriaBuilder, Path<Product> productPath, Sort sort) {

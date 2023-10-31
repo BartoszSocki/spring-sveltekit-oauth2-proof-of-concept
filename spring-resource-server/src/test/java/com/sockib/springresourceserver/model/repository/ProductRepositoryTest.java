@@ -4,7 +4,6 @@ import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.Category;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.ProductInventory;
-import com.sockib.springresourceserver.model.entity.User;
 import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
 import com.sockib.springresourceserver.service.product.SearchFilterToProductSpecificationConverter;
@@ -15,10 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 
-import javax.swing.text.html.InlineView;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -53,7 +50,7 @@ class ProductRepositoryTest {
         );
 
         var specification = searchFilterToProductSpecificationConverter.convert(filters);
-        var page = Page.of(0, 10);
+        var page = Pageable.of(0, 10);
 
         // when
         var products = productRepository.findProducts(specification, page, "product[category]");
@@ -75,7 +72,7 @@ class ProductRepositoryTest {
                 .build();
 
         var specification = searchFilterToProductSpecificationConverter.convert(filter);
-        var page = Page.of(0, 10);
+        var page = Pageable.of(0, 10);
 
         // when
         var products = productRepository.findProducts(specification, page, "product[category]");
@@ -101,7 +98,7 @@ class ProductRepositoryTest {
                 .build();
 
         var specification = searchFilterToProductSpecificationConverter.convert(filter);
-        var page = Page.of(0, 10);
+        var page = Pageable.of(0, 10);
 
         // when
         var products = productRepository.findProducts(specification, page, "product[all]");
@@ -137,10 +134,10 @@ class ProductRepositoryTest {
     void givenAscSortByName_whenSearch_thenSuccess() {
         // given
         Sort sort = Sort.of("name", SortDirection.ASC);
-        Page page = Page.of(0, 10);
+        Pageable pageable = Pageable.of(0, 10);
 
         // when
-        var products = productRepository.findProducts(Specification.empty(), page, sort);
+        var products = productRepository.findProducts(Specification.empty(), pageable, sort);
 
         // then
         assertThat(products).isNotEmpty();
@@ -156,10 +153,10 @@ class ProductRepositoryTest {
     void givenAscSortByPrice_whenSearch_thenSuccess() {
         // given
         Sort sort = Sort.of("price", SortDirection.ASC);
-        Page page = Page.of(0, 10);
+        Pageable pageable = Pageable.of(0, 10);
 
         // when
-        var products = productRepository.findProducts(Specification.empty(), page, sort);
+        var products = productRepository.findProducts(Specification.empty(), pageable, sort);
 
         // then
         assertThat(products).isNotEmpty();
@@ -178,10 +175,10 @@ class ProductRepositoryTest {
     void givenAscSortByScore_whenSearch_thenSuccess() {
         // given
         Sort sort = Sort.of("score", SortDirection.ASC);
-        Page page = Page.of(0, 10);
+        Pageable pageable = Pageable.of(0, 10);
 
         // when
-        var products = productRepository.findProducts(Specification.empty(), page, sort);
+        var products = productRepository.findProducts(Specification.empty(), pageable, sort);
 
         // then
         assertThat(products).isNotEmpty();
