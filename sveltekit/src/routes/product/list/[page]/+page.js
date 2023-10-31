@@ -1,4 +1,4 @@
-export function _SearchProductsVariables({ url }) {
+export function _SearchProductsVariables({ url, params }) {
     let filters = [];
     for (const [key, value] of url.searchParams.entries()) {
         const filter = paramToFilterConverter(key, value)
@@ -7,14 +7,13 @@ export function _SearchProductsVariables({ url }) {
         }
     }
 
-    let offset = parseInt(url.searchParams.get('offset') ?? '0') ?? 0;
-    let limit = parseInt(url.searchParams.get('limit') ?? '10') ?? 10;
     let sortField = url.searchParams.get('sort') ?? 'name';
     let sortDir = url.searchParams.get('sortDir') ?? "ASC";
+    let offset = params.page
 
     return {
         filters,
-        page: page(offset, limit),
+        page: page(offset * 5, 5),
         sort: sort(sortField, sortDir)
     }
 }

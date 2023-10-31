@@ -1,5 +1,5 @@
 <div>
-    price filter
+    <input />
 </div>
 
 <style>

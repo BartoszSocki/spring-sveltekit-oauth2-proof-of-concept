@@ -1,24 +1,24 @@
 <script>
 	import Product from "$lib/Product/Product.svelte";
     import { page } from '$app/stores';
+    import { invalidate } from '$app/navigation'
 
     export let data;
 
-    $: currentOffset = parseInt($page.url.searchParams.get('offset'))
-    $: currentLimit = parseInt($page.url.searchParams.get('limit'))
-
+    const pageNumber = parseInt($page.params.page);
     let nextUrl, prevUrl;
 
     $: {
         let url = $page.url
-        url.searchParams.set('offset', currentOffset + currentLimit);
-        nextUrl = url.href;
-        url.searchParams.set('offset', Math.max(0, currentOffset - currentLimit));
-        prevUrl = url.href;
+        nextUrl = [url.origin, '/product/list/2', url.search].join('');
+        prevUrl = [url.origin, '/product/list/0', url.search].join('');
     } 
 
+    const reload = async () => {
+        invalidate('/product/list')
+    }
+
     $: ({SearchProducts} = data);
-    // $: console.log($SearchProducts.data)
 </script>
 
 <section>
@@ -30,10 +30,10 @@
         {/each}
     </ul>
     <footer>
-        {#if currentOffset > 0}
-        <a href={prevUrl} target="_self">prev</a>
+        {#if pageNumber > 0}
+        <a href={prevUrl} on:click={reload}>prev</a>
         {/if}
-        <a href={nextUrl} target="_self">next</a>
+        <a href={nextUrl} on:click={reload}>next</a>
     </footer>
 </section>
 
@@ -52,7 +52,7 @@
     
     footer {
         display: flex;
-        gap: 1rem;
         justify-content: center;
+        gap: 1ch;
     }
 </style>
