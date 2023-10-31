@@ -14,7 +14,7 @@
                 </a>
             </li>
             <li>
-                <a href="/product/list">search</a>
+                <a href="/product/list/0">search</a>
             </li>
             {#if isUserAuthenticated}
             <li>

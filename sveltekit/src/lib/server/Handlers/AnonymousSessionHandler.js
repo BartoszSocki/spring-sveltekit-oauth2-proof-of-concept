@@ -22,6 +22,7 @@ export async function anonymousSessionHandler({ event, resolve }) {
     const session = await newAnonymousSession({ ipAddress })
 
     event.cookies.set('sessionid', session.id, {
+        path: '/',
         expires: session.expirationDateIdle,
         httpOnly: PROD !== undefined && PROD === 'true'
     })
