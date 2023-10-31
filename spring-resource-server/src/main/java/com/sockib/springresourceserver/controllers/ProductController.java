@@ -20,15 +20,6 @@ public class ProductController {
 
     private final ProductService productService;
 
-//    @QueryMapping
-//    List<ProductDto> searchProducts(@Argument List<SearchFilter> filters) {
-//        var products = productService.searchProduct(filters, Page.of(0, 10)).stream()
-//                .map(ProductDto::new)
-//                .toList();
-//
-//        return products;
-//    }
-
     @QueryMapping
     PageDto<ProductDto> searchProducts(@Argument List<SearchFilter> filters, @Argument Pageable pageable, @Argument Sort sort) {
         var page = productService.searchProduct(filters, pageable, sort);

@@ -1,6 +1,5 @@
 package com.sockib.springresourceserver.util.search;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -9,9 +8,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PageImpl<T> implements Page<T> {
 
-    private Long pageSize = 5L;
     private final List<T> content;
     private final Long currentPage;
+    private final Long pageSize;
     private final Long total;
 
     @Override
@@ -27,6 +26,11 @@ public class PageImpl<T> implements Page<T> {
     @Override
     public Long getTotal() {
         return total;
+    }
+
+    @Override
+    public Long getPageSize() {
+        return pageSize;
     }
 
     @Override

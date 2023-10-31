@@ -40,18 +40,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductDto> searchProduct(List<SearchFilter> filters, Pageable pageable) {
-        var specification = searchFilterToProductSpecificationConverter.convert(filters);
-
-        var page = productRepository.findProducts(specification, pageable);
-        var products = page.getContent().stream()
-                .map(ProductDto::new)
-                .toList();
-
-        return new PageImpl<>(products, page.getPage(), page.getPages());
-    }
-
-    @Override
     public Page<ProductDto> searchProduct(List<SearchFilter> filters, Pageable pageable, Sort sort) {
         var specification = searchFilterToProductSpecificationConverter.convert(filters);
 
@@ -61,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
                 .map(ProductDto::new)
                 .toList();
 
-        return new PageImpl<>(products, page.getPage(), page.getTotal());
+        return new PageImpl<>(products, page.getPage(), page.getPageSize(), page.getTotal());
     }
 
     @Override

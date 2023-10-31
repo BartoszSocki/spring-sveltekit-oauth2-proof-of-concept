@@ -50,7 +50,7 @@ class ProductRepositoryTest {
         );
 
         var specification = searchFilterToProductSpecificationConverter.convert(filters);
-        var page = Pageable.of(0, 10);
+        var page = Pageable.of(0L, 10L);
 
         // when
         var products = productRepository.findProducts(specification, page, "product[category]");
@@ -72,7 +72,7 @@ class ProductRepositoryTest {
                 .build();
 
         var specification = searchFilterToProductSpecificationConverter.convert(filter);
-        var page = Pageable.of(0, 10);
+        var page = Pageable.of(0L, 10L);
 
         // when
         var products = productRepository.findProducts(specification, page, "product[category]").getContent();
@@ -98,7 +98,7 @@ class ProductRepositoryTest {
                 .build();
 
         var specification = searchFilterToProductSpecificationConverter.convert(filter);
-        var page = Pageable.of(0, 10);
+        var page = Pageable.of(0L, 10L);
 
         // when
         var products = productRepository.findProducts(specification, page, "product[all]").getContent();
@@ -134,7 +134,7 @@ class ProductRepositoryTest {
     void givenAscSortByName_whenSearch_thenSuccess() {
         // given
         Sort sort = Sort.of("name", SortDirection.ASC);
-        Pageable pageable = Pageable.of(0, 10);
+        Pageable pageable = Pageable.of(0L, 10L);
 
         // when
         var products = productRepository.findProducts(Specification.empty(), pageable, sort).getContent();
@@ -153,7 +153,7 @@ class ProductRepositoryTest {
     void givenAscSortByPrice_whenSearch_thenSuccess() {
         // given
         Sort sort = Sort.of("price", SortDirection.ASC);
-        Pageable pageable = Pageable.of(0, 10);
+        Pageable pageable = Pageable.of(0L, 10L);
 
         // when
         var products = productRepository.findProducts(Specification.empty(), pageable, sort).getContent();
@@ -175,7 +175,7 @@ class ProductRepositoryTest {
     void givenAscSortByScore_whenSearch_thenSuccess() {
         // given
         Sort sort = Sort.of("score", SortDirection.ASC);
-        Pageable pageable = Pageable.of(0, 10);
+        Pageable pageable = Pageable.of(0L, 10L);
 
         // when
         var products = productRepository.findProducts(Specification.empty(), pageable, sort).getContent();

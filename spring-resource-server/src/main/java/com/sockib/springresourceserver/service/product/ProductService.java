@@ -12,7 +12,6 @@ import java.util.List;
 
 public interface ProductService {
 
-    Page<ProductDto> searchProduct(List<SearchFilter> filters, Pageable pageable);
     Page<ProductDto> searchProduct(List<SearchFilter> filters, Pageable pageable, Sort sort);
     Product addNewProduct(ProductInputDto productInputDto, String email);
 

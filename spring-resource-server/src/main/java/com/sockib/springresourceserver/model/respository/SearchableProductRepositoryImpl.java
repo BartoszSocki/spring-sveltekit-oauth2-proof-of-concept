@@ -48,8 +48,8 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
                 );
 
         var list = entityManager.createQuery(query)
-                .setFirstResult(pageable.getOffset())
-                .setMaxResults(pageable.getLimit())
+                .setFirstResult(pageable.getOffset().intValue())
+                .setMaxResults(pageable.getLimit().intValue())
                 .getResultList();
 
         List<Long> sortedProductsIds = list.stream().map(t -> (Long) t.get(0)).toList();
@@ -83,22 +83,12 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
         countCriteriaQuery.where(countPredicate).select(criteriaBuilder.count(countRoot.get(Product_.ID)));
         Long count = entityManager.createQuery(countCriteriaQuery).getSingleResult();
 
-        return new PageImpl<>(productsContent, (long) pageable.getPage(), count);
+        return new PageImpl<>(productsContent, (long) pageable.getPage(), pageable.getLimit(),count);
     }
 
     @Override
     public Page<Product> findProducts(Specification<Product> specification, Pageable pageable, Sort sort) {
         return findProducts(specification, pageable, sort, "product[all]");
-    }
-
-    @Override
-    public Page<Product> findProducts(Specification<Product> specification, Pageable pageable, String entityGraphName) {
-        return findProducts(specification, pageable, Sort.of("name", SortDirection.ASC), entityGraphName);
-    }
-
-    @Override
-    public Page<Product> findProducts(Specification<Product> specification, Pageable pageable) {
-        return findProducts(specification, pageable, "product[all]");
     }
 
     private Order getOrder(CriteriaBuilder criteriaBuilder, Path<Product> productPath, Sort sort) {

@@ -1,3 +1,5 @@
+
+
 const query = `
 query SearchProducts($filters: [SearchFilter]!, $pageable: Pageable!, $sort: Sort!) {
     searchProducts(filters: $filters, pageable: $pageable, sort: $sort) {
@@ -40,7 +42,7 @@ export async function load({ params, url }) {
 
     const variables = {
         filters,
-        pageable: pageable(offset * 5, 5),
+        pageable: pageable(offset * 2, 2),
         sort: sort(sortField, sortDir)
     };
 
@@ -56,15 +58,13 @@ export async function load({ params, url }) {
 
     const json = await response.json();
 
-    console.log(json)
-
     return json;
 }
 
 function paramToFilterConverter(param, value) {
     if (param === 'category') {
         // check if value is safe
-        return filter('category', 'LIKE', value)
+        return filter('category', 'EQ', value)
     }
 
     if (param === 'name') {

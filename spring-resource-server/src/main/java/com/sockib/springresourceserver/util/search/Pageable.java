@@ -14,12 +14,12 @@ import lombok.ToString;
 public class Pageable {
 
     @PositiveOrZero
-    private Integer offset;
+    private Long offset;
 
     @Positive
-    private Integer limit;
+    private Long limit;
 
-    public static Pageable of(Integer offset, Integer limit) {
+    public static Pageable of(Long offset, Long limit) {
         return Pageable.builder()
                 .offset(offset)
                 .limit(limit)
@@ -27,7 +27,7 @@ public class Pageable {
     }
 
     public Integer getPage() {
-        return (int) Math.ceil(offset / limit);
+        return (int) Math.ceil((double) offset / limit);
     }
 
 }

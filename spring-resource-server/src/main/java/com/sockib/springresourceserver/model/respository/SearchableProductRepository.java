@@ -12,7 +12,5 @@ public interface SearchableProductRepository {
 
     Page<Product> findProducts(Specification<Product> specification, Pageable pageable, Sort sort, String entityGraphName);
     Page<Product> findProducts(Specification<Product> specification, Pageable pageable, Sort sort);
-    Page<Product> findProducts(Specification<Product> specification, Pageable pageable, String entityGraphName);
-    Page<Product> findProducts(Specification<Product> specification, Pageable pageable);
 
 }

@@ -7,6 +7,7 @@ public interface Page<T> {
     List<T> getContent();
     Long getPage();
     Long getTotal();
+    Long getPageSize();
     Long getPages();
     Boolean isFirstPage();
     Boolean isLastPage();
