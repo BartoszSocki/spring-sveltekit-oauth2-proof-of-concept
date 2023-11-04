@@ -1,11 +1,30 @@
 <script>
     export let filterParams;
+    export let isValid;
+    
+    const simpleStringRegex = /^[ \w]+$/
+
+    function isInputSimpleString(value) {
+        return value === undefined 
+            || value === null
+            || value === ""
+            || simpleStringRegex.test(value)
+    }
+
+    $: isDataValid = isInputSimpleString($filterParams['category'])
+    $: isValid.update(current => {
+        return {
+            ...current,
+            priceFilter: isDataValid
+        }
+    })
 </script>
 
 <form>
-    <label>
+    <label class={!isDataValid ? "error" : ""}>
         Category name
-        <input bind:value={filterParams['category']} />
+        <input bind:value={$filterParams['category']} />
+        <span>category name contains invalid character</span>
     </label>
 </form>
 
@@ -32,5 +51,9 @@
 
     label > span {
         visibility: hidden;
+    }
+    
+    input {
+        margin-bottom: 0;
     }
 </style>

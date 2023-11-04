@@ -49,7 +49,7 @@
 <main>
     <div class="filters">
         <PriceFilter filterParams={$filterParams} isValid={isValid} />
-        <CategoryFilter filterParams={$filterParams} isValid={isValid} />
+        <CategoryFilter filterParams={filterParams} isValid={isValid} />
         
         <button on:click={search} disabled={!isDataValid}>search</button>
     </div>
