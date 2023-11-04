@@ -8,6 +8,7 @@
 
     export let data;
     const filterParams = writable({})
+    const isValid = writable({})
 
     // const reload = async () => {
     //     // invalidateAll()
@@ -40,14 +41,17 @@
         })
     })
 
+    $: filtersState = $isValid
+    $: isDataValid = Object.entries(filtersState).every(([_, state]) => state)
+
 </script>
 
 <main>
     <div class="filters">
-        <PriceFilter filterParams={$filterParams} />
-        <CategoryFilter filterParams={$filterParams} />
+        <PriceFilter filterParams={$filterParams} isValid={isValid} />
+        <CategoryFilter filterParams={$filterParams} isValid={isValid} />
         
-        <button on:click={search}>search</button>
+        <button on:click={search} disabled={!isDataValid}>search</button>
     </div>
 
     <slot />

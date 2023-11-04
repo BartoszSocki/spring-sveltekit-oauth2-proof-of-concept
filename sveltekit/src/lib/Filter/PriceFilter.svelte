@@ -1,5 +1,6 @@
 <script>
     export let filterParams;
+    export let isValid;
     
     const positiveIntegerRegex = /^[0-9]\d*$/
 
@@ -12,6 +13,13 @@
 
     $: isFirstInputValid = isInputPositiveInteger(filterParams['priceFrom'])
     $: isSecondInputValid = isInputPositiveInteger(filterParams['priceTo'])
+    $: isDataValid = isFirstInputValid && isSecondInputValid
+    $: isValid.update(current => {
+        return {
+            ...current,
+            priceFilter: isDataValid
+        }
+    })
 
 </script>
 
