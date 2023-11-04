@@ -1,5 +1,3 @@
-
-
 const query = `
 query SearchProducts($filters: [SearchFilterInput]!, $pageable: PageableInput!, $sort: SortInput!) {
     searchProducts(filters: $filters, pageable: $pageable, sort: $sort) {

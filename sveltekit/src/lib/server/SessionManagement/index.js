@@ -142,7 +142,10 @@ export async function renewSession(sessionId) {
 
 export async function isUserAuthed(sessionId) {
     const session = await findSessionById(sessionId)
-    return session.userId !== anonymousUserId && !isSessionDead(session)
+    return session !== null 
+        && session !== undefined 
+        && session.userId !== anonymousUserId 
+        && !isSessionDead(session)
 }
 
 async function saveStateForSession(sessionId, state) {

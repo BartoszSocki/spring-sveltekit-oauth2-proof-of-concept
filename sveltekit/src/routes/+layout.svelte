@@ -10,7 +10,7 @@
         <ul>
             <li>
                 <a href="/">
-                    <h1>Allegrisimo</h1>
+                    <h1>Allegrissimo</h1>
                 </a>
             </li>
             <li>
