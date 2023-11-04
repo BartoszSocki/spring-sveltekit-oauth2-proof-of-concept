@@ -65,6 +65,14 @@ function paramToFilterConverter(param, value) {
         return filter('category', 'EQ', value)
     }
 
+    if (param === 'priceTo') {
+        return filter('price', 'LT', value)
+    }
+
+    if (param === 'priceFrom') {
+        return filter('price', 'GT', value)
+    }
+
     if (param === 'name') {
         return filter('name', 'LIKE', value)
     }

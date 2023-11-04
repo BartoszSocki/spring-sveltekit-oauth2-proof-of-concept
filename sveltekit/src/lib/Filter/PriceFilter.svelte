@@ -52,4 +52,8 @@
     label > span {
         visibility: hidden;
     }
+
+    input {
+        margin-bottom: 0;
+    }
 </style>

@@ -58,11 +58,11 @@ public class SearchFilterToProductSpecificationConverterImpl implements SearchFi
     }
 
     public Specification<Product> priceGreaterThan(Integer value) {
-        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.greaterThan(path.get(Product_.PRICE).get("price"), max(0, value));
+        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.greaterThan(path.get(Product_.PRICE).get("amount"), max(0, value));
     }
 
     public Specification<Product> priceLessThan(Integer value) {
-        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.lessThan(path.get(Product_.PRICE).get("price"), max(0, value));
+        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.lessThan(path.get(Product_.PRICE).get("amount"), max(0, value));
     }
 
     private Specification<Product> withCategory(String name) {

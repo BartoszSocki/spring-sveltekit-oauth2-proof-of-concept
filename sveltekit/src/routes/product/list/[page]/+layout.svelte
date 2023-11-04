@@ -1,15 +1,17 @@
 <script>
     import { page } from '$app/stores'
     import PriceFilter from '$lib/Filter/PriceFilter.svelte';
+    import CategoryFilter from '$lib/Filter/CategoryFilter.svelte';
 	import { writable } from 'svelte/store';
     import { onMount } from 'svelte';
+    import { goto } from '$app/navigation'
 
     export let data;
     const filterParams = writable({})
 
-    const reload = async () => {
-        invalidateAll()
-    }
+    // const reload = async () => {
+    //     // invalidateAll()
+    // }
 
     $: isLastPage = data.data.searchProducts.isLastPage
     $: isFirstPage = data.data.searchProducts.isFirstPage
@@ -17,21 +19,24 @@
     $: nextUrl = $page.url.origin + '/product/list/' + (parseInt($page.params.page) + 1) + $page.url.search;
 
 
-    function toUrl() {
+    function search() {
         const map = $filterParams
         const search = Object.entries(map)
             .filter(([_, value]) => value !== null && value !== undefined && value !== "")
             .map(([key, value]) => key + '=' + value)
             .join('&')
         
-        console.log(search)
+        const url = '/product/list/0?' + search;
+        goto(url)
+        
     }
 
     onMount(() => {
         const urlParams = new URLSearchParams(window.location.search);
         filterParams.set({
             priceFrom: urlParams.get('priceFrom'),
-            priceTo: urlParams.get('priceTo') 
+            priceTo: urlParams.get('priceTo'),
+            category: urlParams.get('category') 
         })
     })
 
@@ -40,17 +45,19 @@
 <main>
     <div class="filters">
         <PriceFilter filterParams={$filterParams} />
-        <button on:click={() => toUrl(filterParams)}>search</button>
+        <CategoryFilter filterParams={$filterParams} />
+        
+        <button on:click={search}>search</button>
     </div>
 
     <slot />
 
     <footer>
         {#if !isFirstPage}
-            <a href={prevUrl} on:click={reload}>prev</a>
+            <a href={prevUrl}>prev</a>
         {/if}
         {#if !isLastPage}
-            <a href={nextUrl} on:click={reload}>next</a>
+            <a href={nextUrl}>next</a>
         {/if}
     </footer>
 </main>
@@ -67,6 +74,6 @@
         display: flex;
         justify-content: center;
         gap: 1ch;
+        padding-block: 1rem;
     }
-
 </style>

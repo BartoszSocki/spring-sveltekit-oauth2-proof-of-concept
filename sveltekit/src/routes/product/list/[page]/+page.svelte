@@ -2,24 +2,23 @@
 	import Product from "$lib/Product/Product.svelte";
 
     export let data;
+    $: console.log(data)
 
     $: products = data.data.searchProducts.content
 </script>
 
-<section>
-    <ul>
-        {#if products !== undefined && products !== null}
-            {#each products as product (product.id)}
-                <li>
-                    <Product product={product} />
-                </li>
-            {/each}
-        {:else}
-                <div>wow so empty here</div>
-        {/if}
-    </ul>
+<ul>
+    {#if products !== undefined && products !== null}
+        {#each products as product (product.id)}
+            <li>
+                <Product product={product} />
+            </li>
+        {/each}
+    {:else}
+            <div>wow so empty here</div>
+    {/if}
+</ul>
 
-</section>
 
 <style>
     li {
