@@ -20,7 +20,7 @@ public class SearchInput {
 
     @NotBlank(message = "search filter field value cannot be empty")
     @NotNull(message = "search filter field value is mandatory")
-    @Pattern(regexp = "^[\\w\\s]+$")
+    @Pattern(regexp = "^[-,\\w\\s]+$")
     private String fieldValue;
 
 }

@@ -1,5 +1,5 @@
 <script>
-    export let filterParams;
+    export let searchParams;
     export let isValid;
     
     const positiveIntegerRegex = /^[0-9]\d*$/
@@ -11,8 +11,8 @@
             || positiveIntegerRegex.test(value)        
     }
 
-    $: isFirstInputValid = isInputPositiveInteger(filterParams['priceFrom'])
-    $: isSecondInputValid = isInputPositiveInteger(filterParams['priceTo'])
+    $: isFirstInputValid = isInputPositiveInteger($searchParams['priceFrom'])
+    $: isSecondInputValid = isInputPositiveInteger($searchParams['priceTo'])
     $: isDataValid = isFirstInputValid && isSecondInputValid
     $: isValid.update(current => {
         return {
@@ -26,12 +26,12 @@
 <form>
     <label class={!isFirstInputValid ? "error" : ""}>
         Price from
-        <input bind:value={filterParams['priceFrom']} />
+        <input bind:value={$searchParams['priceFrom']} />
         <span>values is not a number</span>
     </label>
     <label class={!isSecondInputValid ? "error" : ""}>
         Price to
-        <input bind:value={filterParams['priceTo']} />
+        <input bind:value={$searchParams['priceTo']} />
         <span>values is not a number</span>
     </label>
 </form>

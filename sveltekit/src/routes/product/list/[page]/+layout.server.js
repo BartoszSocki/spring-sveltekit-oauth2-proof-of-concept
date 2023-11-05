@@ -75,6 +75,14 @@ function paramToFilterConverter(param, value) {
     if (param === 'name') {
         return filter('name', 'LIKE', value)
     }
+
+    if (param === 'tags') {
+        if (value === undefined || value === null || value === "") {
+            return null
+        }
+        const tags = value.split(',').filter(t => t !== "")
+        return filter('tag', 'IN', tags.join(','))
+    }
 }
 
 function filter(fieldName, searchOperation, fieldValue) {
@@ -92,13 +100,14 @@ function pageable(offset, limit) {
 function paramsToSortConverter(params) {
     const fieldName = params.get('orderBy') ?? ""
     const sortDir = params.get('sortDir') ?? ""
+    const defaultSort = sort('name', 'ASC')
 
     if (!['score', 'price', 'name'].includes(fieldName)) {
-        return null;
+        return defaultSort;
     }
 
     if (!['ASC', 'DSC'].includes(sortDir)) {
-        return null;
+        return defaultSort;
     }
 
     return sort(fieldName, sortDir)

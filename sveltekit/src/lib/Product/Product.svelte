@@ -1,4 +1,6 @@
 <script>
+	import Tag from "./Tag.svelte";
+
 	export let product;
 
 	const { name, category, price, quantity, productScore, tags } = product;
@@ -33,8 +35,8 @@
 		</div>
 		<div class="tags">
 			<ul>
-				{#each tags as tag}
-					<li class="tag">{tag}</li>
+				{#each tags as tag (tag)}
+					<Tag>{tag}</Tag>
 				{/each}
 			</ul>
 		</div>
@@ -91,17 +93,6 @@
 		align-items: center;
 	}
 
-	li.tag {
-		--text: #a8d5ed;
-		display: inline-block;
-		padding: 1ch 1.5ch;
-		border-radius: 4rem;
-		border: 2px solid var(--text);
-		font-size: 0.8rem;
-		list-style: none;
-		color: var(--text);
-	}
-
 	:root {
 		--star-size: 1rem;
 		--star-color: #fff;
@@ -131,9 +122,5 @@
 
 	.price {
 		color: #fff;
-	}
-
-	h4 {
-		margin: 0;
 	}
 </style>

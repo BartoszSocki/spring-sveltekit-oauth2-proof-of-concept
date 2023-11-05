@@ -38,7 +38,7 @@ public class SearchFilterToProductSpecificationConverterImpl implements SearchFi
         }
 
         if ("tag".equals(field) && SearchOperation.IN.equals(op)) {
-            List<String> tags = Arrays.stream(value.split(" ")).toList();
+            List<String> tags = Arrays.stream(value.split(",")).toList();
             return withTags(tags);
         }
 

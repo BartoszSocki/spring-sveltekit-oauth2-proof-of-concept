@@ -47,7 +47,7 @@
 		margin-bottom: 0;
 	}
 
-	label:has(input[type='radio']) {
+	/* label:has(input[type='radio']) {
 		grid-column: 1;
-	}
+	} */
 </style>

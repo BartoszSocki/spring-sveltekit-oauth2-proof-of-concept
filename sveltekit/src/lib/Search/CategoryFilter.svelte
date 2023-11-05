@@ -1,5 +1,5 @@
 <script>
-    export let filterParams;
+    export let searchParams;
     export let isValid;
     
     const simpleStringRegex = /^[ \w]+$/
@@ -11,7 +11,7 @@
             || simpleStringRegex.test(value)
     }
 
-    $: isDataValid = isInputSimpleString($filterParams['category'])
+    $: isDataValid = isInputSimpleString($searchParams['category'])
     $: isValid.update(current => {
         return {
             ...current,
@@ -23,7 +23,7 @@
 <form>
     <label class={!isDataValid ? "error" : ""}>
         Category name
-        <input bind:value={$filterParams['category']} />
+        <input bind:value={$searchParams['category']} />
         <span>category name contains invalid character</span>
     </label>
 </form>

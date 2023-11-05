@@ -83,7 +83,7 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
         countCriteriaQuery.where(countPredicate).select(criteriaBuilder.count(countRoot.get(Product_.ID)));
         Long count = entityManager.createQuery(countCriteriaQuery).getSingleResult();
 
-        return new PageImpl<>(productsContent, (long) pageable.getPage(), pageable.getLimit(),count);
+        return new PageImpl<>(productsContent, (long) pageable.getPage(), pageable.getLimit(), count);
     }
 
     @Override

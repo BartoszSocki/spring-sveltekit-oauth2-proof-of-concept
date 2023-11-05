@@ -6,6 +6,7 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation'
 	import Sorter from '$lib/Search/Sorter.svelte';
+	import TagsFilter from '../../../../lib/Search/TagsFilter.svelte';
 
     export let data;
     const filterParams = writable({})
@@ -31,13 +32,16 @@
 
     onMount(() => {
         const urlParams = new URLSearchParams(window.location.search);
+        const tags = urlParams.get('tags') === null ? [] : urlParams.get('tags').split(',')
+
         filterParams.set({
             priceFrom: urlParams.get('priceFrom'),
             priceTo: urlParams.get('priceTo'),
             category: urlParams.get('category'),
             orderBy: urlParams.get('orderBy'),
-            sortDir: urlParams.get('sortDir')
-        })
+            sortDir: urlParams.get('sortDir'),
+            tags
+        });
     })
 
     $: filtersState = $isValid
@@ -47,8 +51,9 @@
 
 <main>
     <div class="filters">
-        <PriceFilter filterParams={$filterParams} isValid={isValid} />
-        <CategoryFilter filterParams={filterParams} isValid={isValid} />
+        <PriceFilter searchParams={filterParams} isValid={isValid} />
+        <CategoryFilter searchParams={filterParams} isValid={isValid} />
+        <TagsFilter searchParams={filterParams} />
         <Sorter searchParams={filterParams} />
         
         <button on:click={search} disabled={!isDataValid}>search</button>

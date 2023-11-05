@@ -2,9 +2,9 @@
 	import Product from "$lib/Product/Product.svelte";
 
     export let data;
-    $: console.log(data)
-
+    // $: console.log(data)
     $: products = data.data.searchProducts.content
+    // $: products = []
 </script>
 
 <ul>
