@@ -26,6 +26,9 @@
             {/if}
             <div class="space" />
             <li>
+                <a href="/cart">cart</a>
+            </li>
+            <li>
                 <a href="/profile">profile</a>
             </li>
             <li>
