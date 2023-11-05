@@ -34,14 +34,13 @@ export async function load({ params, url }) {
         }
     }
 
-    let sortField = url.searchParams.get('sort') ?? 'name';
-    let sortDir = url.searchParams.get('sortDir') ?? "ASC";
+    let searchSort = paramsToSortConverter(url.searchParams)
     let offset = params.page
 
     const variables = {
         filters,
         pageable: pageable(offset * 2, 2),
-        sort: sort(sortField, sortDir)
+        sort: searchSort
     };
 
     const response = await fetch('http://localhost:9090/graphql', {
@@ -88,6 +87,21 @@ function pageable(offset, limit) {
     return {
         offset, limit
     }
+}
+
+function paramsToSortConverter(params) {
+    const fieldName = params.get('orderBy') ?? ""
+    const sortDir = params.get('sortDir') ?? ""
+
+    if (!['score', 'price', 'name'].includes(fieldName)) {
+        return null;
+    }
+
+    if (!['ASC', 'DSC'].includes(sortDir)) {
+        return null;
+    }
+
+    return sort(fieldName, sortDir)
 }
 
 function sort(fieldName, sortDirection) {

@@ -1,18 +1,15 @@
 <script>
     import { page } from '$app/stores'
-    import PriceFilter from '$lib/Filter/PriceFilter.svelte';
-    import CategoryFilter from '$lib/Filter/CategoryFilter.svelte';
+    import PriceFilter from '$lib/Search/PriceFilter.svelte';
+    import CategoryFilter from '$lib/Search/CategoryFilter.svelte';
 	import { writable } from 'svelte/store';
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation'
+	import Sorter from '$lib/Search/Sorter.svelte';
 
     export let data;
     const filterParams = writable({})
     const isValid = writable({})
-
-    // const reload = async () => {
-    //     // invalidateAll()
-    // }
 
     $: isLastPage = data.data.searchProducts.isLastPage
     $: isFirstPage = data.data.searchProducts.isFirstPage
@@ -37,7 +34,9 @@
         filterParams.set({
             priceFrom: urlParams.get('priceFrom'),
             priceTo: urlParams.get('priceTo'),
-            category: urlParams.get('category') 
+            category: urlParams.get('category'),
+            orderBy: urlParams.get('orderBy'),
+            sortDir: urlParams.get('sortDir')
         })
     })
 
@@ -50,6 +49,7 @@
     <div class="filters">
         <PriceFilter filterParams={$filterParams} isValid={isValid} />
         <CategoryFilter filterParams={filterParams} isValid={isValid} />
+        <Sorter searchParams={filterParams} />
         
         <button on:click={search} disabled={!isDataValid}>search</button>
     </div>
