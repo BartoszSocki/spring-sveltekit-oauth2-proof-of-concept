@@ -61,4 +61,5 @@ type Product {
 type Query {
 #    searchProducts(filters: [SearchFilter]!): [Product]!
     searchProducts(filters: [SearchFilterInput]!, pageable: PageableInput!, sort: SortInput!): ProductPage!
+    findProductsByIds(ids: [Int!]!): [Product]
 }

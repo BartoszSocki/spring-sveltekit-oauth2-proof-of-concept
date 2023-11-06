@@ -34,4 +34,9 @@ public class ProductController {
         return new PageDto<>(productService.searchProduct(productFilters, productPageable, productSort));
     }
 
+
+    @QueryMapping
+    List<ProductDto> findProductsByIds(@Argument List<Long> ids) {
+        return productService.findProductsByIds(ids);
+    }
 }

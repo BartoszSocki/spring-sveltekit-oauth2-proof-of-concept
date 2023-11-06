@@ -4,8 +4,10 @@
 
     export let data;
 
-    $: products = data.products;
-    $: canBeBought = products !== undefined && products !== null && products.length !== 0;
+    $: console.log(data)
+
+    $: products = data.data;
+    $: canBeBought = products !== undefined && products !== null && products.length > 0;
 
     function removeItemFromCart(id) {
         products = products.filter(p => p.id !== id)
@@ -15,7 +17,7 @@
 
 <div>
     <ul>
-        {#if products}
+        {#if products && products.length > 0}
             {#each products as product (product.id)}
                 <li>
                     <CartProduct product={product}/>

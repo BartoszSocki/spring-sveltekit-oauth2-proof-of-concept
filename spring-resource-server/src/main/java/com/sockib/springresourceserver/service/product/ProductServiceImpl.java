@@ -55,7 +55,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> findProductsByIds(List<Long> ids) {
-        return null;
+        var products = productRepository.findProductsByIdIn(ids);
+        return products.stream()
+                .map(ProductDto::new)
+                .toList();
     }
 
     @Override
