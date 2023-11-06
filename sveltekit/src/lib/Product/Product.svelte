@@ -45,12 +45,18 @@
 			{price.currency}
 		</div>
 	</div>
+
+	<div class="add-to-cart">
+		<slot />
+	</div>
 </div>
 
 <style>
 	div.wrapper {
-		display: flex;
-		flex-direction: row;
+		/* display: flex;
+		flex-direction: row; */
+		display: grid;
+		grid-template-columns: minmax(min-content, max-content) auto minmax(8rem, 10rem);
 		gap: 1rem;
 
 		padding: 1rem;
@@ -122,5 +128,9 @@
 
 	.price {
 		color: #fff;
+	}
+
+	.add-to-cart {
+		align-self: center;
 	}
 </style>

@@ -13,6 +13,7 @@ import java.util.List;
 public interface ProductService {
 
     Page<ProductDto> searchProduct(List<SearchFilter> filters, Pageable pageable, Sort sort);
+    List<ProductDto> findProductsByIds(List<Long> ids);
     Product addNewProduct(ProductInputDto productInputDto, String email);
 
 }

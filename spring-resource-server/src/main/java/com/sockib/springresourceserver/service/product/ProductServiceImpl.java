@@ -54,6 +54,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductDto> findProductsByIds(List<Long> ids) {
+        return null;
+    }
+
+    @Override
     @Transactional
     public Product addNewProduct(@Valid ProductInputDto productInputDto, String email) {
         var user = userRepository.findUserByEmail(email).orElseThrow(() -> new RuntimeException("TODO: add User Not Found Exception"));

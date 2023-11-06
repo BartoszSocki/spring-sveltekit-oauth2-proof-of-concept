@@ -7,6 +7,7 @@ export function getCart() {
 }
 
 function save(state) {
+    console.log(state)
     window.localStorage.setItem('cart-products', state.join(','))
 }
 
@@ -16,6 +17,11 @@ export function removeFromCart(id) {
 }
 
 export function addToCart(id) {
-    const newState = [...getCart(), id].join(',')
+    const state = getCart()
+    if (state.includes(id)) {
+        return
+    }
+
+    const newState = [...state, id]
     save(newState)
 }
