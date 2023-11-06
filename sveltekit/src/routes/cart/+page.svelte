@@ -1,31 +1,38 @@
 <script>
-    import cartStore from '$lib/shared/stores/cartStore.js'
-	import CartProduct from '../../lib/Cart/CartProduct.svelte';
+	import CartProduct from '$lib/Cart/CartProduct.svelte';
+    import { removeFromCart } from '$lib/shared/cart/cart.js'
 
-    const products = [
-        {name: 'aaa', price: { amount: 10, currency: 'USD'} }, 
-        {name: 'bbb', price: { amount: 10, currency: 'USD'} }, 
-        {name: 'ccc', price: { amount: 10, currency: 'USD'} }
-    ];
+    export let data;
 
+    $: products = data.products;
+    $: canBeBought = products !== undefined && products !== null && products.length !== 0;
+
+    function removeItemFromCart(id) {
+        products = products.filter(p => p.id !== id)
+        removeFromCart(id)
+    }
 </script>
 
 <div>
     <ul>
-        {#each products as product}
-            <li>
-                <CartProduct product={product}/>
-                <div class="space" />
-                <span>quantity: </span>
-                <button class="btn quantity">+</button>
-                <button class="btn quantity">-</button>
-                <button class="btn delete">delete</button>
-            </li>
-        {/each}
+        {#if products}
+            {#each products as product (product.id)}
+                <li>
+                    <CartProduct product={product}/>
+                    <div class="space" />
+                    <!-- <span>quantity: </span> -->
+                    <!-- <button class="btn quantity">+</button> -->
+                    <!-- <button class="btn quantity">-</button> -->
+                    <button class="btn delete" on:click={() => removeItemFromCart(product.id)}>delete</button>
+                </li>
+            {/each}
+        {:else}
+            <span>cart is empty</span>
+        {/if}
     </ul>
 
     <footer>
-        <button>buy</button>
+        <button disabled={!canBeBought}>buy</button>
     </footer>
 </div>
 

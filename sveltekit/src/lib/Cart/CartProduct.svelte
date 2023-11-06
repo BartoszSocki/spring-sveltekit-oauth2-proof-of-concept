@@ -4,19 +4,23 @@
 </script>
 
 <div class="container">
-    <div class="img">
+    <!-- <div class="img"> -->
 		<img src="/images/image-not-found.png" alt={name} />
-	</div> 
-    <span>{name}</span>
-    <span>{price.amount}</span>
-    <span>{price.currency}</span>
+	<!-- </div>  -->
+    <span class="name">{name}</span>
+    <span>{price.amount} {price.currency}</span>
 </div>
 
 <style>
     img {
+        display: inline-block;
         object-fit: cover;
         width: 3rem;
         height: 3rem;
+    }
+
+    .name {
+        color: white;
     }
 
     .container {
