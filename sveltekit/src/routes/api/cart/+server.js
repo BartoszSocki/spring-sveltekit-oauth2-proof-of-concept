@@ -1,4 +1,6 @@
-import { json } from '@sveltejs/kit'
+import { error, json } from '@sveltejs/kit'
+import { API_URL } from '$env/static/private'
+import { positiveIntegerRegex } from '../../../lib/util/validation.js'
 
 const query = `
 query FindProductsByIds($ids: [Int!]!) {
@@ -15,21 +17,20 @@ query FindProductsByIds($ids: [Int!]!) {
 
 export async function GET({ params, url }) {
     const cartItemsIds = url.searchParams.get('cart')
-    if  (cartItemsIds === undefined || cartItemsIds === null || cartItemsIds === "") {
+
+    if  (!cartItemsIds) {
         return json({
             products: []
         })
     }
 
-    const ids = cartItemsIds.split(',').map(id => parseInt(id)) 
-
-    console.log(ids)
+    const ids = getIds(cartItemsIds)
 
     const variables = {
         ids
     };
 
-    const response = await fetch('http://localhost:9090/graphql', {
+    const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -44,20 +45,17 @@ export async function GET({ params, url }) {
     return json(data.data.findProductsByIds)
 }
 
+function getIds(value) {
+    const stringIds = value.split(',')
 
-// export async function GET(event) {
-//     // console.log({event})
-    
-//     return await json({
-//         products: [
-//             {
-//                 id: 1,
-//                 name: 'Name',
-//                 price: {
-//                     amount: 10,
-//                     currency: 'USD'
-//                 }
-//             }
-//         ]
-//     })
-// }
+    const areIdsValid = stringIds.map(id => positiveIntegerRegex.test(id))
+        .every(id => id)
+
+    if (!areIdsValid) {
+        throw error(400, {
+            message: 'ids contains invalid id'
+        })
+    }
+
+    return stringIds.map(id => parseInt(id))
+}
