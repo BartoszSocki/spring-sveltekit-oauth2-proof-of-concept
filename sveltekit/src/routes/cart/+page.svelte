@@ -17,20 +17,28 @@
 
 <div>
     <ul>
-        {#if products && products.length > 0}
-            {#each products as product (product.id)}
-                <li>
-                    <CartProduct product={product}/>
-                    <div class="space" />
-                    <!-- <span>quantity: </span> -->
-                    <!-- <button class="btn quantity">+</button> -->
-                    <!-- <button class="btn quantity">-</button> -->
-                    <button class="btn delete" on:click={() => removeItemFromCart(product.id)}>delete</button>
-                </li>
-            {/each}
-        {:else}
-            <span>cart is empty</span>
-        {/if}
+        {#await products}
+            Loading...
+        {:then products}
+
+            {#if products && products.length > 0}
+                {#each products as product (product.id)}
+                    <li>
+                        <CartProduct product={product}/>
+                        <div class="space" />
+                        <!-- <span>quantity: </span> -->
+                        <!-- <button class="btn quantity">+</button> -->
+                        <!-- <button class="btn quantity">-</button> -->
+                        <button class="btn delete" on:click={() => removeItemFromCart(product.id)}>delete</button>
+                    </li>
+                {/each}
+            {:else}
+                <span>cart is empty</span>
+            {/if}
+
+        {:catch error}
+            {error.message}
+        {/await}
     </ul>
 
     <footer>

@@ -1,8 +1,8 @@
 <script>
+    import { positiveIntegerRegex } from '$lib/util/validation.js'
+
     export let searchParams;
     export let isValid;
-    
-    const positiveIntegerRegex = /^[0-9]\d*$/
 
     function isInputPositiveInteger(value) {
         return value === undefined 
