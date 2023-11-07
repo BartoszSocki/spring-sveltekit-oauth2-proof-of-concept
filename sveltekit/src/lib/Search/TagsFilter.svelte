@@ -12,20 +12,15 @@
             || simpleStringRegex.test(value)
     }
 
-    // $: isDataValid = isInputSimpleString($searchParams['category'])
-    // $: isValid.update(current => {
-    //     return {
-    //         ...current,
-    //         priceFilter: isDataValid
-    //     }
-    // })
 
-    // $: tags = $searchParams['tags']
-    // $: console.log('tags', tags)
-    // $: tags = ['aaa', 'bbb', 'ccc'];
     $: newTag = '';
-    // $: console.log($searchParams['tags'])
-    // $: console.log(searchParams)
+    $: isDataValid = isInputSimpleString(newTag)
+    $: isValid.update(current => {
+        return {
+            ...current,
+            tagsFilter: isDataValid
+        }
+    })
 
     function addTag(e) {
         if (newTag === '') {
@@ -74,8 +69,8 @@
             {/each}
         {/if}
     </ul>
-    <input type="text" bind:value={newTag}>
-    <button on:click={addTag}>Add new tag</button>
+    <input type="text" bind:value={newTag} class={isDataValid ? '' : 'error'}>
+    <button on:click={addTag} disabled={!isDataValid}>Add new tag</button>
 </fieldset>
 
 <style>
@@ -118,22 +113,8 @@
         padding-left: 0;
     }
 
-    label.error > span {
-        visibility: visible;
-        color: red;
-        font-size: 0.5rem;
-    }
-
-    label.error > input {
+    input.error {
         border-color: red;
-    }
-
-    label.error {
-        color: red;
-    }
-
-    label > span {
-        visibility: hidden;
     }
     
     input {

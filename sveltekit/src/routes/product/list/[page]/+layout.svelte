@@ -54,7 +54,7 @@
     <div class="filters">
         <PriceFilter searchParams={filterParams} isValid={isValid} />
         <CategoryFilter searchParams={filterParams} isValid={isValid} />
-        <TagsFilter searchParams={filterParams} />
+        <TagsFilter searchParams={filterParams} isValid={isValid}/>
         <Sorter searchParams={filterParams} />
         
         <button on:click={search} disabled={!isDataValid}>search</button>
