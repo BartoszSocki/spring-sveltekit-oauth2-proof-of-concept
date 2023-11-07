@@ -3,12 +3,12 @@ import { browser } from '$app/environment';
 
 const defaultValue = '';
 const initialValue = browser ? window.localStorage.getItem('cart-products') ?? defaultValue : defaultValue
-const cartStore = writable(initialValue);
+const CartStore = writable(initialValue);
 
-cartStore.subscribe((value) => {
+CartStore.subscribe((value) => {
     if (browser) {
         window.localStorage.setItem('cart-products', value);
     }
 });
 
-export default cartStore;
+export default CartStore;

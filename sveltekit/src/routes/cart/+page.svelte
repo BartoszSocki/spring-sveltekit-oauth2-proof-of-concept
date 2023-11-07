@@ -1,5 +1,5 @@
 <script>
-	import CartProduct from '$lib/Cart/CartProduct.svelte';
+	import CartProduct from '$lib/cart/CartProduct.svelte';
     import { removeFromCart } from '$lib/shared/cart/cart.js'
 
     export let data;

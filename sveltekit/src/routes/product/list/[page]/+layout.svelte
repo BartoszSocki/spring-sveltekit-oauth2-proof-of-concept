@@ -1,12 +1,13 @@
 <script>
     import { page } from '$app/stores'
-    import PriceFilter from '$lib/Search/PriceFilter.svelte';
-    import CategoryFilter from '$lib/Search/CategoryFilter.svelte';
 	import { writable } from 'svelte/store';
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation'
-	import Sorter from '$lib/Search/Sorter.svelte';
-	import TagsFilter from '../../../../lib/Search/TagsFilter.svelte';
+
+    import PriceFilter from '$lib/search/PriceFilter.svelte';
+    import CategoryFilter from '$lib/search/CategoryFilter.svelte';
+	import Sorter from '$lib/search/Sorter.svelte';
+	import TagsFilter from '$lib/search/TagsFilter.svelte';
 
     export let data;
     const filterParams = writable({})

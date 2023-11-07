@@ -1,5 +1,5 @@
 <script>
-	import Tag from "./Tag.svelte";
+	import Tag from "$lib/product/Tag.svelte";
 
 	export let product;
 
