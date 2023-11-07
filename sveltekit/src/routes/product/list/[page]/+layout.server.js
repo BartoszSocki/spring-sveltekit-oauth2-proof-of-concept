@@ -1,29 +1,5 @@
-const query = `
-query SearchProducts($filters: [SearchFilterInput]!, $pageable: PageableInput!, $sort: SortInput!) {
-    searchProducts(filters: $filters, pageable: $pageable, sort: $sort) {
-        content {
-            id
-            name
-            category
-            tags
-            description
-            ownerId
-            price {
-                amount
-                currency
-            }
-            quantity
-            productScore {
-                averageScore
-                reviewsCount
-            }
-            imageUrl
-        }
-        isLastPage
-        isFirstPage
-    }
-} 
-`
+import { API_URL } from '$env/static/private'
+import query from './query.gql?raw'
 
 export async function load({ params, url }) {
     let filters = [];
@@ -43,7 +19,7 @@ export async function load({ params, url }) {
         sort: searchSort
     };
 
-    const response = await fetch('http://localhost:9090/graphql', {
+    const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

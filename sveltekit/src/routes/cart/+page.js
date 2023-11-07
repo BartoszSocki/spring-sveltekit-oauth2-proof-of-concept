@@ -1,5 +1,6 @@
 import { browser } from '$app/environment'
 import { getCart } from '$lib/shared/cart/cart.js'
+import { BACKEND_URL } from '$env/static/public'
 
 export async function load({ fetch }) {
     if (!browser) {
@@ -10,7 +11,8 @@ export async function load({ fetch }) {
 
     const urlSuffix = prodcutIds.length === 0 ? '' : `?cart=${prodcutIds}`;
 
-    const response = await fetch(`http://localhost:3000/api/cart${urlSuffix}`)
+    const response = await fetch(`${BACKEND_URL}/api/cart${urlSuffix}`)
+
     const data = await response.json()
 
     return { data };

@@ -1,0 +1,24 @@
+query SearchProducts($filters: [SearchFilterInput]!, $pageable: PageableInput!, $sort: SortInput!) {
+    searchProducts(filters: $filters, pageable: $pageable, sort: $sort) {
+        content {
+            id
+            name
+            category
+            tags
+            description
+            ownerId
+            price {
+                amount
+                currency
+            }
+            quantity
+            productScore {
+                averageScore
+                reviewsCount
+            }
+            imageUrl
+        }
+        isLastPage
+        isFirstPage
+    }
+} 
