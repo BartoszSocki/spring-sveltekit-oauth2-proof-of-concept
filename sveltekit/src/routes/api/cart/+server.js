@@ -1,21 +1,9 @@
 import { error, json } from '@sveltejs/kit'
 import { API_URL } from '$env/static/private'
-import { positiveIntegerRegex } from '../../../lib/util/validation.js'
+import { positiveIntegerRegex } from '$lib/util/validation.js'
+import query from './query.gql?raw'
 
-const query = `
-query FindProductsByIds($ids: [Int!]!) {
-    findProductsByIds(ids: $ids) {
-        id
-        name
-        price {
-            amount
-            currency
-        }
-    }
-} 
-`
-
-export async function GET({ params, url }) {
+export async function GET({ url }) {
     const cartItemsIds = url.searchParams.get('cart')
 
     if  (!cartItemsIds) {
@@ -26,9 +14,7 @@ export async function GET({ params, url }) {
 
     const ids = getIds(cartItemsIds)
 
-    const variables = {
-        ids
-    };
+    const variables = { ids };
 
     const response = await fetch(API_URL, {
         method: 'POST',
@@ -57,5 +43,7 @@ function getIds(value) {
         })
     }
 
-    return stringIds.map(id => parseInt(id))
+    const ids = stringIds.map(id => parseInt(id))
+
+    return ids
 }

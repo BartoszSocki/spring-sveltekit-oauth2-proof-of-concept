@@ -1,0 +1,10 @@
+query FindProductsByIds($ids: [Int!]!) {
+    findProductsByIds(ids: $ids) {
+        id
+        name
+        price {
+            amount
+            currency
+        }
+    }
+} 
