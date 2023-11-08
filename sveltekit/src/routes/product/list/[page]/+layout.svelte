@@ -32,8 +32,9 @@
     }
 
     onMount(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const tags = urlParams.get('tags') === null ? [] : urlParams.get('tags').split(',')
+        const urlParams = new URLSearchParams(window.location.search)
+        const tagsInUrl = urlParams.get('tags')
+        const tags = tagsInUrl === null || tagsInUrl === "" ? [] : tagsInUrl.split(',')
 
         filterParams.set({
             priceFrom: urlParams.get('priceFrom'),

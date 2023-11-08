@@ -49,7 +49,7 @@
     }
 
     main {
-        /* padding: 0.5rem; */
+        padding: 1rem;
         height: 100vh;
         width: clamp(40rem, 100%, 90rem);
         margin-inline: auto;

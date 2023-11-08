@@ -12,7 +12,6 @@
             || simpleStringRegex.test(value)
     }
 
-
     $: newTag = '';
     $: isDataValid = isInputSimpleString(newTag)
     $: isValid.update(current => {
