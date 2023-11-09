@@ -30,7 +30,8 @@ public class ProductInput {
     private String category;
 
     @Size(max = 10, message = "too many tags")
-    private List<TagDto> tags;
+    // TODO: add validation
+    private List<String> tags;
 
     @Size(max = 1024, message = "product description is too long")
     @Pattern(regexp = "^[\\s\\w]+$")
