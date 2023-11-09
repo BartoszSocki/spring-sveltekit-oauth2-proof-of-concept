@@ -1,6 +1,10 @@
 package com.sockib.springresourceserver.controllers;
 
 import com.sockib.springresourceserver.model.dto.*;
+import com.sockib.springresourceserver.model.dto.input.PageableInput;
+import com.sockib.springresourceserver.model.dto.input.ProductInput;
+import com.sockib.springresourceserver.model.dto.input.SearchInput;
+import com.sockib.springresourceserver.model.dto.input.SortInput;
 import com.sockib.springresourceserver.service.product.ProductService;
 import com.sockib.springresourceserver.util.search.Pageable;
 import com.sockib.springresourceserver.util.search.SearchFilter;
@@ -9,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
@@ -34,9 +39,13 @@ public class ProductController {
         return new PageDto<>(productService.searchProduct(productFilters, productPageable, productSort));
     }
 
-
     @QueryMapping
     List<ProductDto> findProductsByIds(@Argument List<Long> ids) {
         return productService.findProductsByIds(ids);
+    }
+
+    @MutationMapping
+    Boolean addProduct(@Argument @Valid ProductInput product) {
+        return true;
     }
 }

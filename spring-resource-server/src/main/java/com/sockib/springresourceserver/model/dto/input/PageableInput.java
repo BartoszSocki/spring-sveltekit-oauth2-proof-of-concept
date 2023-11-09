@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.model.dto;
+package com.sockib.springresourceserver.model.dto.input;
 
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;

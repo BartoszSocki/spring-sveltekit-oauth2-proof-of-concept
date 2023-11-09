@@ -1,8 +1,9 @@
 package com.sockib.springresourceserver.service.product;
 
 import com.sockib.springresourceserver.model.dto.ProductDto;
-import com.sockib.springresourceserver.model.dto.ProductInputDto;
+import com.sockib.springresourceserver.model.dto.input.ProductInput;
 import com.sockib.springresourceserver.model.dto.TagDto;
+import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.*;
 import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.model.respository.TagRepository;
@@ -10,7 +11,6 @@ import com.sockib.springresourceserver.model.respository.UserRepository;
 import com.sockib.springresourceserver.util.search.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,25 +63,29 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Product addNewProduct(@Valid ProductInputDto productInputDto, String email) {
+    public Product addNewProduct(@Valid ProductInput productInput, String email) {
         var user = userRepository.findUserByEmail(email).orElseThrow(() -> new RuntimeException("TODO: add User Not Found Exception"));
 
-        var tagNames = productInputDto.getTags().stream().map(TagDto::getName).toList();
+        var tagNames = productInput.getTags().stream().map(TagDto::getName).toList();
         List<Tag> existingTags = tagRepository.findAllByNameIn(tagNames);
         var productTags = combineExistingTagsWithNewTags(tagNames, existingTags);
 
-        var productCategory = categoryRepository.findCategoryByName(productInputDto.getCategory())
-                .orElse(new Category(productInputDto.getCategory()));
+        var productCategory = categoryRepository.findCategoryByName(productInput.getCategory())
+                .orElse(new Category(productInput.getCategory()));
+
+        var money = new Money();
+        money.setAmount(productInput.getPrice().getAmount());
+        money.setCurrency(productInput.getPrice().getCurrency());
 
         var product = Product.builder()
-                .name(productInputDto.getName())
+                .name(productInput.getName())
                 .category(productCategory)
                 .tags(productTags)
-                .description(productInputDto.getDescription())
-                .imageUrl(productInputDto.getImageUrl())
+                .description(productInput.getDescription())
+                .imageUrl(productInput.getImageUrl())
                 .owner(user)
-                .inventory(new ProductInventory(productInputDto.getQuantity()))
-                .price(productInputDto.getPrice().toMoney())
+                .inventory(new ProductInventory(productInput.getQuantity()))
+                .price(money)
                 .build();
 
         return productRepository.save(product);

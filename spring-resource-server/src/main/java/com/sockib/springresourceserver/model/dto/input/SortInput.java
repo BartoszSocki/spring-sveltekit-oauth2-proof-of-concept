@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.model.dto;
+package com.sockib.springresourceserver.model.dto.input;
 
 import com.sockib.springresourceserver.util.search.SortDirection;
 import jakarta.validation.constraints.NotBlank;

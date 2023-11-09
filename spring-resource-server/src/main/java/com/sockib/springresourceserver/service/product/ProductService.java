@@ -1,7 +1,7 @@
 package com.sockib.springresourceserver.service.product;
 
 import com.sockib.springresourceserver.model.dto.ProductDto;
-import com.sockib.springresourceserver.model.dto.ProductInputDto;
+import com.sockib.springresourceserver.model.dto.input.ProductInput;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.util.search.Page;
 import com.sockib.springresourceserver.util.search.Pageable;
@@ -14,6 +14,6 @@ public interface ProductService {
 
     Page<ProductDto> searchProduct(List<SearchFilter> filters, Pageable pageable, Sort sort);
     List<ProductDto> findProductsByIds(List<Long> ids);
-    Product addNewProduct(ProductInputDto productInputDto, String email);
+    Product addNewProduct(ProductInput productInput, String email);
 
 }

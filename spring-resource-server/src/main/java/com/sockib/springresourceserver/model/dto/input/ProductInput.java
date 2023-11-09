@@ -1,5 +1,6 @@
-package com.sockib.springresourceserver.model.dto;
+package com.sockib.springresourceserver.model.dto.input;
 
+import com.sockib.springresourceserver.model.dto.TagDto;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ProductInputDto {
+public class ProductInput {
 
     @Size(max = 256, message = "product name is too long")
     @NotBlank(message = "product name cannot be empty")
@@ -16,7 +17,7 @@ public class ProductInputDto {
     @Pattern(regexp = "^[\\s\\w]+$")
     private String name;
 
-    private MoneyDto price;
+    private MoneyInput price;
 
     @Positive(message = "product quantity must be non negative")
     @NotNull(message = "product quantity is mandatory")

@@ -59,7 +59,25 @@ type Product {
 }
 
 type Query {
-#    searchProducts(filters: [SearchFilter]!): [Product]!
     searchProducts(filters: [SearchFilterInput]!, pageable: PageableInput!, sort: SortInput!): ProductPage!
     findProductsByIds(ids: [Int!]!): [Product]
+}
+
+input MoneyInput {
+    amount: Float!
+    currency: String!
+}
+
+input ProductInput {
+    name: String!
+    description: String
+    price: MoneyInput!
+    quantity: Int!
+    category: String!
+    tags: [String]
+    imageUrl: String
+}
+
+type Mutation {
+    addProduct(product: ProductInput!): Boolean
 }

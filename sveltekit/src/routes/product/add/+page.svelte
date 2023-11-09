@@ -68,6 +68,10 @@
 			Quantity
 			<input required pattern="[0-9]\d*" name="quantity" type="text" placeholder="Quantity..." />
 		</label>
+		<label>
+			Image Url
+			<input name="image-url" type="text" placeholder="Image Url..." />
+		</label>
 	</fieldset>
 
 	<fieldset>
@@ -151,7 +155,7 @@
         color: #a8d5ed;
     }
 
-	label:has(input[type="text"]:not(:placeholder-shown):invalid) {
+	label:has(input:not(:placeholder-shown):invalid) {
 		color: red;
 	}
 
