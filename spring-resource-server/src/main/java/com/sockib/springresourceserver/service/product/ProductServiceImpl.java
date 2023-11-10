@@ -106,11 +106,4 @@ public class ProductServiceImpl implements ProductService {
         return Stream.concat(existingTags.stream(), newTags.stream()).toList();
     }
 
-    public void buyProducts(@Valid List<Long> productIds,
-                            @Valid AddressInput address,
-                            String email) {
-
-
-    }
-
 }

@@ -28,4 +28,8 @@ public class BoughtProduct extends WithCreationAndUpdateTimestamp {
     private String description;
     private String imageUrl;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "transaction_id")
+    private Transaction transaction;
+
 }

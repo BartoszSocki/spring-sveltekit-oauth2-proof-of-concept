@@ -1,12 +1,11 @@
 package com.sockib.springresourceserver.model.entity;
 
 import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreationAndUpdateTimestamp;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,5 +21,8 @@ public class Transaction extends WithCreationAndUpdateTimestamp {
     private Address address;
 
     private String transactionStatus;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<BoughtProduct> boughtProducts;
 
 }
