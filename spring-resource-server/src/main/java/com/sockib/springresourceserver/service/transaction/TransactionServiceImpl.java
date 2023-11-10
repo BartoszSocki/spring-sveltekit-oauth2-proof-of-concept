@@ -5,6 +5,7 @@ import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.BoughtProduct;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Transaction;
+import com.sockib.springresourceserver.model.entity.User;
 import com.sockib.springresourceserver.model.respository.BoughtProductRepository;
 import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.model.respository.TransactionRepository;
@@ -28,7 +29,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public Transaction buyProducts(List<Long> productsIds, AddressInput addressInput, String email) {
-        var user = userRepository.findUserByEmail(email).orElseThrow(() -> new RuntimeException("user not found"));
+        var user = userRepository.findUserByEmail(email).orElse(new User(email, new Money(1000.0, "USD")));
 
         var transaction = new Transaction();
         var products = productRepository.findProductsByIdIn(productsIds);
@@ -71,7 +72,7 @@ public class TransactionServiceImpl implements TransactionService {
         // user money update
         user.getUserMoney().setAmount(user.getUserMoney().getAmount() - totalProductsPrice.getAmount());
         userRepository.save(user);
-        
+
         var productsWithUpdatedQuantity = getProductsWithUpdatedQuantity(products);
         productRepository.saveAll(productsWithUpdatedQuantity);
 

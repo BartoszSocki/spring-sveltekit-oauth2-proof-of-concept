@@ -6,6 +6,7 @@ import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.respository.ProductRepository;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.context.annotation.EnableMBeanExport;
 
 import java.util.List;
 
@@ -16,7 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 
-@Entity(name = "`product_catalog`")
 @NamedEntityGraph(name = "product[owner]",
         attributeNodes = @NamedAttributeNode("owner")
 )
@@ -38,6 +38,7 @@ import java.util.List;
                 @NamedAttributeNode("tags"),
         }
 )
+@Entity(name = "`product_catalog`")
 public class Product extends WithCreationAndUpdateTimestamp {
 
     private String name;

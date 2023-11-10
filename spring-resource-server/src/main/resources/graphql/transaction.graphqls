@@ -7,7 +7,6 @@
 #    description: String
 #    imageUrl: String
 #}
-#
 
 input AddressInput {
     addressLine: String!
@@ -17,9 +16,5 @@ input AddressInput {
 }
 
 extend type Mutation {
-    buyProducts(productsIds: [Int!]!, address: AddressInput!, email: String!): Boolean
+    buyProducts(productsIds: [Int!]!, address: AddressInput!): Boolean
 }
-
-#type Mutation {
-#    addProduct(product: ProductInput!): Boolean
-#}

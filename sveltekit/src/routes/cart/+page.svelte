@@ -4,10 +4,10 @@
 
     export let data;
 
-    $: console.log(data)
-
     $: products = data.data;
     $: canBeBought = products !== undefined && products !== null && products.length > 0;
+    $: productsIds = products ? products.map(p => p.id) : []
+    // $: totalPrice = products ? products.reduce((acc, cur) => ) : 0;
 
     function removeItemFromCart(id) {
         products = products.filter(p => p.id !== id)
@@ -41,9 +41,31 @@
         {/await}
     </ul>
 
-    <footer>
+    <!-- <span>total price: {} USD</span> -->
+
+    <form method="POST">
+        <fieldset>
+            <legend>Shipping Address</legend>
+            <label>
+                Country
+                <input required pattern="[\w\s]+" name="country" type="text" placeholder="Country..." />
+            </label>
+            <label>
+                City
+                <input required pattern="[\w\s]+" name="city" type="text" placeholder="City..." />
+            </label>
+            <label>
+                Postal Code
+                <input required name="postal_code" type="text" placeholder="Postal Code..." />
+            </label>
+            <label>
+                Street
+                <input required pattern="[\w\s\d]+" name="street" type="text" placeholder="Street..." />
+            </label>
+        </fieldset>
+        <input hidden name="products_ids" type="text" value={productsIds}>
         <button disabled={!canBeBought}>buy</button>
-    </footer>
+    </form>
 </div>
 
 <style>

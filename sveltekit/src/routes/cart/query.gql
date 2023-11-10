@@ -1,0 +1,3 @@
+mutation BuyProducts($address: AddressInput!, $productsIds: [Int!]!) {
+    buyProducts(address: $address, productsIds: $productsIds)
+}

@@ -192,4 +192,20 @@ class ProductRepositoryTest {
 
         assertThat(sortedScores).isEqualTo(fetchedScores);
     }
+
+    @Test
+    @Sql("/repository/product_ids_test_1.sql")
+    void givenProductsIds_whenFind_thenSuccess() {
+        // given
+        final var ids = List.of(100L, 200L);
+
+        // when
+        var products = productRepository.findProductsByIdIn(ids);
+
+        // then
+        assertThat(products).isNotNull();
+        assertThat(products).isNotEmpty();
+        assertThat(products).hasSize(ids.size());
+    }
+
 }
