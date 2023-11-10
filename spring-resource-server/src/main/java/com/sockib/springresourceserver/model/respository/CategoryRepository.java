@@ -1,5 +1,6 @@
-package com.sockib.springresourceserver.model.entity;
+package com.sockib.springresourceserver.model.respository;
 
+import com.sockib.springresourceserver.model.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

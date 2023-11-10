@@ -1,10 +1,11 @@
 package com.sockib.springresourceserver.service.product;
 
 import com.sockib.springresourceserver.model.dto.ProductDto;
+import com.sockib.springresourceserver.model.dto.input.AddressInput;
 import com.sockib.springresourceserver.model.dto.input.ProductInput;
-import com.sockib.springresourceserver.model.dto.TagDto;
 import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.*;
+import com.sockib.springresourceserver.model.respository.CategoryRepository;
 import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.model.respository.TagRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
@@ -103,6 +104,13 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
 
         return Stream.concat(existingTags.stream(), newTags.stream()).toList();
+    }
+
+    public void buyProducts(@Valid List<Long> productIds,
+                            @Valid AddressInput address,
+                            String email) {
+
+
     }
 
 }

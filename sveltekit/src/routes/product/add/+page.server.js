@@ -37,6 +37,8 @@ export const actions = {
             })
         });
 
-        console.log(response)
+        // check if all was good 
+        // redirect afterwards
+    
     }
 }

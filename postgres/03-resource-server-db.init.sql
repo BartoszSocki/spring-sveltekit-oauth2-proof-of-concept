@@ -103,8 +103,7 @@ create table if not exists resource_server.address (
 
 	user_id int not null,
 
-	address_line_1 text not null,
-	address_line_2 text not null,
+	address_line text not null,
 
 	country text not null,
 	city text not null,
@@ -155,10 +154,10 @@ create table if not exists resource_server.order (
 	created_at timestamp null default now(),
 	updated_at timestamp null default now(),
 
-	product_catalog_id int not null,
+	bought_product_id int not null,
 	transaction_id int not null,
 
-	constraint fk_product_catalog foreign key (product_catalog_id) references resource_server.product_catalog(id),
+	constraint fk_bought_product foreign key (bought_product_id) references resource_server.bought_product(id),
 	constraint fk_transaction foreign key (transaction_id) references resource_server.transaction(id)
 );
 

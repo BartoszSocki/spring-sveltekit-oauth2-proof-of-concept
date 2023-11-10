@@ -75,6 +75,7 @@ public class Product extends WithCreationAndUpdateTimestamp {
     private String description;
     private String imageUrl;
 
+//    @Transient
     private ProductScore productScore;
 
 }
