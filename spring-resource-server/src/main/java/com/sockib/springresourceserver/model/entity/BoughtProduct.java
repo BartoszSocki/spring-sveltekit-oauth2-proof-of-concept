@@ -10,6 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Entity
 public class BoughtProduct extends WithCreationAndUpdateTimestamp {
 
@@ -19,17 +20,15 @@ public class BoughtProduct extends WithCreationAndUpdateTimestamp {
     private Money price;
 
     @OneToOne(cascade = CascadeType.ALL, fetch= FetchType.LAZY)
+    @ToString.Exclude
     private User owner;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch= FetchType.LAZY)
     @JoinColumn(name = "category_id")
+    @ToString.Exclude
     private Category category;
 
     private String description;
     private String imageUrl;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "transaction_id")
-    private Transaction transaction;
 
 }

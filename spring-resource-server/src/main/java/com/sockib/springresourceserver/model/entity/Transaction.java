@@ -4,25 +4,29 @@ import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreatio
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@ToString
 public class Transaction extends WithCreationAndUpdateTimestamp {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id")
+    @ToString.Exclude
     private User buyer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
+    @ToString.Exclude
     private Address address;
 
     private String transactionStatus;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany
     private List<BoughtProduct> boughtProducts;
 
 }

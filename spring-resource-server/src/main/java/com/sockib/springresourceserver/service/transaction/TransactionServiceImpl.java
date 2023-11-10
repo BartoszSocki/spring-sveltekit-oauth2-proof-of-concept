@@ -25,17 +25,20 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public void buyProducts(List<Long> productsIds, AddressInput address, String email) {
+    public Transaction buyProducts(List<Long> productsIds, AddressInput address, String email) {
         var user = userRepository.findUserByEmail(email).orElseThrow(() -> new RuntimeException("user not found"));
 
-        var products = productRepository.findProductsByIdIn(productsIds).stream()
+        var boughtProducts = productRepository.findProductsByIdIn(productsIds).stream()
                 .map(this::convertProductToBoughtProduct)
                 .toList();
 
         var transaction = new Transaction();
         transaction.setBuyer(user);
-        transaction.setTransactionStatus("DEFAULT");
+        transaction.setTransactionStatus("OK");
+        transaction.setBoughtProducts(boughtProducts);
+        transaction.setAddress(address.toAddress());
 
+        return transactionRepository.save(transaction);
     }
 
 
