@@ -31,4 +31,8 @@ public class BoughtProduct extends WithCreationAndUpdateTimestamp {
     private String description;
     private String imageUrl;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "transaction_id")
+    private Transaction transaction;
+
 }

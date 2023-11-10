@@ -1,6 +1,7 @@
 package com.sockib.springresourceserver.service.transaction;
 
 import com.sockib.springresourceserver.model.dto.input.AddressInput;
+import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.BoughtProduct;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Transaction;
@@ -12,6 +13,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @AllArgsConstructor
@@ -25,22 +27,56 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public Transaction buyProducts(List<Long> productsIds, AddressInput address, String email) {
+    public Transaction buyProducts(List<Long> productsIds, AddressInput addressInput, String email) {
         var user = userRepository.findUserByEmail(email).orElseThrow(() -> new RuntimeException("user not found"));
 
-        var boughtProducts = productRepository.findProductsByIdIn(productsIds).stream()
+        var transaction = new Transaction();
+        var products = productRepository.findProductsByIdIn(productsIds);
+
+        if (products.size() != productsIds.size()) {
+            throw new RuntimeException("some products don't exists");
+        }
+
+        var areProductsAvailable = areProductsAvailable(products);
+        if (!areProductsAvailable) {
+            throw new RuntimeException("not all products are available");
+        }
+
+        var prices = products.stream().map(Product::getPrice).toList();
+        var totalProductsPrice = getTotalPriceOfProducts(prices);
+
+        if (!totalProductsPrice.getCurrency().equals(user.getUserMoney().getCurrency())) {
+            throw new RuntimeException("TODO: implement different currencies problem");
+        }
+
+        if (totalProductsPrice.getAmount() > user.getUserMoney().getAmount()) {
+            throw new RuntimeException("user has no money to buy products");
+        }
+
+        var boughtProducts = products.stream()
                 .map(this::convertProductToBoughtProduct)
                 .toList();
+        boughtProducts.forEach(bp -> bp.setTransaction(transaction));
 
-        var transaction = new Transaction();
         transaction.setBuyer(user);
         transaction.setTransactionStatus("OK");
+
         transaction.setBoughtProducts(boughtProducts);
-        transaction.setAddress(address.toAddress());
+
+        var address = addressInput.toAddress();
+        address.setUser(user);
+
+        transaction.setAddress(address);
+
+        // user money update
+        user.getUserMoney().setAmount(user.getUserMoney().getAmount() - totalProductsPrice.getAmount());
+        userRepository.save(user);
+        
+        var productsWithUpdatedQuantity = getProductsWithUpdatedQuantity(products);
+        productRepository.saveAll(productsWithUpdatedQuantity);
 
         return transactionRepository.save(transaction);
     }
-
 
     private BoughtProduct convertProductToBoughtProduct(Product product) {
         var boughtProduct = new BoughtProduct();
@@ -52,6 +88,38 @@ public class TransactionServiceImpl implements TransactionService {
         boughtProduct.setImageUrl(product.getImageUrl());
 
         return boughtProduct;
+    }
+
+    private Money getTotalPriceOfProducts(List<Money> prices) {
+        var areCurrenciesTheSame = prices.stream().allMatch(m -> "USD".equals(m.getCurrency()));
+        if (!areCurrenciesTheSame) {
+            throw new RuntimeException("TODO: implement different currencies total price");
+        }
+
+        var initPrice = new Money();
+        initPrice.setCurrency("USD");
+        initPrice.setAmount(0.0);
+
+        var totalPrice = prices.stream().reduce(initPrice, (cur, acc) -> {
+            acc.setAmount(acc.getAmount() + cur.getAmount());
+            return acc;
+        });
+        return totalPrice;
+    }
+
+    private boolean areProductsAvailable(List<Product> products) {
+        for (var product : products) {
+            if ((product.getInventory().getQuantity() <= 0)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private List<Product> getProductsWithUpdatedQuantity(List<Product> products) {
+        products.forEach(p -> p.getInventory().setQuantity(p.getInventory().getQuantity() - 1));
+        return products;
     }
 
 }

@@ -26,7 +26,7 @@ public class Transaction extends WithCreationAndUpdateTimestamp {
 
     private String transactionStatus;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "transaction")
     private List<BoughtProduct> boughtProducts;
 
 }
