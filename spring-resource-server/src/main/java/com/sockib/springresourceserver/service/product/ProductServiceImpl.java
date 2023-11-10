@@ -1,7 +1,6 @@
 package com.sockib.springresourceserver.service.product;
 
 import com.sockib.springresourceserver.model.dto.ProductDto;
-import com.sockib.springresourceserver.model.dto.input.AddressInput;
 import com.sockib.springresourceserver.model.dto.input.ProductInput;
 import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.*;
@@ -41,19 +40,26 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductDto> searchProduct(List<SearchFilter> filters,
-                                          Pageable pageable,
-                                          Sort sort) {
+    public SimplePage<ProductDto> searchProduct(List<SearchFilter> filters,
+                                                Pageable pageable,
+                                                Sort sort) {
         var specification = searchFilterToProductSpecificationConverter.convert(filters);
         var sorter = sortToProductSorterConverter.convert(sort);
 
-        var page = productRepository.findProducts(specification, pageable, sorter);
-        var products = page.getContent()
+        var productsPage = productRepository.findProducts(specification, pageable, sorter);
+
+        var products = productsPage.getContent()
                 .stream()
                 .map(ProductDto::new)
                 .toList();
 
-        return new PageImpl<>(products, page.getPage(), page.getPageSize(), page.getTotal());
+        var page = new SimplePageImpl<ProductDto>(
+                products,
+                productsPage.isFirstPage(),
+                productsPage.isLastPage()
+        );
+
+        return page;
     }
 
     @Override

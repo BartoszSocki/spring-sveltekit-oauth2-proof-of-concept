@@ -16,14 +16,7 @@ type ProductScore {
     reviewsCount: Int
 }
 
-type Page {
-    pageNumber: Int!
-    isLastPage: Boolean!
-    isFirstPage: Boolean!
-}
-
 type ProductPage {
-    pageNumber: Int!
     isLastPage: Boolean!
     isFirstPage: Boolean!
     content: [Product]!

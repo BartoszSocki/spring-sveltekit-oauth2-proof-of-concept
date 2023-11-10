@@ -13,7 +13,6 @@ import jakarta.persistence.criteria.*;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -22,16 +21,19 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
     private final EntityManager entityManager;
 
     @Override
-    public Page<Product> findProducts(Specification<Product> specification, Pageable pageable, Sorter<Product> sorter, String entityGraphName) {
+    public SimplePage<Product> findProducts(Specification<Product> specification, Pageable pageable, Sorter<Product> sorter, String entityGraph) {
         var idsAndProductScores = getProductsIdsMatchingSpecification(specification, pageable, sorter);
-        var products = getOrderedProductListFromIdList(idsAndProductScores, entityGraphName);
+        var products = getOrderedProductListFromIdList(idsAndProductScores, entityGraph);
         var productsCount = getNumberOfProductsMatchingSpecification(specification);
 
-        return new PageImpl<>(products, (long) pageable.getPage(), pageable.getLimit(), productsCount);
+        var isFirstPage = pageable.getPage() == 0;
+        var isLastPage = productsCount <= pageable.getOffset() + pageable.getLimit();
+
+        return new SimplePageImpl<>(products, isFirstPage, isLastPage);
     }
 
     @Override
-    public Page<Product> findProducts(Specification<Product> specification, Pageable pageable, Sorter<Product> sorter) {
+    public SimplePage<Product> findProducts(Specification<Product> specification, Pageable pageable, Sorter<Product> sorter) {
         return findProducts(specification, pageable, sorter, "product[all]");
     }
 
