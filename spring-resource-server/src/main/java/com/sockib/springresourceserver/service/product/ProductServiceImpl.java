@@ -41,7 +41,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductDto> searchProduct(List<SearchFilter> filters, Pageable pageable, Sort sort) {
+    public Page<ProductDto> searchProduct(List<SearchFilter> filters,
+                                          Pageable pageable,
+                                          Sort sort) {
         var specification = searchFilterToProductSpecificationConverter.convert(filters);
         var sorter = sortToProductSorterConverter.convert(sort);
 

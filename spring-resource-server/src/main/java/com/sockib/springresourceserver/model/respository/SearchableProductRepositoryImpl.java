@@ -5,6 +5,7 @@ import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.ProductReview;
 import com.sockib.springresourceserver.model.entity.ProductReview_;
 import com.sockib.springresourceserver.model.entity.Product_;
+import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreationAndUpdateTimestamp;
 import com.sockib.springresourceserver.util.search.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
@@ -22,6 +23,19 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
 
     @Override
     public Page<Product> findProducts(Specification<Product> specification, Pageable pageable, Sorter<Product> sorter, String entityGraphName) {
+        var idsAndProductScores = getProductsIdsMatchingSpecification(specification, pageable, sorter);
+        var products = getOrderedProductListFromIdList(idsAndProductScores, entityGraphName);
+        var productsCount = getNumberOfProductsMatchingSpecification(specification);
+
+        return new PageImpl<>(products, (long) pageable.getPage(), pageable.getLimit(), productsCount);
+    }
+
+    @Override
+    public Page<Product> findProducts(Specification<Product> specification, Pageable pageable, Sorter<Product> sorter) {
+        return findProducts(specification, pageable, sorter, "product[all]");
+    }
+
+    private List<Pair<Long, ProductScore>> getProductsIdsMatchingSpecification(Specification<Product> specification, Pageable pageable, Sorter<Product> sorter) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> criteriaQuery = criteriaBuilder.createTupleQuery();
         Root<Product> root = criteriaQuery.from(Product.class);
@@ -52,54 +66,74 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
                 .setMaxResults(pageable.getLimit().intValue())
                 .getResultList();
 
-        List<Long> sortedProductsIds = list.stream().map(t -> (Long) t.get(0)).toList();
+        var results = list.stream()
+                .map(p -> Pair.of((Long) p.get(0), new ProductScore((Long) p.get(2), (Double) p.get(1))))
+                .toList();
 
-        CriteriaBuilder productCriteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Product> productCriteriaQuery = productCriteriaBuilder.createQuery(Product.class);
-        Root<Product> productRoot = productCriteriaQuery.from(Product.class);
+        return results;
+    }
 
-        var productQuery = productCriteriaQuery.where(productRoot.get(Product_.ID).in(sortedProductsIds));
+    private List<Product> getOrderedProductListFromIdList(List<Pair<Long, ProductScore>> pairs, String entityGraph) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
+        Root<Product> root = criteriaQuery.from(Product.class);
 
-        var graph = entityManager.getEntityGraph(entityGraphName);
-        var products = entityManager.createQuery(productQuery)
+        var ids = pairs.stream()
+                .map(Pair::getSt)
+                .toList();
+
+        var query = criteriaQuery.where(root.get(Product_.ID).in(ids));
+
+        var graph = entityManager.getEntityGraph(entityGraph);
+        var products = entityManager.createQuery(query)
                 .setHint("jakarta.persistence.fetchgraph", graph)
                 .getResultList();
 
-        Map<Long, ProductScore> productScores = list.stream().collect(Collectors.toMap(t -> (Long) t.get(0), t -> new ProductScore((Long) t.get(2), (Double) t.get(1))));
-        Map<Long, Product> productMap = products.stream().collect(Collectors.toMap(p -> p.getId(), p -> p));
+        var productMap = products.stream()
+                .collect(Collectors.toMap(WithCreationAndUpdateTimestamp::getId, p -> p));
 
-        var productsContent = sortedProductsIds.stream().map(i -> {
-            Product p = productMap.get(i);
-            p.setProductScore(productScores.get(i));
-            return p;
-        }).toList();
-
-        // get how many products there are
-        CriteriaBuilder countCriteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Long> countCriteriaQuery = countCriteriaBuilder.createQuery(Long.class);
-        Root<Product> countRoot = countCriteriaQuery.from(Product.class);
-
-        var countPredicate = specification.toPredicate(countRoot, countCriteriaQuery, countCriteriaBuilder);
-        countCriteriaQuery.where(countPredicate).select(criteriaBuilder.count(countRoot.get(Product_.ID)));
-        Long count = entityManager.createQuery(countCriteriaQuery).getSingleResult();
-
-        return new PageImpl<>(productsContent, (long) pageable.getPage(), pageable.getLimit(), count);
+        return pairs.stream()
+                .map(pair -> {
+                    var p = productMap.get(pair.getSt());
+                    p.setProductScore(pair.getNd());
+                    return p;
+                })
+                .toList();
     }
 
-    @Override
-    public Page<Product> findProducts(Specification<Product> specification, Pageable pageable, Sorter<Product> sorter) {
-        return findProducts(specification, pageable, sorter, "product[all]");
+    private Long getNumberOfProductsMatchingSpecification(Specification<Product> specification) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<Product> root = criteriaQuery.from(Product.class);
+
+        var predicate = specification.toPredicate(root, criteriaQuery, criteriaBuilder);
+
+        var query = criteriaQuery
+                .select(criteriaBuilder.countDistinct(root.get(Product_.ID)))
+                .where(predicate);
+
+        return entityManager.createQuery(query)
+                .getSingleResult();
     }
 
-    private Order getOrder(CriteriaBuilder criteriaBuilder, Path<Product> productPath, Sort sort) {
-        var field = switch (sort.getFieldName()) {
-            case "price" -> productPath.get(Product_.PRICE).get("amount");
-            case "name" -> criteriaBuilder.lower(productPath.get(Product_.NAME));
-            case "score" -> criteriaBuilder.literal(2);
-            default -> throw new RuntimeException("TODO: add custom exception");
-        };
+    private static class Pair<T, U> {
+        private final T t;
+        private final U u;
 
-        return sort.getSortDirection() == SortDirection.DSC ? criteriaBuilder.desc(field) : criteriaBuilder.asc(field);
+        public T getSt() {
+            return t;
+        }
+
+        public U getNd() {
+            return u;
+        }
+
+        private Pair(T t, U u) {
+            this.t = t;
+            this.u = u;
+        }
+        public static <T, U> Pair<T, U> of(T t, U u) {
+            return new Pair<T, U>(t, u);
+        }
     }
-
 }
