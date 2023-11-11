@@ -1,0 +1,14 @@
+type BoughtProduct {
+    name: String!
+    price: Money!
+    ownerId: Int!
+    id: ID!
+    category: String!
+
+    description: String
+    imageUrl: String
+}
+
+extend type Query {
+    searchBoughtProducts(pageable: PageableInput!, sort: SortInput!): [BoughtProduct]!
+}

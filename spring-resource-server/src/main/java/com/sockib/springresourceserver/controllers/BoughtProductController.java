@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 @AllArgsConstructor
@@ -23,8 +24,10 @@ public class BoughtProductController {
 
     @QueryMapping
     SimplePage<BoughtProductDto> searchBoughtProducts(@Argument @Valid PageableInput pageableInput,
-                                                      @Argument @Valid SortInput sortInput,
-                                                      @Argument String email) {
+                                                      @Argument @Valid SortInput sortInput) {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var email = authentication.getName();
+
         var pageable = modelMapper.map(pageableInput, Pageable.class);
         var sort = modelMapper.map(sortInput, Sort.class);
         var page = boughtProductService.searchBoughtProducts(pageable, sort, email);
