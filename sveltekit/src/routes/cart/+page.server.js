@@ -16,7 +16,7 @@ export const actions = {
         const products = productsIds.map((id, i) => {
             return {
                 productId: id,
-                priductQuantity: productsQuantity.at(i)
+                productQuantity: productsQuantity.at(i)
             }
         })
 

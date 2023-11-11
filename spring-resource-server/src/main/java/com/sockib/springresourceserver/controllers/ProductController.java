@@ -51,8 +51,8 @@ public class ProductController {
 
     @MutationMapping
     Boolean addProduct(@Argument @Valid ProductInput product) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var email = authentication.getName();
 
         productService.addNewProduct(product, email);
         return true;

@@ -94,7 +94,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private void throwIfProductsDontExists(List<Product> products, List<Long> productsIds) {
-        var productsIdsSet = Set.of(productsIds);
+        var productsIdsSet = Set.copyOf(productsIds);
+
         if (productsIdsSet.size() != products.size()) {
             throw new RuntimeException("TODO: add ProductNotExistsException");
         }
