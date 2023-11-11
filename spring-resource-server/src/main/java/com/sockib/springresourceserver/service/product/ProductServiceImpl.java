@@ -1,6 +1,8 @@
 package com.sockib.springresourceserver.service.product;
 
 import com.sockib.springresourceserver.model.dto.ProductDto;
+import com.sockib.springresourceserver.model.dto.converter.ProductToProductDtoConverter;
+import com.sockib.springresourceserver.model.dto.converter.ToDtoConverter;
 import com.sockib.springresourceserver.model.dto.input.ProductInput;
 import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.*;
@@ -15,6 +17,7 @@ import com.sockib.springresourceserver.util.search.page.SimplePageImpl;
 import com.sockib.springresourceserver.util.search.sort.Sort;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +35,7 @@ public class ProductServiceImpl implements ProductService {
     private final SearchFilterToProductSpecificationConverter searchFilterToProductSpecificationConverter;
     private final SortToProductSorterConverter sortToProductSorterConverter;
     private final CategoryRepository categoryRepository;
+    private final ToDtoConverter<Product, ProductDto> productConverter;
     private final static Integer MAX_PRODUCT_PAGE_SIZE = 10;
 
 
@@ -42,6 +46,7 @@ public class ProductServiceImpl implements ProductService {
         this.searchFilterToProductSpecificationConverter = new SearchFilterToProductSpecificationConverterImpl();
         this.sortToProductSorterConverter = new SortToProductSorterConverterImpl();
         this.categoryRepository = categoryRepository;
+        this.productConverter = new ProductToProductDtoConverter();
     }
 
     @Override
@@ -58,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
 
         var products = productsPage.getContent()
                 .stream()
-                .map(ProductDto::new)
+                .map(productConverter::convert)
                 .toList();
 
         var page = new SimplePageImpl<ProductDto>(
@@ -74,7 +79,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> findProductsByIds(List<Long> ids) {
         var products = productRepository.findProductsByIdIn(ids);
         var productsDtos = products.stream()
-                .map(ProductDto::new)
+                .map(productConverter::convert)
                 .toList();
 
         return productsDtos;

@@ -24,18 +24,4 @@ public class ProductDto {
     private String imageUrl;
     private ProductScore productScore;
 
-    public ProductDto(Product product) {
-        this.id = product.getId();
-        this.ownerId = product.getOwner().getId();
-        this.name = product.getName();
-        this.price = new MoneyDto(product.getPrice());
-        this.quantity = product.getInventory().getQuantity();
-        this.category = product.getCategory().getName();
-        this.tags = product.getTags().stream().map(Tag::getName).toList();
-
-        this.description = product.getDescription();
-        this.imageUrl = product.getImageUrl();
-        this.productScore = product.getProductScore();
-    }
-
 }

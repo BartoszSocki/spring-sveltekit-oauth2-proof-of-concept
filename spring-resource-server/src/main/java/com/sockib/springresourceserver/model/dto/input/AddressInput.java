@@ -1,6 +1,5 @@
 package com.sockib.springresourceserver.model.dto.input;
 
-import com.sockib.springresourceserver.model.entity.Address;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
