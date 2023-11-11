@@ -4,6 +4,8 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import static com.sockib.springresourceserver.model.dto.input.InputValidationRegex.SUPPORTED_CURRENCIES;
+
 @Getter
 @Setter
 public class MoneyInput {
@@ -15,7 +17,7 @@ public class MoneyInput {
     @Size(max = 256, message = "currency name is too long")
     @NotBlank(message = "currency name cannot be empty")
     @NotNull(message = "currency name is mandatory")
-    @Pattern(regexp = "^[\\s\\w]+$")
+    @Pattern(regexp = SUPPORTED_CURRENCIES)
     private String currency;
 
 }

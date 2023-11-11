@@ -111,8 +111,8 @@ public class ProductServiceImpl implements ProductService {
         inventory.setQuantity(productInput.getQuantity());
 
         var newProduct = new Product();
-        newProduct.setName(newProduct.getName());
-        newProduct.setDescription(newProduct.getDescription());
+        newProduct.setName(productInput.getName());
+        newProduct.setDescription(productInput.getDescription());
         newProduct.setCategory(productCategory);
         newProduct.setTags(tags);
         newProduct.setOwner(owner);
