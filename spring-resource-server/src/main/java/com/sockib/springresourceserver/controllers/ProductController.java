@@ -30,16 +30,10 @@ public class ProductController {
     private final ProductService productService;
     private final ModelMapper modelMapper;
 
-    private final static Integer MAX_PRODUCT_PAGE_SIZE = 10;
-
     @QueryMapping
     SimplePage<ProductDto> searchProducts(@Argument @Valid List<SearchInput> filters,
                                           @Argument @Valid PageableInput pageable,
                                           @Argument @Valid SortInput sort) {
-        if (pageable.getLimit() > MAX_PRODUCT_PAGE_SIZE) {
-            throw new RuntimeException("TODO: implement max page limit exceeded");
-        }
-
         var productFilters = filters.stream().map(f -> modelMapper.map(f, SearchFilter.class)).toList();
         var productPageable = modelMapper.map(pageable, Pageable.class);
         var productSort = modelMapper.map(sort, Sort.class);

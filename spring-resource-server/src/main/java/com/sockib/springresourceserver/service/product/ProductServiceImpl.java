@@ -32,6 +32,8 @@ public class ProductServiceImpl implements ProductService {
     private final SearchFilterToProductSpecificationConverter searchFilterToProductSpecificationConverter;
     private final SortToProductSorterConverter sortToProductSorterConverter;
     private final CategoryRepository categoryRepository;
+    private final static Integer MAX_PRODUCT_PAGE_SIZE = 10;
+
 
     public ProductServiceImpl(ProductRepository productRepository, TagRepository tagRepository, UserRepository userRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
@@ -39,7 +41,6 @@ public class ProductServiceImpl implements ProductService {
         this.userRepository = userRepository;
         this.searchFilterToProductSpecificationConverter = new SearchFilterToProductSpecificationConverterImpl();
         this.sortToProductSorterConverter = new SortToProductSorterConverterImpl();
-
         this.categoryRepository = categoryRepository;
     }
 
@@ -47,9 +48,12 @@ public class ProductServiceImpl implements ProductService {
     public SimplePage<ProductDto> searchProduct(List<SearchFilter> filters,
                                                 Pageable pageable,
                                                 Sort sort) {
+        if (pageable.getLimit() > MAX_PRODUCT_PAGE_SIZE) {
+            throw new RuntimeException("TODO: implement max page limit exceeded");
+        }
+
         var specification = searchFilterToProductSpecificationConverter.convert(filters);
         var sorter = sortToProductSorterConverter.convert(sort);
-
         var productsPage = productRepository.findProducts(specification, pageable, sorter);
 
         var products = productsPage.getContent()
@@ -69,20 +73,23 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> findProductsByIds(List<Long> ids) {
         var products = productRepository.findProductsByIdIn(ids);
-        return products.stream()
+        var productsDtos = products.stream()
                 .map(ProductDto::new)
                 .toList();
+
+        return productsDtos;
     }
 
     @Override
     @Transactional
     public Product addNewProduct(@Valid ProductInput productInput, String email) {
-        var user = userRepository.findUserByEmail(email).orElse(new User(email, new Money(0.0, "USD")));
+        var owner = userRepository.findUserByEmail(email)
+                .orElse(new User(email, new Money(0.0, "USD")));
 
-        var tagNames = productInput.getTags();
-        List<Tag> existingTags = tagRepository.findAllByNameIn(tagNames);
-        var productTags = combineExistingTagsWithNewTags(tagNames, existingTags);
-        tagRepository.saveAll(productTags);
+        var inputTags = productInput.getTags();
+        var existingTags = tagRepository.findAllByNameIn(inputTags);
+        var tags = combineExistingTagsWithNewTags(inputTags, existingTags);
+        tagRepository.saveAll(tags);
 
         var productCategory = categoryRepository.findCategoryByName(productInput.getCategory())
                 .orElse(new Category(productInput.getCategory()));
@@ -91,18 +98,20 @@ public class ProductServiceImpl implements ProductService {
         money.setAmount(productInput.getPrice().getAmount());
         money.setCurrency(productInput.getPrice().getCurrency());
 
-        var product = Product.builder()
-                .name(productInput.getName())
-                .category(productCategory)
-                .tags(productTags)
-                .description(productInput.getDescription())
-                .imageUrl(productInput.getImageUrl())
-                .owner(user)
-                .inventory(new ProductInventory(productInput.getQuantity()))
-                .price(money)
-                .build();
+        var inventory = new ProductInventory();
+        inventory.setQuantity(productInput.getQuantity());
 
-        return productRepository.save(product);
+        var newProduct = new Product();
+        newProduct.setName(newProduct.getName());
+        newProduct.setDescription(newProduct.getDescription());
+        newProduct.setCategory(productCategory);
+        newProduct.setTags(tags);
+        newProduct.setOwner(owner);
+        newProduct.setInventory(inventory);
+        newProduct.setPrice(money);
+
+        var product = productRepository.save(newProduct);
+        return product;
     }
 
     private List<Tag> combineExistingTagsWithNewTags(List<String> allTagNames, List<Tag> existingTags) {
