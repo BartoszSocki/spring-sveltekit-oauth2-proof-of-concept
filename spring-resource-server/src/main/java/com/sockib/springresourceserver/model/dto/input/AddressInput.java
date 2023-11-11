@@ -21,14 +21,4 @@ public class AddressInput {
     @NotBlank
     private String postalCode;
 
-    public Address toAddress() {
-        var address = new Address();
-        address.setAddressLine(addressLine);
-        address.setCountry(country);
-        address.setCity(city);
-        address.setPostalCode(postalCode);
-
-        return address;
-    }
-
 }

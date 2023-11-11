@@ -2,9 +2,11 @@ package com.sockib.springresourceserver.controllers;
 
 import com.sockib.springresourceserver.model.dto.input.AddressInput;
 import com.sockib.springresourceserver.model.dto.input.TransactionProductInput;
+import com.sockib.springresourceserver.model.entity.Address;
 import com.sockib.springresourceserver.service.transaction.TransactionService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.security.core.Authentication;
@@ -17,7 +19,7 @@ import java.util.List;
 @Controller
 public class TransactionController {
 
-    TransactionService transactionService;
+    private TransactionService transactionService;
 
     @MutationMapping
     Boolean buyProducts(@Argument @Valid List<TransactionProductInput> products,

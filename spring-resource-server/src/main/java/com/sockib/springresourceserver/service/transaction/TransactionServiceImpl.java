@@ -3,6 +3,7 @@ package com.sockib.springresourceserver.service.transaction;
 import com.sockib.springresourceserver.model.dto.input.AddressInput;
 import com.sockib.springresourceserver.model.dto.input.TransactionProductInput;
 import com.sockib.springresourceserver.model.embeddable.Money;
+import com.sockib.springresourceserver.model.entity.Address;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Transaction;
 import com.sockib.springresourceserver.model.entity.User;
@@ -10,6 +11,7 @@ import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.model.respository.TransactionRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,14 +25,17 @@ public class TransactionServiceImpl implements TransactionService {
     private ProductRepository productRepository;
     private UserRepository userRepository;
     private ProductToBoughtProductConverter productToBoughtProductConverter;
+    private ModelMapper modelMapper;
 
     public TransactionServiceImpl(TransactionRepository transactionRepository,
                                   ProductRepository productRepository,
-                                  UserRepository userRepository) {
+                                  UserRepository userRepository,
+                                  ModelMapper modelMapper) {
         this.transactionRepository = transactionRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.productToBoughtProductConverter = new ProductToBoughtProductConverter();
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -55,7 +60,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .map(productToBoughtProductConverter::convert)
                 .toList();
 
-        var address = addressInput.toAddress();
+        var address = modelMapper.map(addressInput, Address.class);
         address.setUser(buyer);
 
         var transaction = new Transaction();
