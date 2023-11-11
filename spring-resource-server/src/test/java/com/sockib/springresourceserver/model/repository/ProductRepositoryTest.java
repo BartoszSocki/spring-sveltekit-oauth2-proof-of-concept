@@ -154,7 +154,7 @@ class ProductRepositoryTest {
         // then
         assertThat(products).isNotEmpty();
 
-        var sortedNames = products.stream().map(Product::getName).sorted().toList();
+        var sortedNames = products.stream().map(Product::getName).sorted(String::compareToIgnoreCase).toList();
         var fetchedNames = products.stream().map(Product::getName).toList();
 
         assertThat(sortedNames).isEqualTo(fetchedNames);

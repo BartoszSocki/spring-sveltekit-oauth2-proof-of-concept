@@ -5,7 +5,6 @@ import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.ProductReview;
 import com.sockib.springresourceserver.model.entity.ProductReview_;
 import com.sockib.springresourceserver.model.entity.Product_;
-import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreationAndUpdateTimestamp;
 import com.sockib.springresourceserver.util.search.filter.Specification;
 import com.sockib.springresourceserver.util.search.page.Pageable;
 import com.sockib.springresourceserver.util.search.page.SimplePage;
@@ -17,7 +16,7 @@ import jakarta.persistence.criteria.*;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @AllArgsConstructor
 public class SearchableProductRepositoryImpl implements SearchableProductRepository {
@@ -27,7 +26,7 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
     @Override
     public SimplePage<Product> findProducts(Specification<Product> specification, Pageable pageable, Sorter<Product> sorter, String entityGraph) {
         var idsAndProductScores = getProductsIdsMatchingSpecification(specification, pageable, sorter);
-        var products = getOrderedProductListFromIdList(idsAndProductScores, entityGraph);
+        var products = getOrderedProductListFromIdList(idsAndProductScores, sorter, entityGraph);
         var productsCount = getNumberOfProductsMatchingSpecification(specification);
 
         var isFirstPage = pageable.getPage() == 0;
@@ -79,7 +78,7 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
         return results;
     }
 
-    private List<Product> getOrderedProductListFromIdList(List<Pair<Long, ProductScore>> pairs, String entityGraph) {
+    private List<Product> getOrderedProductListFromIdList(List<Pair<Long, ProductScore>> pairs, Sorter<Product> sorter, String entityGraph) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
         Root<Product> root = criteriaQuery.from(Product.class);
@@ -88,23 +87,31 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
                 .map(Pair::getSt)
                 .toList();
 
-        var query = criteriaQuery.where(root.get(Product_.ID).in(ids));
+        var order = sorter.toOrder(root, criteriaQuery, criteriaBuilder);
+        var query = criteriaQuery.where(root.get(Product_.ID).in(ids))
+                .orderBy(order);
 
         var graph = entityManager.getEntityGraph(entityGraph);
         var products = entityManager.createQuery(query)
                 .setHint("jakarta.persistence.fetchgraph", graph)
                 .getResultList();
 
-        var productMap = products.stream()
-                .collect(Collectors.toMap(WithCreationAndUpdateTimestamp::getId, p -> p));
+        IntStream.range(0, pairs.size())
+                .mapToObj(i -> Pair.of(products.get(i), pairs.get(i).getNd()))
+                .forEach(pair -> pair.getSt().setProductScore(pair.getNd()));
 
-        return pairs.stream()
-                .map(pair -> {
-                    var p = productMap.get(pair.getSt());
-                    p.setProductScore(pair.getNd());
-                    return p;
-                })
-                .toList();
+        return products;
+
+//        var productMap = products.stream()
+//                .collect(Collectors.toMap(WithCreationAndUpdateTimestamp::getId, p -> p));
+//
+//        return pairs.stream()
+//                .map(pair -> {
+//                    var p = productMap.get(pair.getSt());
+//                    p.setProductScore(pair.getNd());
+//                    return p;
+//                })
+//                .toList();
     }
 
     private Long getNumberOfProductsMatchingSpecification(Specification<Product> specification) {
@@ -122,24 +129,15 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
                 .getSingleResult();
     }
 
-    private static class Pair<T, U> {
-        private final T t;
-        private final U u;
-
+    private record Pair<T, U>(T t, U u) {
         public T getSt() {
-            return t;
-        }
-
+                       return t;
+                                }
         public U getNd() {
-            return u;
-        }
-
-        private Pair(T t, U u) {
-            this.t = t;
-            this.u = u;
-        }
+                       return u;
+                                }
         public static <T, U> Pair<T, U> of(T t, U u) {
-            return new Pair<T, U>(t, u);
-        }
+                return new Pair<T, U>(t, u);
+            }
     }
 }

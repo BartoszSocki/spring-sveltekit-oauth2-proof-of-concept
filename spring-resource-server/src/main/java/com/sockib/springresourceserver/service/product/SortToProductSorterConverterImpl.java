@@ -21,6 +21,7 @@ public class SortToProductSorterConverterImpl implements SortToProductSorterConv
     public Sorter<Product> byName(SortDirection sortDirection) {
         return (path, criteriaQuery, criteriaBuilder) -> {
             var field = criteriaBuilder.lower(path.get(Product_.NAME));
+//            var field = path.get(Product_.NAME);
             return sortDirection == SortDirection.ASC ? criteriaBuilder.asc(field) : criteriaBuilder.desc(field);
         };
     }

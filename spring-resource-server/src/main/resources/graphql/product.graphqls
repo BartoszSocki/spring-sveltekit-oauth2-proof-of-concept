@@ -51,11 +51,6 @@ type Product {
     imageUrl: String
 }
 
-type Query {
-    searchProducts(filters: [SearchFilterInput]!, pageable: PageableInput!, sort: SortInput!): ProductPage!
-    findProductsByIds(ids: [Int!]!): [Product]
-}
-
 input MoneyInput {
     amount: Float!
     currency: String!
@@ -69,6 +64,11 @@ input ProductInput {
     category: String!
     tags: [String]
     imageUrl: String
+}
+
+type Query {
+    searchProducts(filters: [SearchFilterInput]!, pageable: PageableInput!, sort: SortInput!): ProductPage!
+    findProductsByIds(ids: [Int!]!): [Product]
 }
 
 type Mutation {
