@@ -3,10 +3,8 @@ package com.sockib.springresourceserver.model.entity;
 import com.sockib.springresourceserver.model.embeddable.ProductScore;
 import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreationAndUpdateTimestamp;
 import com.sockib.springresourceserver.model.embeddable.Money;
-import com.sockib.springresourceserver.model.respository.ProductRepository;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.context.annotation.EnableMBeanExport;
 
 import java.util.List;
 

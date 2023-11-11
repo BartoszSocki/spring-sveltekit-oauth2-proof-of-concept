@@ -7,7 +7,7 @@ import com.sockib.springresourceserver.model.entity.Address;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Transaction;
 import com.sockib.springresourceserver.model.entity.User;
-import com.sockib.springresourceserver.model.respository.ProductRepository;
+import com.sockib.springresourceserver.model.respository.products.ProductRepository;
 import com.sockib.springresourceserver.model.respository.TransactionRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
 import jakarta.transaction.Transactional;

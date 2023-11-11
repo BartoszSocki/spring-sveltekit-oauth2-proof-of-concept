@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.model.respository;
+package com.sockib.springresourceserver.model.respository.boughtproducts;
 
 import com.sockib.springresourceserver.model.entity.BoughtProduct;
 import com.sockib.springresourceserver.model.entity.BoughtProduct_;
@@ -7,7 +7,6 @@ import com.sockib.springresourceserver.model.entity.User_;
 import com.sockib.springresourceserver.util.search.page.Pageable;
 import com.sockib.springresourceserver.util.search.page.SimplePage;
 import com.sockib.springresourceserver.util.search.page.SimplePageImpl;
-import com.sockib.springresourceserver.util.search.sort.Sort;
 import com.sockib.springresourceserver.util.search.sort.Sorter;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;

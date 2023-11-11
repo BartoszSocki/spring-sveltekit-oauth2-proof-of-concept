@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.model.respository;
+package com.sockib.springresourceserver.model.respository.products;
 
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.util.search.filter.Specification;

@@ -4,7 +4,7 @@ import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.Category;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.ProductInventory;
-import com.sockib.springresourceserver.model.respository.ProductRepository;
+import com.sockib.springresourceserver.model.respository.products.ProductRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
 import com.sockib.springresourceserver.service.product.SearchFilterToProductSpecificationConverter;
 import com.sockib.springresourceserver.service.product.SearchFilterToProductSpecificationConverterImpl;

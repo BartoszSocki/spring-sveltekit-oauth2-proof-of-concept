@@ -7,7 +7,7 @@ import com.sockib.springresourceserver.model.dto.input.ProductInput;
 import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.*;
 import com.sockib.springresourceserver.model.respository.CategoryRepository;
-import com.sockib.springresourceserver.model.respository.ProductRepository;
+import com.sockib.springresourceserver.model.respository.products.ProductRepository;
 import com.sockib.springresourceserver.model.respository.TagRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
 import com.sockib.springresourceserver.util.search.filter.SearchFilter;
@@ -17,7 +17,6 @@ import com.sockib.springresourceserver.util.search.page.SimplePageImpl;
 import com.sockib.springresourceserver.util.search.sort.Sort;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
