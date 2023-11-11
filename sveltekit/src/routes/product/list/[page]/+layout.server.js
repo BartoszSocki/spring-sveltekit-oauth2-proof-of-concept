@@ -1,7 +1,7 @@
 import { API_URL } from '$env/static/private'
 import query from './query.gql?raw'
 
-export async function load({ params, url }) {
+export async function load({ params, url, fetch }) {
     let filters = [];
     for (const [key, value] of url.searchParams.entries()) {
         const filter = paramToFilterConverter(key, value)

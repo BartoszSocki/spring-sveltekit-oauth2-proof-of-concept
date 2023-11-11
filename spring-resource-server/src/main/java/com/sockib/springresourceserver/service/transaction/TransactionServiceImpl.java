@@ -50,6 +50,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .map(TransactionProductInput::getProductQuantity)
                 .toList();
 
+        // TODO: use entity graph
         var products = productRepository.findProductsByIdIn(productsIds);
 
         throwIfProductsDontExists(products, productsIds);
@@ -59,6 +60,8 @@ public class TransactionServiceImpl implements TransactionService {
         var boughtProducts = products.stream()
                 .map(productToBoughtProductConverter::convert)
                 .toList();
+
+        boughtProducts.forEach(b -> b.setOwner(buyer));
 
         var address = modelMapper.map(addressInput, Address.class);
         address.setUser(buyer);

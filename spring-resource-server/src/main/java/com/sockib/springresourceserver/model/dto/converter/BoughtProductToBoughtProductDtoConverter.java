@@ -14,6 +14,7 @@ public class BoughtProductToBoughtProductDtoConverter implements ToDtoConverter<
         var money = moneyConverter.convert(boughtProduct.getPrice());
 
         var boughtProductDto = new BoughtProductDto();
+        boughtProductDto.setId(boughtProduct.getId());
         boughtProductDto.setName(boughtProduct.getName());
         boughtProductDto.setDescription(boughtProduct.getDescription());
         boughtProductDto.setCategory(boughtProduct.getCategory().getName());

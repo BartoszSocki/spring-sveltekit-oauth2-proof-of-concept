@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class BoughtProductDto {
 
+    private Long id;
     private String name;
     private MoneyDto price;
     private Long ownerId;

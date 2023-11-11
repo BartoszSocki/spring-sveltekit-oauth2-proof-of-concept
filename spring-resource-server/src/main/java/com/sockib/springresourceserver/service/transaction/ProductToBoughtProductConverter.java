@@ -11,7 +11,6 @@ public class ProductToBoughtProductConverter {
         boughtProduct.setDescription(product.getDescription());
         boughtProduct.setCategory(product.getCategory());
         boughtProduct.setPrice(product.getPrice());
-        boughtProduct.setOwner(product.getOwner());
         boughtProduct.setImageUrl(product.getImageUrl());
 
         return boughtProduct;

@@ -21,7 +21,7 @@
                 <a href="/product/add">add new product</a>
             </li>
             <li>
-                <a href="/bought-product">bought products</a>
+                <a href="/bought-product/list/0">bought products</a>
             </li>
             {/if}
             <div class="space" />

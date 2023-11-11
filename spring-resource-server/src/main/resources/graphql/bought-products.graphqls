@@ -9,6 +9,12 @@ type BoughtProduct {
     imageUrl: String
 }
 
+type BoughtProductPage {
+    content: [BoughtProduct]!
+    isFirstPage: Boolean!
+    isLastPage: Boolean!
+}
+
 extend type Query {
-    searchBoughtProducts(pageable: PageableInput!, sort: SortInput!): [BoughtProduct]!
+    searchBoughtProducts(pageable: PageableInput!, sort: SortInput!): BoughtProductPage!
 }

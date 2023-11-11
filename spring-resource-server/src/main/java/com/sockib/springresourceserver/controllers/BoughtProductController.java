@@ -23,14 +23,14 @@ public class BoughtProductController {
     private ModelMapper modelMapper;
 
     @QueryMapping
-    SimplePage<BoughtProductDto> searchBoughtProducts(@Argument @Valid PageableInput pageableInput,
-                                                      @Argument @Valid SortInput sortInput) {
+    SimplePage<BoughtProductDto> searchBoughtProducts(@Argument @Valid PageableInput pageable,
+                                                      @Argument @Valid SortInput sort) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var email = authentication.getName();
 
-        var pageable = modelMapper.map(pageableInput, Pageable.class);
-        var sort = modelMapper.map(sortInput, Sort.class);
-        var page = boughtProductService.searchBoughtProducts(pageable, sort, email);
+        var boughtProductsPageable = modelMapper.map(pageable, Pageable.class);
+        var boughtProductsSort = modelMapper.map(sort, Sort.class);
+        var page = boughtProductService.searchBoughtProducts(boughtProductsPageable, boughtProductsSort, email);
 
         return page;
     }
