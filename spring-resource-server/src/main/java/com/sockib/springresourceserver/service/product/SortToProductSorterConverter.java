@@ -1,8 +1,8 @@
 package com.sockib.springresourceserver.service.product;
 
 import com.sockib.springresourceserver.model.entity.Product;
-import com.sockib.springresourceserver.util.search.Sort;
-import com.sockib.springresourceserver.util.search.Sorter;
+import com.sockib.springresourceserver.util.search.sort.Sort;
+import com.sockib.springresourceserver.util.search.sort.Sorter;
 
 public interface SortToProductSorterConverter {
 

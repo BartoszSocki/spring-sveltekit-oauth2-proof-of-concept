@@ -1,7 +1,10 @@
 package com.sockib.springresourceserver.model.respository;
 
 import com.sockib.springresourceserver.model.entity.Product;
-import com.sockib.springresourceserver.util.search.*;
+import com.sockib.springresourceserver.util.search.filter.Specification;
+import com.sockib.springresourceserver.util.search.page.Pageable;
+import com.sockib.springresourceserver.util.search.page.SimplePage;
+import com.sockib.springresourceserver.util.search.sort.Sorter;
 
 public interface SearchableProductRepository {
 

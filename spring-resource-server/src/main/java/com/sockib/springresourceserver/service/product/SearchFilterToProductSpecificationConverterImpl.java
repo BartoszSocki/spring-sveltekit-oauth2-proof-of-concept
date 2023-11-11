@@ -4,9 +4,9 @@ import com.sockib.springresourceserver.model.entity.Category_;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Product_;
 import com.sockib.springresourceserver.model.entity.Tag_;
-import com.sockib.springresourceserver.util.search.SearchFilter;
-import com.sockib.springresourceserver.util.search.SearchOperation;
-import com.sockib.springresourceserver.util.search.Specification;
+import com.sockib.springresourceserver.util.search.filter.SearchFilter;
+import com.sockib.springresourceserver.util.search.filter.SearchOperation;
+import com.sockib.springresourceserver.util.search.filter.Specification;
 
 import java.util.Arrays;
 import java.util.List;

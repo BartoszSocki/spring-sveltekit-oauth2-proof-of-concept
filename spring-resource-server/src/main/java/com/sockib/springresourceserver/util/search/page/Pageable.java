@@ -1,10 +1,8 @@
-package com.sockib.springresourceserver.util.search;
+package com.sockib.springresourceserver.util.search.page;
 
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
-
-import java.time.Clock;
 
 @Getter
 @Setter

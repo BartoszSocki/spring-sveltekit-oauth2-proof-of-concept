@@ -2,9 +2,9 @@ package com.sockib.springresourceserver.service.product;
 
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Product_;
-import com.sockib.springresourceserver.util.search.Sort;
-import com.sockib.springresourceserver.util.search.SortDirection;
-import com.sockib.springresourceserver.util.search.Sorter;
+import com.sockib.springresourceserver.util.search.sort.Sort;
+import com.sockib.springresourceserver.util.search.sort.SortDirection;
+import com.sockib.springresourceserver.util.search.sort.Sorter;
 
 public class SortToProductSorterConverterImpl implements SortToProductSorterConverter {
     @Override

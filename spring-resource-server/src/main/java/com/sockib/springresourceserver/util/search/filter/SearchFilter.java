@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.util.search;
+package com.sockib.springresourceserver.util.search.filter;
 
 import lombok.*;
 
