@@ -15,6 +15,11 @@ input AddressInput {
     postalCode: String!
 }
 
+input CartProductInput {
+    productId: Int!
+    productQuantity: Int!
+}
+
 extend type Mutation {
-    buyProducts(productsIds: [Int!]!, address: AddressInput!): Boolean
+    buyProducts(products: [CartProductInput!]!, address: AddressInput!): Boolean
 }

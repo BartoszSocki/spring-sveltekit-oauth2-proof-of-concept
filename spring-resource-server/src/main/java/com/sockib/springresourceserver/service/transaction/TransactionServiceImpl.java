@@ -1,11 +1,11 @@
 package com.sockib.springresourceserver.service.transaction;
 
 import com.sockib.springresourceserver.model.dto.input.AddressInput;
+import com.sockib.springresourceserver.model.dto.input.TransactionProductInput;
 import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Transaction;
 import com.sockib.springresourceserver.model.entity.User;
-import com.sockib.springresourceserver.model.respository.BoughtProductRepository;
 import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.model.respository.TransactionRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -32,16 +33,23 @@ public class TransactionServiceImpl implements TransactionService {
         this.productToBoughtProductConverter = new ProductToBoughtProductConverter();
     }
 
-
     @Override
     @Transactional
-    public void buyProducts(List<Long> productsIds, AddressInput addressInput, String email) {
+    public void buyProducts(List<TransactionProductInput> productsInput, AddressInput addressInput, String email) {
         var buyer = userRepository.findUserByEmail(email).orElse(new User(email, new Money(1000.0, "USD")));
+        var productsIds = productsInput.stream()
+                .map(TransactionProductInput::getProductId)
+                .toList();
+
+        var productsQuantities = productsInput.stream()
+                .map(TransactionProductInput::getProductQuantity)
+                .toList();
+
         var products = productRepository.findProductsByIdIn(productsIds);
 
         throwIfProductsDontExists(products, productsIds);
-        throwIfProductsAreNotAvailable(products);
-        throwIfUserCannotBuyProducts(products, buyer);
+        throwIfProductsAreNotAvailable(products, productsQuantities);
+        throwIfUserCannotBuyProducts(products, productsQuantities, buyer);
 
         var boughtProducts = products.stream()
                 .map(productToBoughtProductConverter::convert)
@@ -57,28 +65,27 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setAddress(address);
         boughtProducts.forEach(bp -> bp.setTransaction(transaction));
 
-        var priceSum = getProductPriceSum(products);
+        var priceSum = getProductPriceSum(products, productsQuantities);
         updateBuyerMoney(buyer, priceSum);
 
-        var productsWithUpdatedQuantity = getProductsWithUpdatedQuantity(products);
-        productRepository.saveAll(productsWithUpdatedQuantity);
+        updateProductsQuantities(products, productsQuantities);
 
         transactionRepository.save(transaction);
     }
 
-    private Double getProductPriceSum(List<Product> products) {
-        return products.stream()
-                .map(p -> p.getPrice().getAmount())
+    private Double getProductPriceSum(List<Product> products, List<Integer> quantities) {
+        return IntStream.range(0, quantities.size())
+                .mapToObj(i -> products.get(i).getPrice().getAmount() * quantities.get(i))
                 .reduce(0.0, Double::sum);
     }
 
-    private void throwIfUserCannotBuyProducts(List<Product> products, User user) {
+    private void throwIfUserCannotBuyProducts(List<Product> products, List<Integer> quantities, User user) {
         var areCurrenciesTheSame = products.stream().allMatch(p -> "USD".equals(p.getPrice().getCurrency()));
         if (!areCurrenciesTheSame) {
             throw new RuntimeException("TODO: add MixedCurrenciesException");
         }
 
-        var priceSum = getProductPriceSum(products);
+        var priceSum = getProductPriceSum(products, quantities);
 
         var userMoneyAmount = user.getUserMoney().getAmount();
         if (priceSum > userMoneyAmount) {
@@ -93,16 +100,20 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
-    private void throwIfProductsAreNotAvailable(List<Product> products) {
-        var areAvailable = products.stream().allMatch(p -> p.getInventory().getQuantity() > 0);
+    private void throwIfProductsAreNotAvailable(List<Product> products, List<Integer> quantities) {
+        var areAvailable = IntStream.range(0, quantities.size())
+                .allMatch(i -> products.get(i).getInventory().getQuantity() >= quantities.get(i));
+
         if (!areAvailable) {
             throw new RuntimeException("TODO: add ProductNotAvailableException");
         }
     }
 
-    private List<Product> getProductsWithUpdatedQuantity(List<Product> products) {
-        products.forEach(p -> p.getInventory().setQuantity(p.getInventory().getQuantity() - 1));
-        return products;
+    private void updateProductsQuantities(List<Product> products, List<Integer> quantities) {
+        IntStream.range(0, quantities.size())
+                .forEach(i -> products.get(i).getInventory().setQuantity(products.get(i).getInventory().getQuantity() - quantities.get(i)));
+
+        productRepository.saveAll(products);
     }
 
     private void updateBuyerMoney(User user, Double amount) {

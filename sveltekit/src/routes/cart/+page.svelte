@@ -7,6 +7,8 @@
     $: products = data.data;
     $: canBeBought = products !== undefined && products !== null && products.length > 0;
     $: productsIds = products ? products.map(p => p.id) : []
+    // for now there is no possibility of changing quantity
+    $: productsQuantity = new Array(productsIds.length).fill(1)
     // $: totalPrice = products ? products.reduce((acc, cur) => ) : 0;
 
     function removeItemFromCart(id) {
@@ -64,6 +66,7 @@
             </label>
         </fieldset>
         <input hidden name="products_ids" type="text" value={productsIds}>
+        <input hidden name="products_quantity" type="text" value={productsQuantity}>
         <button disabled={!canBeBought}>buy</button>
     </form>
 </div>

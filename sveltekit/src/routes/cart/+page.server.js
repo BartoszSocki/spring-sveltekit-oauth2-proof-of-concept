@@ -7,6 +7,18 @@ export const actions = {
 
         console.log(data)
         const productsIds = data.get('products_ids').split(',').map(x => parseInt(x))
+        const productsQuantity = data.get('products_quantity').split(',').map(x => parseInt(x))
+
+        if (productsIds.length !== productsQuantity.length) {
+            console.log("TODO: lengths are not the same")
+        }
+
+        const products = productsIds.map((id, i) => {
+            return {
+                productId: id,
+                priductQuantity: productsQuantity.at(i)
+            }
+        })
 
         const variables = {
             address: {
@@ -15,7 +27,7 @@ export const actions = {
                 postalCode: data.get('postal_code'),
                 addressLine: data.get('street'),
             },
-            productsIds
+            products
         } 
 
         const response = await fetch(API_URL, {

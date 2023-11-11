@@ -1,6 +1,7 @@
 package com.sockib.springresourceserver.controllers;
 
 import com.sockib.springresourceserver.model.dto.input.AddressInput;
+import com.sockib.springresourceserver.model.dto.input.TransactionProductInput;
 import com.sockib.springresourceserver.service.transaction.TransactionService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -19,13 +20,14 @@ public class TransactionController {
     TransactionService transactionService;
 
     @MutationMapping
-    Boolean buyProducts(@Argument List<Long> productsIds,
+    Boolean buyProducts(@Argument @Valid List<TransactionProductInput> products,
                         @Argument @Valid AddressInput address) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var email = authentication.getName();
 
-        transactionService.buyProducts(productsIds, address, email);
+        transactionService.buyProducts(products, address, email);
+
         return true;
     }
 
