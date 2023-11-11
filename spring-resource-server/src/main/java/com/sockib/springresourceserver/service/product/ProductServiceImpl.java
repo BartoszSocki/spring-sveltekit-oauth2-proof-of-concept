@@ -94,6 +94,10 @@ public class ProductServiceImpl implements ProductService {
         var productCategory = categoryRepository.findCategoryByName(productInput.getCategory())
                 .orElse(new Category(productInput.getCategory()));
 
+        if (!"USD".equals(productInput.getPrice().getCurrency())) {
+            throw new RuntimeException("TODO: add CurrencyNotSupportedException");
+        }
+
         var money = new Money();
         money.setAmount(productInput.getPrice().getAmount());
         money.setCurrency(productInput.getPrice().getCurrency());

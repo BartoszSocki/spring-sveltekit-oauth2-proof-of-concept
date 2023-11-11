@@ -2,7 +2,6 @@ package com.sockib.springresourceserver.service.transaction;
 
 import com.sockib.springresourceserver.model.dto.input.AddressInput;
 import com.sockib.springresourceserver.model.embeddable.Money;
-import com.sockib.springresourceserver.model.entity.BoughtProduct;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Transaction;
 import com.sockib.springresourceserver.model.entity.User;
@@ -11,116 +10,105 @@ import com.sockib.springresourceserver.model.respository.ProductRepository;
 import com.sockib.springresourceserver.model.respository.TransactionRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
-@AllArgsConstructor
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
     private TransactionRepository transactionRepository;
     private ProductRepository productRepository;
-    private BoughtProductRepository boughtProductRepository;
     private UserRepository userRepository;
+    private ProductToBoughtProductConverter productToBoughtProductConverter;
+
+    public TransactionServiceImpl(TransactionRepository transactionRepository,
+                                  ProductRepository productRepository,
+                                  UserRepository userRepository) {
+        this.transactionRepository = transactionRepository;
+        this.productRepository = productRepository;
+        this.userRepository = userRepository;
+        this.productToBoughtProductConverter = new ProductToBoughtProductConverter();
+    }
+
 
     @Override
     @Transactional
-    public Transaction buyProducts(List<Long> productsIds, AddressInput addressInput, String email) {
-        var user = userRepository.findUserByEmail(email).orElse(new User(email, new Money(1000.0, "USD")));
-
-        var transaction = new Transaction();
+    public void buyProducts(List<Long> productsIds, AddressInput addressInput, String email) {
+        var buyer = userRepository.findUserByEmail(email).orElse(new User(email, new Money(1000.0, "USD")));
         var products = productRepository.findProductsByIdIn(productsIds);
 
-        if (products.size() != productsIds.size()) {
-            throw new RuntimeException("some products don't exists");
-        }
-
-        var areProductsAvailable = areProductsAvailable(products);
-        if (!areProductsAvailable) {
-            throw new RuntimeException("not all products are available");
-        }
-
-        var prices = products.stream().map(Product::getPrice).toList();
-        var totalProductsPrice = getTotalPriceOfProducts(prices);
-
-        if (!totalProductsPrice.getCurrency().equals(user.getUserMoney().getCurrency())) {
-            throw new RuntimeException("TODO: implement different currencies problem");
-        }
-
-        if (totalProductsPrice.getAmount() > user.getUserMoney().getAmount()) {
-            throw new RuntimeException("user has no money to buy products");
-        }
+        throwIfProductsDontExists(products, productsIds);
+        throwIfProductsAreNotAvailable(products);
+        throwIfUserCannotBuyProducts(products, buyer);
 
         var boughtProducts = products.stream()
-                .map(this::convertProductToBoughtProduct)
+                .map(productToBoughtProductConverter::convert)
                 .toList();
-        boughtProducts.forEach(bp -> bp.setTransaction(transaction));
-
-        transaction.setBuyer(user);
-        transaction.setTransactionStatus("OK");
-
-        transaction.setBoughtProducts(boughtProducts);
 
         var address = addressInput.toAddress();
-        address.setUser(user);
+        address.setUser(buyer);
 
+        var transaction = new Transaction();
+        transaction.setBuyer(buyer);
+        transaction.setTransactionStatus("BOUGHT");
+        transaction.setBoughtProducts(boughtProducts);
         transaction.setAddress(address);
+        boughtProducts.forEach(bp -> bp.setTransaction(transaction));
 
-        // user money update
-        user.getUserMoney().setAmount(user.getUserMoney().getAmount() - totalProductsPrice.getAmount());
-        userRepository.save(user);
+        var priceSum = getProductPriceSum(products);
+        updateBuyerMoney(buyer, priceSum);
 
         var productsWithUpdatedQuantity = getProductsWithUpdatedQuantity(products);
         productRepository.saveAll(productsWithUpdatedQuantity);
 
-        return transactionRepository.save(transaction);
+        transactionRepository.save(transaction);
     }
 
-    private BoughtProduct convertProductToBoughtProduct(Product product) {
-        var boughtProduct = new BoughtProduct();
-        boughtProduct.setName(product.getName());
-        boughtProduct.setDescription(product.getDescription());
-        boughtProduct.setCategory(product.getCategory());
-        boughtProduct.setPrice(product.getPrice());
-        boughtProduct.setOwner(product.getOwner());
-        boughtProduct.setImageUrl(product.getImageUrl());
-
-        return boughtProduct;
+    private Double getProductPriceSum(List<Product> products) {
+        return products.stream()
+                .map(p -> p.getPrice().getAmount())
+                .reduce(0.0, Double::sum);
     }
 
-    private Money getTotalPriceOfProducts(List<Money> prices) {
-        var areCurrenciesTheSame = prices.stream().allMatch(m -> "USD".equals(m.getCurrency()));
+    private void throwIfUserCannotBuyProducts(List<Product> products, User user) {
+        var areCurrenciesTheSame = products.stream().allMatch(p -> "USD".equals(p.getPrice().getCurrency()));
         if (!areCurrenciesTheSame) {
-            throw new RuntimeException("TODO: implement different currencies total price");
+            throw new RuntimeException("TODO: add MixedCurrenciesException");
         }
 
-        var initPrice = new Money();
-        initPrice.setCurrency("USD");
-        initPrice.setAmount(0.0);
+        var priceSum = getProductPriceSum(products);
 
-        var totalPrice = prices.stream().reduce(initPrice, (cur, acc) -> {
-            acc.setAmount(acc.getAmount() + cur.getAmount());
-            return acc;
-        });
-        return totalPrice;
+        var userMoneyAmount = user.getUserMoney().getAmount();
+        if (priceSum > userMoneyAmount) {
+            throw new RuntimeException("TODO: add NotEnoughCashException");
+        }
     }
 
-    private boolean areProductsAvailable(List<Product> products) {
-        for (var product : products) {
-            if ((product.getInventory().getQuantity() <= 0)) {
-                return false;
-            }
+    private void throwIfProductsDontExists(List<Product> products, List<Long> productsIds) {
+        var productsIdsSet = Set.of(productsIds);
+        if (productsIdsSet.size() != products.size()) {
+            throw new RuntimeException("TODO: add ProductNotExistsException");
         }
+    }
 
-        return true;
+    private void throwIfProductsAreNotAvailable(List<Product> products) {
+        var areAvailable = products.stream().allMatch(p -> p.getInventory().getQuantity() > 0);
+        if (!areAvailable) {
+            throw new RuntimeException("TODO: add ProductNotAvailableException");
+        }
     }
 
     private List<Product> getProductsWithUpdatedQuantity(List<Product> products) {
         products.forEach(p -> p.getInventory().setQuantity(p.getInventory().getQuantity() - 1));
         return products;
+    }
+
+    private void updateBuyerMoney(User user, Double amount) {
+        var currentUserMoney = user.getUserMoney().getAmount();
+        user.getUserMoney().setAmount(currentUserMoney - amount);
+        userRepository.save(user);
     }
 
 }

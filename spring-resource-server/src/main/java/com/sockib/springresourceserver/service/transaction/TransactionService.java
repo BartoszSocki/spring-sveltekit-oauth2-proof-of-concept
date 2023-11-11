@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface TransactionService {
 
-    Transaction buyProducts(List<Long> productsIds, AddressInput address, String email);
+    void buyProducts(List<Long> productsIds, AddressInput address, String email);
 
 }
