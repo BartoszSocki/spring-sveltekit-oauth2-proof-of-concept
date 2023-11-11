@@ -7,6 +7,6 @@ import com.sockib.springresourceserver.util.search.sort.Sorter;
 
 public interface SearchableBoughtProductRepository {
 
-    SimplePage<BoughtProduct> searchBoughtProducts(Pageable pageable, Sorter<BoughtProduct> sorter);
+    SimplePage<BoughtProduct> searchBoughtProducts(Pageable pageable, Sorter<BoughtProduct> sorter, String email);
 
 }

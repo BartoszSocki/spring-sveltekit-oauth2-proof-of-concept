@@ -22,10 +22,9 @@ public class SearchableBoughtProductRepositoryImpl implements SearchableBoughtPr
     private final EntityManager entityManager;
 
     @Override
-    public SimplePage<BoughtProduct> searchBoughtProducts(Pageable pageable, Sorter<BoughtProduct> sorter) {
-        var buyerId = 1L;
-        var boughtProducts = getBoughtProducts(pageable, sorter, buyerId);
-        var count = getNumberOfBoughtProducts(buyerId);
+    public SimplePage<BoughtProduct> searchBoughtProducts(Pageable pageable, Sorter<BoughtProduct> sorter, String email) {
+        var boughtProducts = getBoughtProducts(pageable, sorter, email);
+        var count = getNumberOfBoughtProducts(email);
 
         var isFirstPage = pageable.getPage() == 0;
         var isLastPage = count <= pageable.getOffset() + pageable.getLimit();
@@ -33,7 +32,7 @@ public class SearchableBoughtProductRepositoryImpl implements SearchableBoughtPr
         return new SimplePageImpl<>(boughtProducts, isFirstPage, isLastPage);
     }
 
-    private List<BoughtProduct> getBoughtProducts(Pageable pageable, Sorter<BoughtProduct> sorter, Long buyerId) {
+    private List<BoughtProduct> getBoughtProducts(Pageable pageable, Sorter<BoughtProduct> sorter, String email) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<BoughtProduct> criteriaQuery = criteriaBuilder.createQuery(BoughtProduct.class);
         Root<BoughtProduct> root = criteriaQuery.from(BoughtProduct.class);
@@ -41,7 +40,7 @@ public class SearchableBoughtProductRepositoryImpl implements SearchableBoughtPr
         var order = sorter.toOrder(root, criteriaQuery, criteriaBuilder);
 
         var query = criteriaQuery
-                .where(criteriaBuilder.equal(root.get(BoughtProduct_.OWNER).get(User_.ID), buyerId))
+                .where(criteriaBuilder.equal(root.get(BoughtProduct_.OWNER).get(User_.EMAIL), email))
                 .orderBy(order);
 
         var list = entityManager.createQuery(query)
@@ -52,14 +51,14 @@ public class SearchableBoughtProductRepositoryImpl implements SearchableBoughtPr
         return list;
     }
 
-    private Long getNumberOfBoughtProducts(Long buyerId) {
+    private Long getNumberOfBoughtProducts(String email) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
         Root<Product> root = criteriaQuery.from(Product.class);
 
         var query = criteriaQuery
                 .select(criteriaBuilder.countDistinct(root.get(BoughtProduct_.ID)))
-                .where(criteriaBuilder.equal(root.get(BoughtProduct_.OWNER).get(User_.ID), buyerId));
+                .where(criteriaBuilder.equal(root.get(BoughtProduct_.OWNER).get(User_.EMAIL), email));
 
         var count = entityManager.createQuery(query)
                 .getSingleResult();
