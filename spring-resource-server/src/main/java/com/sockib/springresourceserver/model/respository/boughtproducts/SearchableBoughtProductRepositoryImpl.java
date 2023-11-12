@@ -57,7 +57,7 @@ public class SearchableBoughtProductRepositoryImpl implements SearchableBoughtPr
         Root<Product> root = criteriaQuery.from(Product.class);
 
         var query = criteriaQuery
-                .select(criteriaBuilder.countDistinct(root.get(BoughtProduct_.ID)))
+                .select(criteriaBuilder.count(root.get(BoughtProduct_.ID)))
                 .where(criteriaBuilder.equal(root.get(BoughtProduct_.OWNER).get(User_.EMAIL), email));
 
         var count = entityManager.createQuery(query)
