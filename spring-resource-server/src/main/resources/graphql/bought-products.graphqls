@@ -1,9 +1,10 @@
 type BoughtProduct {
+    id: ID!
     name: String!
     price: Money!
     ownerId: Int!
-    id: ID!
     category: String!
+    date: String!
 
     description: String
     imageUrl: String

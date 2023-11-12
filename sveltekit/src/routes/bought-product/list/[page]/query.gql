@@ -1,0 +1,18 @@
+query SearchBoughtProducts($pageable: PageableInput!, $sort: SortInput!) {
+    searchBoughtProducts(pageable: $pageable, sort: $sort) {
+        content {
+            id
+            name
+            description
+            category
+            imageUrl
+            date
+            price {
+                amount
+                currency
+            }
+        }
+        isFirstPage
+        isLastPage
+    }
+}

@@ -2,7 +2,6 @@ package com.sockib.springresourceserver.model.respository.boughtproducts;
 
 import com.sockib.springresourceserver.model.entity.BoughtProduct;
 import com.sockib.springresourceserver.model.entity.BoughtProduct_;
-import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.User_;
 import com.sockib.springresourceserver.util.search.page.Pageable;
 import com.sockib.springresourceserver.util.search.page.SimplePage;
@@ -54,7 +53,7 @@ public class SearchableBoughtProductRepositoryImpl implements SearchableBoughtPr
     private Long getNumberOfBoughtProducts(String email) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
-        Root<Product> root = criteriaQuery.from(Product.class);
+        Root<BoughtProduct> root = criteriaQuery.from(BoughtProduct.class);
 
         var query = criteriaQuery
                 .select(criteriaBuilder.count(root.get(BoughtProduct_.ID)))

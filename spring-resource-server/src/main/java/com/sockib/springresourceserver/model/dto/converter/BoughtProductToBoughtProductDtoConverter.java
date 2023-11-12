@@ -18,6 +18,7 @@ public class BoughtProductToBoughtProductDtoConverter implements ToDtoConverter<
         boughtProductDto.setName(boughtProduct.getName());
         boughtProductDto.setDescription(boughtProduct.getDescription());
         boughtProductDto.setCategory(boughtProduct.getCategory().getName());
+        boughtProductDto.setDate(boughtProduct.getCreationDate());
         boughtProductDto.setImageUrl(boughtProduct.getImageUrl());
         boughtProductDto.setOwnerId(boughtProduct.getOwner().getId());
         boughtProductDto.setPrice(money);
