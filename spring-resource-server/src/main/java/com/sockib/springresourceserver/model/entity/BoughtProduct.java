@@ -35,4 +35,9 @@ public class BoughtProduct extends WithCreationAndUpdateTimestamp {
     @JoinColumn(name = "transaction_id")
     private Transaction transaction;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_catalog_id")
+    @ToString.Exclude
+    private Product product;
+
 }
