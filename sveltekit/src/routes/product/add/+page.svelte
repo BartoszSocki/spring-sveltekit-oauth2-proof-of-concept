@@ -9,7 +9,6 @@
 	}
 
 	$: tags = $TagsStore.join(',')
-	$: console.log(tags)
 </script>
 
 <form method="POST">
@@ -73,5 +72,4 @@
 	input[type="text"]:not(:placeholder-shown):invalid {
 		border-color: red;
 	}
-
 </style>
