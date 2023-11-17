@@ -1,4 +1,7 @@
 <script>
+	import Price from "../component/Price.svelte";
+	import ProductTitle from "../component/ProductTitle.svelte";
+
 	export let boughtProduct;
 
     const { name, category, price, date } = boughtProduct;
@@ -9,21 +12,11 @@
 		<img src="/images/image-not-found.png" alt={name} />
 	</div>
 	<div class="content">
-		<div class="title">
-			<span>
-				<span class="title">{name}</span>
-				{category}
-			</span>
-		</div>
-        <div>
-            <i>
-                bought at: {date}
-            </i>
+		<ProductTitle name={name} category={category} />
+        <div class="bought-date">
+			bought at: {date}
         </div>
-		<div class="price">
-			{price.amount.toFixed(2)}
-			{price.currency}
-		</div>
+		<Price amount={price.amount} currency={price.currency} />
 	</div>
 
 	<div class="add-to-cart">
@@ -53,26 +46,7 @@
 		height: 12rem;
 	}
 
-	ul {
-		padding-left: 0;
-		display: flex;
-		flex-direction: row;
-		gap: 1ch;
-	}
-
-	span.title {
-		font-size: 1.4rem;
-		font-weight: bold;
-		color: #fff;
-	}
-
-	:root {
-		--star-size: 1rem;
-		--star-color: #fff;
-		--star-background: #fc0;
-	}
-
-	.price {
-		color: #fff;
+	.bought-date {
+		font-style: italic;
 	}
 </style>

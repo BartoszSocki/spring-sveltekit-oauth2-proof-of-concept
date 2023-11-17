@@ -1,52 +1,11 @@
 <script>
 	import { writable } from 'svelte/store';
-	import Tag from '$lib/product/Tag.svelte';
-	import { simpleStringRegex } from '$lib/util/validation.js'
-
-    function isInputSimpleString(value) {
-        return value !== undefined 
-            && value !== null
-            && value !== ""
-            && simpleStringRegex.test(value)
-    }
+	import EditableTagList from '../../../lib/component/EditableTagList.svelte'
 
 	const TagsStore = writable([]);
 
-	$: newTag = '';
-	$: canTagBeAdded = isInputSimpleString(newTag)
-
-    function handleAddedTag(e) {
-        e.preventDefault()
-        addTag(newTag)
-		newTag = ''
-    }
-
-	function handleTagRemoval(e, tag) {
-		e.preventDefault()
-		removeTag(tag)
-	}
-
-	function addTag(name) {
-		if (!name) {
-			return;
-		}
-
-        console.log($TagsStore)
-
-		TagsStore.update((current) => {
-			console.log(current)
-			if (current.includes(name)) {
-				return current;
-			}
-
-			return [...current, name];
-		});
-	}
-
-	function removeTag(tag) {
-		TagsStore.update((current) => {
-			return current.filter((t) => t !== tag);
-		});
+	function updateFunc(tags) {
+		TagsStore.update(curr => tags)
 	}
 
 	$: tags = $TagsStore.join(',')
@@ -96,23 +55,7 @@
 		</label>
 
 		<input name="tags" value={tags} hidden />
-		<div>
-			<ul>
-				{#if $TagsStore && $TagsStore.length > 0}
-					{#each $TagsStore as tag}
-						<Tag>
-							{tag}
-							<button class="close" tabindex="-1" on:click={(e) => handleTagRemoval(e, tag)}>X</button>
-						</Tag>
-					{/each}
-				{/if}
-			</ul>
-			<div class="add-tag">
-				<label for="tag">Tag</label>
-				<input pattern="[\w ]+" id="tag" type="text" placeholder="Tag..." bind:value={newTag}/>
-				<button on:click={handleAddedTag} disabled={!canTagBeAdded}>add tag</button>
-			</div>
-		</div>
+		<EditableTagList tags={$TagsStore} updateFunc={updateFunc}/>
 	</fieldset>
 	<input type="submit" value="add product" />
 </form>
@@ -122,38 +65,6 @@
 		font-size: 1.2rem;
 		color: white;
 	}
-
-	ul {
-		padding: 0;
-		margin-bottom: 0.25rem;
-		margin-top: 1.25rem;
-		display: flex;
-		flex-direction: row;
-		gap: 1rem;
-	}
-
-	.add-tag {
-		display: grid;
-        gap: 1rem;
-		grid-template-columns: repeat(2, 1fr);
-	}
-
-    .add-tag > label {
-        grid-column: -1 / 1;
-    }
-
-	button.close {
-        font-size: 1rem;
-        padding: 0;
-        margin: 0;
-        background: none;
-        border: none;
-        font-size: inherit;
-    }
-
-    button.close:hover {
-        color: #a8d5ed;
-    }
 
 	label:has(input:not(:placeholder-shown):invalid) {
 		color: red;

@@ -1,16 +1,16 @@
 <script>
-    import { isSimpleString, isEmpty } from "../util/validation.js";
+    import { isSimpleString } from "../util/validation.js";
     import Tag from "./Tag.svelte";
 
     export let tags
     export let updateFunc
+    export let placeholder = 'Tag...';
 
     $: newTag = '';
     $: isTagValid = isSimpleString(newTag)
-    $: isTagEmpty = isEmpty(newTag)
-    $: canTagBeAdded = isTagValid || isTagEmpty;
 
     function addTag(e) {
+        e.preventDefault()
         if (newTag === '') {
             return
         }
@@ -30,7 +30,8 @@
         updateFunc(tags)
     }
 
-    function removeAll() {
+    function removeAll(e) {
+        e.preventDefault()
         newTag = ''
         updateFunc([])
     }
@@ -42,12 +43,15 @@
             {#each tags as tag}
                 <Tag>
                     <span>{tag}</span> 
-                    <button class="close" on:click={() => removeTag(tag)}>X</button>
+                    <button class="close" on:click={(e) => {
+                        e.preventDefault()
+                        removeTag(tag)
+                    }}>X</button>
                 </Tag>
             {/each}
         {/if}
     </ul>
-    <input type="text" bind:value={newTag} class={canTagBeAdded ? '' : 'error'}>
+    <input type="text" pattern="[\w\d\s]+" bind:value={newTag} placeholder={placeholder}>
     <button on:click={addTag} disabled={!isTagValid}>Add New Tag</button>
     <button on:click={removeAll} disabled={tags && tags.length === 0}>Remove All</button>
 </div>
@@ -86,12 +90,12 @@
         margin-bottom: 0;
         padding-left: 0;
     }
-
-    input.error {
-        border-color: red;
-    }
     
     input {
         margin-bottom: 0;
     }
+
+	input[type="text"]:not(:placeholder-shown):invalid {
+		border-color: red;
+	}
 </style>
