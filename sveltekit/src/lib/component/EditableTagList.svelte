@@ -1,12 +1,14 @@
 <script>
-    import { isSimpleString } from "../util/validation.js";
+    import { isSimpleString, isEmpty } from "../util/validation.js";
     import Tag from "./Tag.svelte";
 
     export let tags
     export let updateFunc
 
     $: newTag = '';
-    $: isDataValid = isSimpleString(newTag)
+    $: isTagValid = isSimpleString(newTag)
+    $: isTagEmpty = isEmpty(newTag)
+    $: canTagBeAdded = isTagValid || isTagEmpty;
 
     function addTag(e) {
         if (newTag === '') {
@@ -45,15 +47,15 @@
             {/each}
         {/if}
     </ul>
-    <input type="text" bind:value={newTag} class={isDataValid ? '' : 'error'}>
-    <button on:click={addTag} disabled={!isDataValid}>Add New Tag</button>
-    <button on:click={removeAll}>Remove All</button>
+    <input type="text" bind:value={newTag} class={canTagBeAdded ? '' : 'error'}>
+    <button on:click={addTag} disabled={!isTagValid}>Add New Tag</button>
+    <button on:click={removeAll} disabled={tags && tags.length === 0}>Remove All</button>
 </div>
 
 <style>
     div {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 3fr 1fr 1fr;
         grid-template-rows: auto;
         gap: 1rem;
     }

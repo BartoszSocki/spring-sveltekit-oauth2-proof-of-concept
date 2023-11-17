@@ -20,9 +20,7 @@
 
 <style>
     fieldset {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto;
-        gap: 1rem;
+        display: flex;
+        flex-direction: column;
     }
 </style>

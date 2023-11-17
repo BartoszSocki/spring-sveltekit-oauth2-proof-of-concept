@@ -2,6 +2,8 @@
 	import FiveStarScore from "../component/FiveStarScore.svelte"
 	import Price from "../component/Price.svelte";
 	import TagList from "../component/TagList.svelte";
+	import ProductQuantity from "../component/ProductQuantity.svelte";
+	import ProductTitle from "../component/ProductTitle.svelte";
 
 	export let product;
 
@@ -13,11 +15,9 @@
 		<img src="/images/image-not-found.png" alt={name} />
 	</div>
 	<div class="content">
+		<ProductTitle name={name} category={category} />
+
 		<div class="title">
-			<span>
-				<span class="title">{name}</span>
-				{category}
-			</span>
 			{#if productScore.averageScore !== null}
 				<div class="product-score">
 					<FiveStarScore score={productScore.averageScore} />
@@ -26,15 +26,9 @@
 			{:else}
 				<div class="product-score"><i>No Reviews</i></div>
 			{/if}
-			<!-- </span> -->
 		</div>
-		<div class="quantity">
-			{#if quantity > 0}
-				<div>In Stock</div>
-			{:else}
-				<div>Out Of Stock</div>
-			{/if}
-		</div>
+
+		<ProductQuantity quantity={quantity} />
 		<TagList tags={tags} />
 		<Price amount={price.amount} currency={price.currency} />
 	</div>
@@ -65,12 +59,6 @@
         width: 12rem;
         height: 12rem;
     }
-
-	span.title {
-		font-size: 1.4rem;
-		font-weight: bold;
-		color: #fff;
-	}
 
 	div.product-score {
 		font-size: 0.8rem;
