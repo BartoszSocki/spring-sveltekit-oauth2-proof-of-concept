@@ -6,7 +6,7 @@
         </label>
         <label>
             review
-            <input type="text" name="review">
+            <textarea name="review" />
         </label>
     </fieldset>
 

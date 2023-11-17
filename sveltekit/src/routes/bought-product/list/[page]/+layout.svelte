@@ -31,7 +31,7 @@
         {/if}
         {#if success}
             <div class="status status--success">
-                <span class="status__title">you already have added review to this product</span>
+                <span class="status__title">success</span>
                 <button on:click={removeStatusHeader}>X</button>
             </div>
         {/if}
