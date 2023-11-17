@@ -12,6 +12,7 @@ public class ProductToBoughtProductConverter {
         boughtProduct.setCategory(product.getCategory());
         boughtProduct.setPrice(product.getPrice());
         boughtProduct.setImageUrl(product.getImageUrl());
+        boughtProduct.setProduct(product);
 
         return boughtProduct;
     }

@@ -22,9 +22,6 @@ export async function load({ params, url, fetch }) {
 
     const json = await response.json();
 
-    console.log(json.data.searchBoughtProducts);
-
-    // TODO: add null and undefined check
     return json.data.searchBoughtProducts;
 }
 

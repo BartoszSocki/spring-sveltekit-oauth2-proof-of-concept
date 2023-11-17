@@ -18,7 +18,6 @@
     $: prevUrl = $page.url.origin + '/product/list/' + (parseInt($page.params.page) - 1) + $page.url.search;
     $: nextUrl = $page.url.origin + '/product/list/' + (parseInt($page.params.page) + 1) + $page.url.search;
 
-
     function search() {
         const map = $filterParams
         const search = Object.entries(map)
@@ -55,7 +54,7 @@
     <div class="filters">
         <PriceFilter searchParams={filterParams} isValid={isValid} />
         <CategoryFilter searchParams={filterParams} isValid={isValid} />
-        <TagsFilter searchParams={filterParams} isValid={isValid}/>
+        <TagsFilter searchParams={filterParams} />
         <Sorter searchParams={filterParams} />
         
         <button on:click={search} disabled={!isDataValid}>search</button>

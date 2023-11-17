@@ -8,5 +8,6 @@ import com.sockib.springresourceserver.util.search.sort.Sort;
 public interface BoughtProductService {
 
     SimplePage<BoughtProductDto> searchBoughtProducts(Pageable pageable, Sort sort, String email);
+    Boolean isUserOwnerOfBoughtProduct(Long userId, Long productId);
 
 }

@@ -1,5 +1,6 @@
 type BoughtProduct {
     id: ID!
+    productId: Int!
     name: String!
     price: Money!
     ownerId: Int!

@@ -3,7 +3,6 @@
     export let data;
 
     $: boughtProducts = data.content
-    $: console.log(data)
 </script>
 
 <div>
@@ -11,7 +10,9 @@
         <ul>
             {#each boughtProducts as boughtProduct (boughtProduct.id)}
                 <li>
-                    <BoughtProduct boughtProduct={boughtProduct} />
+                    <BoughtProduct boughtProduct={boughtProduct}>
+                        <a href="/product/{boughtProduct.productId}/review">add review</a>
+                    </BoughtProduct>
                 </li>
             {/each}
         </ul>

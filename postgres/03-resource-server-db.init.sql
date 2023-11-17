@@ -144,9 +144,11 @@ create table if not exists resource_server.bought_product (
 	image_url text null,
 
 	transaction_id int not null,
+	product_catalog_id int not null,
 
 	constraint fk_owner foreign key (owner_id) references resource_server.user(id),
 	constraint fk_category foreign key (category_id) references resource_server.category(id),
+	constraint fk_product_catalog foreign key (product_catalog_id) references resource_server.product_catalog(id),
 	constraint fk_transaction foreign key (transaction_id) references resource_server.transaction(id)
 );
 
