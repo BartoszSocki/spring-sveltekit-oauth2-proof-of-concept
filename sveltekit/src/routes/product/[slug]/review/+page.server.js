@@ -12,7 +12,7 @@ export const actions = {
         const productId = params.slug
 
         const response = await fetch(`${REST_API_URL}/product/${productId}/review`, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -23,11 +23,30 @@ export const actions = {
         });
 
         if (response.status >= 400) {
-            logger.info(`redirecting with error, user already added review for product with id: ${productId}`)
-            throw redirect(303, "/bought-product/list/0?status=error-already-added-review")
+            logger.info(`redirecting with error: ${response.status}`)
+            throw redirect(303, "/bought-product/list/0?status=error")
         }
 
         logger.info(`redirecting with success, user added review for product with id: ${productId}`)
         throw redirect(303, "/bought-product/list/0?status=success")
     }
+}
+
+export async function load({ params, fetch }) {
+    const productId = params.slug;
+    const response = await fetch(`${REST_API_URL}/product/${productId}/review`, { method: 'GET' });
+
+    if (response.status >= 400) {
+        logger.info(`not found product review for productId: ${productId}`)
+        return {
+            data: {
+                fiveStarScore: '',
+                review: '',
+            }
+        }
+    }
+
+    logger.info(`found product review for productId: ${productId}`)
+    const responseJson = await response.json();
+    return responseJson;
 }

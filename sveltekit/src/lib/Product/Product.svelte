@@ -1,5 +1,7 @@
 <script>
-	import Tag from "$lib/product/Tag.svelte";
+	import FiveStarScore from "../component/FiveStarScore.svelte"
+	import Price from "../component/Price.svelte";
+	import TagList from "../component/TagList.svelte";
 
 	export let product;
 
@@ -18,7 +20,7 @@
 			</span>
 			{#if productScore.averageScore !== null}
 				<div class="product-score">
-					<span class="stars" style="--rating: {productScore.averageScore}" />
+					<FiveStarScore score={productScore.averageScore} />
 					<span class="reviews-count">({productScore.reviewsCount})</span>
 				</div>
 			{:else}
@@ -33,17 +35,8 @@
 				<div>Out Of Stock</div>
 			{/if}
 		</div>
-		<div class="tags">
-			<ul>
-				{#each tags as tag (tag)}
-					<Tag>{tag}</Tag>
-				{/each}
-			</ul>
-		</div>
-		<div class="price">
-			{price.amount.toFixed(2)}
-			{price.currency}
-		</div>
+		<TagList tags={tags} />
+		<Price amount={price.amount} currency={price.currency} />
 	</div>
 
 	<div class="add-to-cart">
@@ -53,8 +46,6 @@
 
 <style>
 	div.wrapper {
-		/* display: flex;
-		flex-direction: row; */
 		display: grid;
 		grid-template-columns: minmax(min-content, max-content) auto minmax(8rem, 10rem);
 		gap: 1rem;
@@ -75,59 +66,17 @@
         height: 12rem;
     }
 
-	ul {
-		padding-left: 0;
-		display: flex;
-		flex-direction: row;
-		gap: 1ch;
-	}
-
 	span.title {
 		font-size: 1.4rem;
 		font-weight: bold;
 		color: #fff;
 	}
 
-	/* span.reviews-count {
-        font-size: 0.8rem;
-    } */
-
 	div.product-score {
 		font-size: 0.8rem;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-	}
-
-	:root {
-		--star-size: 1rem;
-		--star-color: #fff;
-		--star-background: #fc0;
-	}
-
-	.stars {
-		--percent: calc(var(--rating) / 5 * 100%);
-
-		display: inline-block;
-		font-size: var(--star-size);
-		font-family: Times;
-		line-height: 1;
-	}
-
-	.stars::before {
-		content: '★★★★★';
-		letter-spacing: 3px;
-		background: linear-gradient(
-			90deg,
-			var(--star-background) var(--percent),
-			var(--star-color) var(--percent)
-		);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-	}
-
-	.price {
-		color: #fff;
 	}
 
 	.add-to-cart {

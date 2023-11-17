@@ -11,20 +11,19 @@
 
     $: status = $page.url.searchParams.get('status')
     $: success = status === 'success'
-    $: error = status === 'error-already-added-review'
+    $: error = status === 'error'
 
     function removeStatusHeader() {
         $page.url.searchParams.delete('status')
         goto($page.url.href)
     }
-
 </script>
 
 <main>
     <header>
         {#if error}
             <div class="status status--error">
-                <div class="status__title">you already have added review to this product</div>
+                <div class="status__title">unexpected error occured</div>
                 <div class="status__grow"/>
                 <button on:click={removeStatusHeader}>X</button>
             </div>
