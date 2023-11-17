@@ -10,6 +10,7 @@ import java.time.LocalDate;
 public class BoughtProductDto {
 
     private Long id;
+    private Long productId;
     private String name;
     private MoneyDto price;
     private Long ownerId;

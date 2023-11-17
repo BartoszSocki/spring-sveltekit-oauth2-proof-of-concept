@@ -2,6 +2,7 @@ query SearchBoughtProducts($pageable: PageableInput!, $sort: SortInput!) {
     searchBoughtProducts(pageable: $pageable, sort: $sort) {
         content {
             id
+            productId
             name
             description
             category

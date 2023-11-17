@@ -11,7 +11,9 @@
         <ul>
             {#each boughtProducts as boughtProduct (boughtProduct.id)}
                 <li>
-                    <BoughtProduct boughtProduct={boughtProduct} />
+                    <BoughtProduct boughtProduct={boughtProduct}>
+                        <a href="/review?product={boughtProduct.productId}">add review</a>
+                    </BoughtProduct>
                 </li>
             {/each}
         </ul>
