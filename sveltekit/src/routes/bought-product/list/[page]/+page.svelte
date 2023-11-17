@@ -3,7 +3,6 @@
     export let data;
 
     $: boughtProducts = data.content
-    $: console.log(data)
 </script>
 
 <div>

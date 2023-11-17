@@ -7,6 +7,7 @@ import com.sockib.springresourceserver.model.embeddable.FiveStarScore;
 import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.ProductReview;
 import com.sockib.springresourceserver.model.entity.User;
+import com.sockib.springresourceserver.model.exception.UserAlreadyAddedReviewException;
 import com.sockib.springresourceserver.model.respository.ProductReviewRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
 import com.sockib.springresourceserver.model.respository.products.ProductRepository;
@@ -44,8 +45,8 @@ public class ReviewServiceImpl implements ReviewService {
             throw new RuntimeException("TODO: add UserDontOwnProductException");
         }
 
-        if (!hasUserAlreadyAddedReviewForProduct(reviewer.getId(), productId)) {
-            throw new RuntimeException("TODO: add UserAlreadyAddedReviewException");
+        if (hasUserAlreadyAddedReviewForProduct(reviewer.getId(), productId)) {
+            throw new UserAlreadyAddedReviewException("user already added review for product: " + productId);
         }
 
         var fiveStarScore = new FiveStarScore();
