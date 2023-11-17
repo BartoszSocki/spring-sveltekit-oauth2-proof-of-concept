@@ -10,15 +10,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
-@RequestMapping("/api/review")
+@RequestMapping("/api")
 @RestController
 public class ReviewController {
 
     private ReviewService reviewService;
 
-    @PostMapping
-    ResponseEntity<ProductReviewDto> addReview(@Valid ReviewInputDto reviewInputDto,
-                   @RequestParam(required = true) Long productId) {
+    @PostMapping("/product/{productId}/review")
+    ResponseEntity<ProductReviewDto> addReview(@Valid @RequestBody ReviewInputDto reviewInputDto,
+                                               @PathVariable Long productId) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var email = authentication.getName();
         var review = reviewService.addReview(reviewInputDto, productId, email);
@@ -26,7 +26,7 @@ public class ReviewController {
         return ResponseEntity.ok(review);
     }
 
-    @GetMapping("/{:id}")
+    @GetMapping("/review/{id}")
     ResponseEntity<ProductReviewDto> getReview(@PathVariable Long id) {
         var productReviewDto = reviewService.getProductReviewById(id);
 

@@ -9,40 +9,44 @@ import com.sockib.springresourceserver.model.entity.ProductReview;
 import com.sockib.springresourceserver.model.entity.User;
 import com.sockib.springresourceserver.model.respository.ProductReviewRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
-import com.sockib.springresourceserver.model.respository.boughtproducts.BoughtProductRepository;
 import com.sockib.springresourceserver.model.respository.products.ProductRepository;
-import lombok.AllArgsConstructor;
+import com.sockib.springresourceserver.service.boughtproduct.BoughtProductService;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import javax.management.relation.RelationNotFoundException;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
+    private final BoughtProductService boughtProductService;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
-    private final BoughtProductRepository boughtProductRepository;
     private final ProductReviewRepository productReviewRepository;
     private final ProductReviewDtoConverter productReviewDtoConverter;
 
-    public ReviewServiceImpl(UserRepository userRepository,
+    public ReviewServiceImpl(BoughtProductService boughtProductService,
+                             UserRepository userRepository,
                              ProductRepository productRepository,
-                             BoughtProductRepository boughtProductRepository,
                              ProductReviewRepository productReviewRepository) {
+        this.boughtProductService = boughtProductService;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
-        this.boughtProductRepository = boughtProductRepository;
         this.productReviewRepository = productReviewRepository;
         this.productReviewDtoConverter = new ProductReviewDtoConverter();
     }
-
 
     @Override
     public ProductReviewDto addReview(ReviewInputDto reviewInputDto, Long productId, String email) {
         var reviewer = userRepository.findUserByEmail(email).orElse(new User(email, new Money(1000.0, "USD")));
         var product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("TODO: add ProductNotFoundException"));
 
-        throwIfUserDontHaveBoughtProduct(productId, reviewer.getId());
+        if (!isUserOwningProduct(reviewer.getId(), productId)) {
+            throw new RuntimeException("TODO: add UserDontOwnProductException");
+        }
+
+        if (!hasUserAlreadyAddedReviewForProduct(reviewer.getId(), productId)) {
+            throw new RuntimeException("TODO: add UserAlreadyAddedReviewException");
+        }
 
         var fiveStarScore = new FiveStarScore();
         fiveStarScore.setFiveStarScore(reviewInputDto.getFiveStarScore());
@@ -69,11 +73,12 @@ public class ReviewServiceImpl implements ReviewService {
         return productReviewDto;
     }
 
-    private void throwIfUserDontHaveBoughtProduct(Long productId, Long reviewerId) {
-        var canReviewBeAdded = boughtProductRepository.existsBoughtProductByProductIdAndOwnerId(productId, reviewerId);
-        if (!canReviewBeAdded) {
-            throw new RuntimeException("TODO: add UserDontOwnProductException");
-        }
+    private boolean isUserOwningProduct(Long reviewerId, Long productId) {
+        return boughtProductService.isUserOwnerOfBoughtProduct(reviewerId, productId);
+    }
+
+    private boolean hasUserAlreadyAddedReviewForProduct(Long reviewerId, Long productId) {
+        return productReviewRepository.hasUserAddedReviewForProduct(reviewerId, productId);
     }
 
 }

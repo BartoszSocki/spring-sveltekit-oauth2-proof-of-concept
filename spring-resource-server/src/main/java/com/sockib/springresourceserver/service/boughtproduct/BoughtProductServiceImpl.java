@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class BoughtProductServiceImpl implements BoughtProductService {
 
-    private BoughtProductRepository boughtProductRepository;
-    private SortToBoughtProductSorterConverter sortToBoughtProductSorterConverter;
-    private BoughtProductToBoughtProductDtoConverter boughtProductConverter;
-    private ModelMapper modelMapper;
+    private final BoughtProductRepository boughtProductRepository;
+    private final SortToBoughtProductSorterConverter sortToBoughtProductSorterConverter;
+    private final BoughtProductToBoughtProductDtoConverter boughtProductConverter;
+    private final ModelMapper modelMapper;
     private final static Integer MAX_BOUGHT_PRODUCT_PAGE_SIZE = 10;
 
     public BoughtProductServiceImpl(BoughtProductRepository boughtProductRepository, ModelMapper modelMapper) {
@@ -50,4 +50,10 @@ public class BoughtProductServiceImpl implements BoughtProductService {
 
         return page;
     }
+
+    @Override
+    public Boolean isUserOwnerOfBoughtProduct(Long userId, Long productId) {
+        return boughtProductRepository.isUserOwnerOfProduct(userId, productId);
+    }
+
 }
