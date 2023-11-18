@@ -1,7 +1,7 @@
 package com.sockib.springresourceserver.service.product;
 
 import com.sockib.springresourceserver.model.dto.ProductDto;
-import com.sockib.springresourceserver.model.dto.converter.ProductToProductDtoConverter;
+import com.sockib.springresourceserver.model.dto.converter.ToProductDtoConverter;
 import com.sockib.springresourceserver.model.dto.converter.ToDtoConverter;
 import com.sockib.springresourceserver.model.dto.input.ProductInput;
 import com.sockib.springresourceserver.model.embeddable.Money;
@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
         this.searchFilterToProductSpecificationConverter = new SearchFilterToProductSpecificationConverterImpl();
         this.sortToProductSorterConverter = new SortToProductSorterConverterImpl();
         this.categoryRepository = categoryRepository;
-        this.productConverter = new ProductToProductDtoConverter();
+        this.productConverter = new ToProductDtoConverter();
     }
 
     @Override

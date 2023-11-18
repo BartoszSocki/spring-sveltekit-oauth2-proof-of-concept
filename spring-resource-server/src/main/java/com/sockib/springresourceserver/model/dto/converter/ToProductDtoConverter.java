@@ -4,9 +4,9 @@ import com.sockib.springresourceserver.model.dto.ProductDto;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Tag;
 
-public class ProductToProductDtoConverter implements ToDtoConverter<Product, ProductDto> {
+public class ToProductDtoConverter implements ToDtoConverter<Product, ProductDto> {
 
-    private static final MoneyToMoneyDtoConverter moneyConverter = new MoneyToMoneyDtoConverter();
+    private static final ToMoneyDtoConverter moneyConverter = new ToMoneyDtoConverter();
 
     @Override
     public ProductDto convert(Product product) {
