@@ -20,7 +20,7 @@ public class ProductReviewController {
     @PutMapping("/product/{productId}/review")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     ResponseEntity<Void> addReview(@Valid @RequestBody ReviewInputDto reviewInputDto,
-                                               @PathVariable Long productId) {
+                                   @PathVariable Long productId) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var email = authentication.getName();
 
