@@ -11,7 +11,8 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Entity(name = "`order`")
+@Table(name = "`order`")
+@Entity
 public class Order extends WithCreationAndUpdateTimestamp {
 
     @ManyToOne(fetch = FetchType.LAZY)

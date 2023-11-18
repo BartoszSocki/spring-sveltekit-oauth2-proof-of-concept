@@ -76,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> findProductsByIds(List<Long> ids) {
-        var products = productRepository.findProductsByIdIn(ids);
+        var products = productRepository.findProductsWithIdInFetchAllColumns(ids);
         var productsDtos = products.stream()
                 .map(productConverter::convert)
                 .toList();

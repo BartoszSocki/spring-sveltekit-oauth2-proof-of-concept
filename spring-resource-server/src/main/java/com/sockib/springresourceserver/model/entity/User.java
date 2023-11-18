@@ -5,6 +5,7 @@ import com.sockib.springresourceserver.model.embeddable.Money;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 
 @Getter
@@ -12,8 +13,8 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
-@Entity(name = "`user`")
+@Table(name = "`user`")
+@Entity
 public class User extends WithCreationTimestamp {
 
     @Column(unique = true)

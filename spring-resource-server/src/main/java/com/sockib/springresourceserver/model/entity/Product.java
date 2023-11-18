@@ -39,7 +39,8 @@ import java.util.List;
                 @NamedAttributeNode("tags"),
         }
 )
-@Entity(name = "`product_catalog`")
+@Table(name = "`product_catalog`")
+@Entity
 public class Product extends WithCreationAndUpdateTimestamp {
 
     private String name;
