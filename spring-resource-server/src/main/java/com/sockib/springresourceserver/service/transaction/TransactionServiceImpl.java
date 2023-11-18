@@ -5,7 +5,7 @@ import com.sockib.springresourceserver.model.dto.input.TransactionProductInput;
 import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.Address;
 import com.sockib.springresourceserver.model.entity.Product;
-import com.sockib.springresourceserver.model.entity.Transaction;
+import com.sockib.springresourceserver.model.entity.Order;
 import com.sockib.springresourceserver.model.entity.User;
 import com.sockib.springresourceserver.model.exception.NotEnoughCashException;
 import com.sockib.springresourceserver.model.exception.ProductNotAvailable;
@@ -18,7 +18,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.IntStream;
 
 @Service
@@ -75,12 +74,12 @@ public class TransactionServiceImpl implements TransactionService {
         var address = modelMapper.map(addressInput, Address.class);
         address.setUser(buyer);
 
-        var transaction = new Transaction();
+        var transaction = new Order();
         transaction.setBuyer(buyer);
-        transaction.setTransactionStatus("BOUGHT");
+        transaction.setOrderStatus("BOUGHT");
         transaction.setBoughtProducts(boughtProducts);
         transaction.setAddress(address);
-        boughtProducts.forEach(bp -> bp.setTransaction(transaction));
+        boughtProducts.forEach(bp -> bp.setOrder(transaction));
 
         var priceSum = getProductPriceSum(products, productsQuantities);
         updateBuyerMoney(buyer, priceSum);

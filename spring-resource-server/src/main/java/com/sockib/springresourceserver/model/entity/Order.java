@@ -8,11 +8,11 @@ import lombok.ToString;
 
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
 @ToString
-public class Transaction extends WithCreationAndUpdateTimestamp {
+@Entity(name = "`order`")
+public class Order extends WithCreationAndUpdateTimestamp {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id")
@@ -24,9 +24,10 @@ public class Transaction extends WithCreationAndUpdateTimestamp {
     @ToString.Exclude
     private Address address;
 
-    private String transactionStatus;
+    private String orderStatus;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "transaction")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
+    @ToString.Exclude
     private List<BoughtProduct> boughtProducts;
 
 }

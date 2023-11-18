@@ -2,7 +2,6 @@ package com.sockib.springresourceserver.service.transaction;
 
 import com.sockib.springresourceserver.model.dto.input.AddressInput;
 import com.sockib.springresourceserver.model.dto.input.TransactionProductInput;
-import com.sockib.springresourceserver.model.entity.Transaction;
 
 import java.util.List;
 
