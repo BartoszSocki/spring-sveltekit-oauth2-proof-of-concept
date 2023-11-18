@@ -100,7 +100,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElse(new Category(productInput.getCategory()));
 
         if (!"USD".equals(productInput.getPrice().getCurrency())) {
-            throw new CurrencyNotSupportedException("Only supported currency is USD (for now)");
+            throw new CurrencyNotSupportedException("Only USD is supported (for now)");
         }
 
         var money = new Money();

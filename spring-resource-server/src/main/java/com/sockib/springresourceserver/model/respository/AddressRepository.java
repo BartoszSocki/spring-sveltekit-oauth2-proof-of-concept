@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.model.exception;
+package com.sockib.springresourceserver.model.respository;
 
 import com.sockib.springresourceserver.model.entity.Address;
 import org.springframework.data.jpa.repository.JpaRepository;

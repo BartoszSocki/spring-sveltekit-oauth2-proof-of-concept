@@ -8,6 +8,7 @@ import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Order;
 import com.sockib.springresourceserver.model.entity.User;
 import com.sockib.springresourceserver.model.exception.*;
+import com.sockib.springresourceserver.model.respository.AddressRepository;
 import com.sockib.springresourceserver.model.respository.products.ProductRepository;
 import com.sockib.springresourceserver.model.respository.OrderRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
