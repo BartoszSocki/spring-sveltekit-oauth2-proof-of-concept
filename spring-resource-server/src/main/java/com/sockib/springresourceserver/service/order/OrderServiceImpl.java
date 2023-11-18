@@ -52,7 +52,6 @@ public class OrderServiceImpl implements OrderService {
                 .map(OrderProductInput::getProductQuantity)
                 .toList();
 
-        // TODO: use entity graph
         var products = productRepository.findProductsByIdIn(productsIds);
 
         if (!allProductsExist(products, productsIds)) {

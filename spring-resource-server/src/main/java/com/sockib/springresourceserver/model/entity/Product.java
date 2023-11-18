@@ -21,6 +21,9 @@ import java.util.List;
 @NamedEntityGraph(name = "product[category]",
         attributeNodes = @NamedAttributeNode("category")
 )
+@NamedEntityGraph(name = "product[inventory]",
+        attributeNodes = @NamedAttributeNode("inventory")
+)
 @NamedEntityGraph(name = "product[ForDisplay]",
         attributeNodes = {
                 @NamedAttributeNode("owner"),
