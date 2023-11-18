@@ -7,9 +7,9 @@ import java.util.List;
 
 @Getter
 @Setter
-public class TransactionInput {
+public class OrderInput {
 
-    private List<TransactionProductInput> products;
+    private List<OrderProductInput> products;
     private AddressInput address;
 
 }

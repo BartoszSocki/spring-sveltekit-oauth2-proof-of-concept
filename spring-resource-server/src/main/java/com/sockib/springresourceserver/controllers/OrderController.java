@@ -1,7 +1,7 @@
 package com.sockib.springresourceserver.controllers;
 
-import com.sockib.springresourceserver.model.dto.input.TransactionInput;
-import com.sockib.springresourceserver.service.transaction.TransactionService;
+import com.sockib.springresourceserver.model.dto.input.OrderInput;
+import com.sockib.springresourceserver.service.order.OrderService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RequestMapping("/api/products/buy")
 @RestController
-public class TransactionController {
+public class OrderController {
 
-    private TransactionService transactionService;
+    private OrderService orderService;
 
     @PostMapping
-    ResponseEntity<Void> buyProducts(@Valid @RequestBody TransactionInput transaction) {
+    ResponseEntity<Void> buyProducts(@Valid @RequestBody OrderInput transaction) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var email = authentication.getName();
 
-        transactionService.buyProducts(transaction.getProducts(), transaction.getAddress(), email);
+        orderService.buyProducts(transaction.getProducts(), transaction.getAddress(), email);
 
         return ResponseEntity.ok().build();
     }

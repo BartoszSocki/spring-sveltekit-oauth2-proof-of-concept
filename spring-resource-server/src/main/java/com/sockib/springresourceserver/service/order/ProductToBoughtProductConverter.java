@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.service.transaction;
+package com.sockib.springresourceserver.service.order;
 
 import com.sockib.springresourceserver.model.entity.BoughtProduct;
 import com.sockib.springresourceserver.model.entity.Product;

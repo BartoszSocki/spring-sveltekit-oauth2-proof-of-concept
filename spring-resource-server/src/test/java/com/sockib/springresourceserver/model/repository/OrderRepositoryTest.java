@@ -3,11 +3,10 @@ package com.sockib.springresourceserver.model.repository;
 import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.Address;
 import com.sockib.springresourceserver.model.entity.BoughtProduct;
-import com.sockib.springresourceserver.model.entity.Transaction;
+import com.sockib.springresourceserver.model.entity.Order;
 import com.sockib.springresourceserver.model.respository.CategoryRepository;
-import com.sockib.springresourceserver.model.respository.TransactionRepository;
+import com.sockib.springresourceserver.model.respository.OrderRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
-import org.assertj.core.api.AbstractDateAssert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -20,10 +19,10 @@ import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class TransactionRepositoryTest {
+public class OrderRepositoryTest {
 
     @Autowired
-    TransactionRepository transactionRepository;
+    OrderRepository orderRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -34,9 +33,9 @@ public class TransactionRepositoryTest {
     @Test
     @Sql("/repository/transaction_test_1.sql")
     void givenBoughtProductsUserAndAddress_whenPersist_thenSuccess() {
-        var transaction = new Transaction();
+        var transaction = new Order();
 
-        transaction.setTransactionStatus("OK");
+        transaction.setOrderStatus("OK");
 
         var user = userRepository.findUserByEmail("email.com").orElseThrow(RuntimeException::new);
         transaction.setBuyer(user);
@@ -64,7 +63,7 @@ public class TransactionRepositoryTest {
 
         transaction.setBoughtProducts(List.of(boughtProduct1));
 
-        var persistedTransaction = transactionRepository.save(transaction);
+        var persistedTransaction = orderRepository.save(transaction);
 
         assertThat(persistedTransaction).isNotNull();
         assertThat(persistedTransaction.getBoughtProducts()).isNotNull();

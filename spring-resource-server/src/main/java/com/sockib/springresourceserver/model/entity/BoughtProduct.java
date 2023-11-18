@@ -32,8 +32,9 @@ public class BoughtProduct extends WithCreationAndUpdateTimestamp {
     private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transaction_id")
-    private Transaction transaction;
+    @JoinColumn(name = "order_id")
+    @ToString.Exclude
+    private Order order;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_catalog_id")

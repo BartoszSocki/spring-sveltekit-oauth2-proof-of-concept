@@ -63,6 +63,7 @@ public class Product extends WithCreationAndUpdateTimestamp {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch= FetchType.LAZY)
     @JoinColumn(name = "category_id")
+    @ToString.Exclude
     private Category category;
 
     @ToString.Exclude

@@ -1,7 +1,7 @@
 package com.sockib.springresourceserver.service.review;
 
 import com.sockib.springresourceserver.model.dto.ProductReviewDto;
-import com.sockib.springresourceserver.model.dto.converter.ProductReviewDtoConverter;
+import com.sockib.springresourceserver.model.dto.converter.ToProductReviewDtoConverter;
 import com.sockib.springresourceserver.model.dto.input.ReviewInputDto;
 import com.sockib.springresourceserver.model.embeddable.FiveStarScore;
 import com.sockib.springresourceserver.model.embeddable.Money;
@@ -21,7 +21,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final ProductReviewRepository productReviewRepository;
-    private final ProductReviewDtoConverter productReviewDtoConverter;
+    private final ToProductReviewDtoConverter productReviewConverter;
 
     public ProductReviewServiceImpl(BoughtProductService boughtProductService,
                                     UserRepository userRepository,
@@ -31,7 +31,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.productReviewRepository = productReviewRepository;
-        this.productReviewDtoConverter = new ProductReviewDtoConverter();
+        this.productReviewConverter = new ToProductReviewDtoConverter();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
         var productReview = productReviewRepository.findById(id)
                 .orElseThrow(() -> new ProductReviewNotFoundException("product with id: " + id + " not found"));
 
-        var productReviewDto = productReviewDtoConverter.convert(productReview);
+        var productReviewDto = productReviewConverter.convert(productReview);
 
         return productReviewDto;
     }
@@ -70,7 +70,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
         var productReview = productReviewRepository.findByProductIdAndOwnerEmail(productId, email)
                 .orElseThrow(() -> new ProductReviewNotFoundException("user: " + email + " did not review product with id: " + productId));
 
-        var productReviewDto = productReviewDtoConverter.convert(productReview);
+        var productReviewDto = productReviewConverter.convert(productReview);
 
         return productReviewDto;
     }

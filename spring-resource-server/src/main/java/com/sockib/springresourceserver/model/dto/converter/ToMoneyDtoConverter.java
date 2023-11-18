@@ -3,7 +3,7 @@ package com.sockib.springresourceserver.model.dto.converter;
 import com.sockib.springresourceserver.model.dto.MoneyDto;
 import com.sockib.springresourceserver.model.embeddable.Money;
 
-public class MoneyToMoneyDtoConverter implements ToDtoConverter<Money, MoneyDto> {
+public class ToMoneyDtoConverter implements ToDtoConverter<Money, MoneyDto> {
     @Override
     public MoneyDto convert(Money money) {
         var moneyDto = new MoneyDto();

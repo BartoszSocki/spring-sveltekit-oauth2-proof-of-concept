@@ -1,7 +1,7 @@
 package com.sockib.springresourceserver.service.boughtproduct;
 
 import com.sockib.springresourceserver.model.dto.BoughtProductDto;
-import com.sockib.springresourceserver.model.dto.converter.BoughtProductToBoughtProductDtoConverter;
+import com.sockib.springresourceserver.model.dto.converter.ToBoughtProductDtoConverter;
 import com.sockib.springresourceserver.model.respository.boughtproducts.BoughtProductRepository;
 import com.sockib.springresourceserver.util.search.page.Pageable;
 import com.sockib.springresourceserver.util.search.page.SimplePage;
@@ -15,14 +15,14 @@ public class BoughtProductServiceImpl implements BoughtProductService {
 
     private final BoughtProductRepository boughtProductRepository;
     private final SortToBoughtProductSorterConverter sortToBoughtProductSorterConverter;
-    private final BoughtProductToBoughtProductDtoConverter boughtProductConverter;
+    private final ToBoughtProductDtoConverter boughtProductConverter;
     private final ModelMapper modelMapper;
     private final static Integer MAX_BOUGHT_PRODUCT_PAGE_SIZE = 10;
 
     public BoughtProductServiceImpl(BoughtProductRepository boughtProductRepository, ModelMapper modelMapper) {
         this.boughtProductRepository = boughtProductRepository;
         this.sortToBoughtProductSorterConverter = new SortToBoughtProductSorterConverter();
-        this.boughtProductConverter = new BoughtProductToBoughtProductDtoConverter();
+        this.boughtProductConverter = new ToBoughtProductDtoConverter();
         this.modelMapper = modelMapper;
     }
 
