@@ -1,7 +1,7 @@
-package com.sockib.springresourceserver.service.transaction;
+package com.sockib.springresourceserver.service.order;
 
 import com.sockib.springresourceserver.model.dto.input.AddressInput;
-import com.sockib.springresourceserver.model.dto.input.TransactionProductInput;
+import com.sockib.springresourceserver.model.dto.input.OrderProductInput;
 import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.Address;
 import com.sockib.springresourceserver.model.entity.Product;
@@ -11,7 +11,7 @@ import com.sockib.springresourceserver.model.exception.NotEnoughCashException;
 import com.sockib.springresourceserver.model.exception.ProductNotAvailable;
 import com.sockib.springresourceserver.model.exception.ProductNotExistException;
 import com.sockib.springresourceserver.model.respository.products.ProductRepository;
-import com.sockib.springresourceserver.model.respository.TransactionRepository;
+import com.sockib.springresourceserver.model.respository.OrderRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -21,19 +21,19 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 @Service
-public class TransactionServiceImpl implements TransactionService {
+public class OrderServiceImpl implements OrderService {
 
-    private TransactionRepository transactionRepository;
+    private OrderRepository orderRepository;
     private ProductRepository productRepository;
     private UserRepository userRepository;
     private ProductToBoughtProductConverter productToBoughtProductConverter;
     private ModelMapper modelMapper;
 
-    public TransactionServiceImpl(TransactionRepository transactionRepository,
-                                  ProductRepository productRepository,
-                                  UserRepository userRepository,
-                                  ModelMapper modelMapper) {
-        this.transactionRepository = transactionRepository;
+    public OrderServiceImpl(OrderRepository orderRepository,
+                            ProductRepository productRepository,
+                            UserRepository userRepository,
+                            ModelMapper modelMapper) {
+        this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.productToBoughtProductConverter = new ProductToBoughtProductConverter();
@@ -42,14 +42,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public void buyProducts(List<TransactionProductInput> productsInput, AddressInput addressInput, String email) {
+    public void buyProducts(List<OrderProductInput> productsInput, AddressInput addressInput, String email) {
         var buyer = userRepository.findUserByEmail(email).orElse(new User(email, new Money(1000.0, "USD")));
         var productsIds = productsInput.stream()
-                .map(TransactionProductInput::getProductId)
+                .map(OrderProductInput::getProductId)
                 .toList();
 
         var productsQuantities = productsInput.stream()
-                .map(TransactionProductInput::getProductQuantity)
+                .map(OrderProductInput::getProductQuantity)
                 .toList();
 
         // TODO: use entity graph
@@ -86,7 +86,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         updateProductsQuantities(products, productsQuantities);
 
-        transactionRepository.save(transaction);
+        orderRepository.save(transaction);
     }
 
     private Double getProductPriceSum(List<Product> products, List<Integer> quantities) {

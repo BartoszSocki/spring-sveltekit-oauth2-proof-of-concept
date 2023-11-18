@@ -5,7 +5,7 @@ import com.sockib.springresourceserver.model.entity.Address;
 import com.sockib.springresourceserver.model.entity.BoughtProduct;
 import com.sockib.springresourceserver.model.entity.Order;
 import com.sockib.springresourceserver.model.respository.CategoryRepository;
-import com.sockib.springresourceserver.model.respository.TransactionRepository;
+import com.sockib.springresourceserver.model.respository.OrderRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.*;
 public class OrderRepositoryTest {
 
     @Autowired
-    TransactionRepository transactionRepository;
+    OrderRepository orderRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -63,7 +63,7 @@ public class OrderRepositoryTest {
 
         transaction.setBoughtProducts(List.of(boughtProduct1));
 
-        var persistedTransaction = transactionRepository.save(transaction);
+        var persistedTransaction = orderRepository.save(transaction);
 
         assertThat(persistedTransaction).isNotNull();
         assertThat(persistedTransaction.getBoughtProducts()).isNotNull();

@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TransactionProductInput {
+public class OrderProductInput {
 
     @NotNull(message = "id is mandatory")
     @PositiveOrZero(message = "id cannot be negative")
