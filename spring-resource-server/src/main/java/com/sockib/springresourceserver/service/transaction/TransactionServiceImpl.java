@@ -7,6 +7,9 @@ import com.sockib.springresourceserver.model.entity.Address;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Transaction;
 import com.sockib.springresourceserver.model.entity.User;
+import com.sockib.springresourceserver.model.exception.NotEnoughCashException;
+import com.sockib.springresourceserver.model.exception.ProductNotAvailable;
+import com.sockib.springresourceserver.model.exception.ProductNotExistException;
 import com.sockib.springresourceserver.model.respository.products.ProductRepository;
 import com.sockib.springresourceserver.model.respository.TransactionRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
@@ -53,9 +56,15 @@ public class TransactionServiceImpl implements TransactionService {
         // TODO: use entity graph
         var products = productRepository.findProductsByIdIn(productsIds);
 
-        throwIfProductsDontExists(products, productsIds);
-        throwIfProductsAreNotAvailable(products, productsQuantities);
-        throwIfUserCannotBuyProducts(products, productsQuantities, buyer);
+        if (!allProductsExist(products, productsIds)) {
+            throw new ProductNotExistException("there is at least one product in: " + productsIds + " that don't exist");
+        }
+        if (!areProductsAvailable(products, productsQuantities)) {
+            throw new ProductNotAvailable("there is at least one product in: " + productsIds + " that is not available");
+        }
+        if (!canUserBuyProducts(products, productsQuantities, buyer)) {
+            throw new NotEnoughCashException("user don't have enough cash");
+        }
 
         var boughtProducts = products.stream()
                 .map(productToBoughtProductConverter::convert)
@@ -87,35 +96,25 @@ public class TransactionServiceImpl implements TransactionService {
                 .reduce(0.0, Double::sum);
     }
 
-    private void throwIfUserCannotBuyProducts(List<Product> products, List<Integer> quantities, User user) {
+    private boolean canUserBuyProducts(List<Product> products, List<Integer> quantities, User user) {
         var areCurrenciesTheSame = products.stream().allMatch(p -> "USD".equals(p.getPrice().getCurrency()));
         if (!areCurrenciesTheSame) {
             throw new RuntimeException("TODO: add MixedCurrenciesException");
         }
 
         var priceSum = getProductPriceSum(products, quantities);
-
         var userMoneyAmount = user.getUserMoney().getAmount();
-        if (priceSum > userMoneyAmount) {
-            throw new RuntimeException("TODO: add NotEnoughCashException");
-        }
+
+        return priceSum <= userMoneyAmount;
     }
 
-    private void throwIfProductsDontExists(List<Product> products, List<Long> productsIds) {
-        var productsIdsSet = Set.copyOf(productsIds);
-
-        if (productsIdsSet.size() != products.size()) {
-            throw new RuntimeException("TODO: add ProductNotExistsException");
-        }
+    private boolean allProductsExist(List<Product> products, List<Long> productsIds) {
+        return productsIds.size() == products.size();
     }
 
-    private void throwIfProductsAreNotAvailable(List<Product> products, List<Integer> quantities) {
-        var areAvailable = IntStream.range(0, quantities.size())
+    private boolean areProductsAvailable(List<Product> products, List<Integer> quantities) {
+        return IntStream.range(0, quantities.size())
                 .allMatch(i -> products.get(i).getInventory().getQuantity() >= quantities.get(i));
-
-        if (!areAvailable) {
-            throw new RuntimeException("TODO: add ProductNotAvailableException");
-        }
     }
 
     private void updateProductsQuantities(List<Product> products, List<Integer> quantities) {

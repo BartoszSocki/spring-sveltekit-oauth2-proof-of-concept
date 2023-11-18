@@ -1,11 +1,11 @@
-import query from './query.gql?raw'
-import { API_URL } from '$env/static/private'
+import { REST_API_URL } from '$env/static/private'
+import { redirect } from '@sveltejs/kit';
+import { logger } from '../../lib/server/Logger/index.js'
 
 export const actions = {
     default: async ({ request, fetch }) => {
         const data = await request.formData();
 
-        console.log(data)
         const productsIds = data.get('products_ids').split(',').map(x => parseInt(x))
         const productsQuantity = data.get('products_quantity').split(',').map(x => parseInt(x))
 
@@ -20,28 +20,28 @@ export const actions = {
             }
         })
 
-        const variables = {
-            address: {
-                country: data.get('country'),
-                city: data.get('city'),
-                postalCode: data.get('postal_code'),
-                addressLine: data.get('street'),
-            },
-            products
-        } 
-
-        const response = await fetch(API_URL, {
+        const response = await fetch(`${REST_API_URL}/products/buy`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                query, variables
+                address: {
+                    country: data.get('country'),
+                    city: data.get('city'),
+                    postalCode: data.get('postal_code'),
+                    addressLine: data.get('street'),
+                },
+                products
             })
         });
 
-        const result = await response.json()
+        if (response.status >= 400) {
+            logger.info(`error when trying to buy cart with products: ${productsIds}`)
+            throw redirect(303, '/cart?status=error')
+        }
 
-        console.log(result)
+        logger.info(`cart bought`)
+        throw redirect(303, '/cart?status=success')
     }
 }

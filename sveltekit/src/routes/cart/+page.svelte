@@ -1,6 +1,7 @@
 <script>
 	import CartProduct from '$lib/cart/CartProduct.svelte';
     import { removeFromCart } from '$lib/shared/cart/cart.js'
+	import Legend from '../../lib/component/Legend.svelte';
 
     export let data;
 
@@ -47,7 +48,7 @@
 
     <form method="POST">
         <fieldset>
-            <legend>Shipping Address</legend>
+            <Legend>Shipping Address</Legend>
             <label>
                 Country
                 <input required pattern="[\w\s]+" name="country" type="text" placeholder="Country..." />
@@ -111,16 +112,6 @@
         border: none;
         color: red;
         font-weight: bold;
-    }
-
-    .btn.quantity {
-        color: white;
-        font-weight: bold;
-        /* font-size: 2rem; */
-    }
-
-    .quantity:hover {
-        color: #a8d5ed;
     }
 
     div.space {

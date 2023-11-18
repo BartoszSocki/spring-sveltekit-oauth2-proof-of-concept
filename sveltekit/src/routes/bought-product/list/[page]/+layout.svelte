@@ -19,7 +19,7 @@
     }
 </script>
 
-<main>
+<div>
     <header>
         {#if error}
             <div class="status status--error">
@@ -45,7 +45,7 @@
             <a href={nextUrl}>next</a>
         {/if}
     </footer>
-</main>
+</div>
 
 <style>
     footer {

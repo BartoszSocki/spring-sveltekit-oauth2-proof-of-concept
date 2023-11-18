@@ -1,3 +1,0 @@
-mutation BuyProducts($address: AddressInput!, $products: [TransactionProductInput!]!) {
-    buyProducts(address: $address, products: $products)
-}
