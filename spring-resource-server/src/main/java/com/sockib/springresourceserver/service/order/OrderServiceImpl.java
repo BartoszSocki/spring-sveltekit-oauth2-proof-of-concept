@@ -7,6 +7,7 @@ import com.sockib.springresourceserver.model.entity.Address;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Order;
 import com.sockib.springresourceserver.model.entity.User;
+import com.sockib.springresourceserver.model.exception.InvalidOrderException;
 import com.sockib.springresourceserver.model.exception.NotEnoughCashException;
 import com.sockib.springresourceserver.model.exception.ProductNotAvailable;
 import com.sockib.springresourceserver.model.exception.ProductNotExistException;
@@ -18,6 +19,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 @Service
@@ -59,6 +61,9 @@ public class OrderServiceImpl implements OrderService {
         }
         if (!areProductsAvailable(products, productsQuantities)) {
             throw new ProductNotAvailable("there is at least one product in: " + productsIds + " that is not available");
+        }
+        if (!userDontOwnProducts(products, buyer)) {
+            throw new InvalidOrderException("owner cannot buy own product");
         }
         if (!canUserBuyProducts(products, productsQuantities, buyer)) {
             throw new NotEnoughCashException("user don't have enough cash");
@@ -113,6 +118,10 @@ public class OrderServiceImpl implements OrderService {
     private boolean areProductsAvailable(List<Product> products, List<Integer> quantities) {
         return IntStream.range(0, quantities.size())
                 .allMatch(i -> products.get(i).getInventory().getQuantity() >= quantities.get(i));
+    }
+
+    private boolean userDontOwnProducts(List<Product> products, User buyer) {
+        return products.stream().noneMatch(p -> Objects.equals(p.getOwner().getId(), buyer.getId()));
     }
 
     private void updateProductsQuantities(List<Product> products, List<Integer> quantities) {
