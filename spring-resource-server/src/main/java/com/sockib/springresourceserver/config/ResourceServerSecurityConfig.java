@@ -1,5 +1,6 @@
 package com.sockib.springresourceserver.config;
 
+import com.sockib.springresourceserver.filter.NewUserPersistFilter;
 import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.User;
 import com.sockib.springresourceserver.model.respository.UserRepository;
@@ -15,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.cors.CorsConfiguration;
@@ -34,6 +36,7 @@ public class ResourceServerSecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
 //                .authorizeHttpRequests(x -> x.anyRequest().authenticated())
+                .addFilterAfter(newUserPersistFilter(), AuthorizationFilter.class)
                 .authorizeHttpRequests(x -> x.anyRequest().permitAll())
                 .oauth2ResourceServer(x -> x.jwt(y -> y
 //                        .authenticationManager()
@@ -43,6 +46,11 @@ public class ResourceServerSecurityConfig {
                 .csrf(x -> x.disable())
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
+    }
+
+    @Bean
+    NewUserPersistFilter newUserPersistFilter() {
+        return new NewUserPersistFilter(userRepository);
     }
 
     @Bean

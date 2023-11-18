@@ -12,6 +12,7 @@ import com.sockib.springresourceserver.model.respository.ProductReviewRepository
 import com.sockib.springresourceserver.model.respository.UserRepository;
 import com.sockib.springresourceserver.model.respository.products.ProductRepository;
 import com.sockib.springresourceserver.service.boughtproduct.BoughtProductService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,7 +37,10 @@ public class ProductReviewServiceImpl implements ProductReviewService {
 
     @Override
     public void putReview(ReviewInputDto reviewInputDto, Long productId, String email) {
-        var reviewer = userRepository.findUserByEmail(email).orElse(new User(email, new Money(1000.0, "USD")));
+//        var reviewer = userRepository.findUserByEmail(email).orElse(new User(email, new Money(1000.0, "USD")));
+        var reviewer = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("user with email: " + email + " not found"));
+
         var product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("TODO: add ProductNotFoundException"));
 
         if (!isUserOwningProduct(reviewer.getId(), productId)) {

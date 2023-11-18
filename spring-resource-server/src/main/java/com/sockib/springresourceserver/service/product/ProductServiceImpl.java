@@ -18,6 +18,7 @@ import com.sockib.springresourceserver.util.search.page.SimplePageImpl;
 import com.sockib.springresourceserver.util.search.sort.Sort;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -88,8 +89,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Product addNewProduct(@Valid ProductInput productInput, String email) {
+//        var owner = userRepository.findUserByEmail(email)
+//                .orElse(new User(email, new Money(0.0, "USD")));
         var owner = userRepository.findUserByEmail(email)
-                .orElse(new User(email, new Money(0.0, "USD")));
+                .orElseThrow(() -> new UsernameNotFoundException("user with email: " + email + " not found"));
 
         var inputTags = productInput.getTags();
         var existingTags = tagRepository.findAllByNameIn(inputTags);

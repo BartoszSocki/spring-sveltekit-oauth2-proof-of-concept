@@ -14,6 +14,7 @@ import com.sockib.springresourceserver.model.respository.OrderRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,7 +47,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void buyProducts(List<OrderProductInput> productsInput, AddressInput addressInput, String email) {
-        var buyer = userRepository.findUserByEmail(email).orElse(new User(email, new Money(1000.0, "USD")));
+//        var buyer = userRepository.findUserByEmail(email).orElse(new User(email, new Money(1000.0, "USD")));
+        var buyer = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("user with email: " + email + " not found"));
         var productsIds = productsInput.stream()
                 .map(OrderProductInput::getProductId)
                 .toList();
