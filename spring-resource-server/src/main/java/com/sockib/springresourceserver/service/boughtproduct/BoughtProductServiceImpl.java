@@ -2,6 +2,7 @@ package com.sockib.springresourceserver.service.boughtproduct;
 
 import com.sockib.springresourceserver.model.dto.BoughtProductDto;
 import com.sockib.springresourceserver.model.dto.converter.ToBoughtProductDtoConverter;
+import com.sockib.springresourceserver.model.exception.PageSizeTooLargeException;
 import com.sockib.springresourceserver.model.respository.boughtproducts.BoughtProductRepository;
 import com.sockib.springresourceserver.util.search.page.Pageable;
 import com.sockib.springresourceserver.util.search.page.SimplePage;
@@ -31,7 +32,7 @@ public class BoughtProductServiceImpl implements BoughtProductService {
                                                              Sort sort,
                                                              String email) {
         if (pageable.getLimit() > MAX_BOUGHT_PRODUCT_PAGE_SIZE) {
-            throw new RuntimeException("TODO: add PageSizeTooLargeException");
+            throw new PageSizeTooLargeException("page size: " + pageable.getLimit() + " too large (>" + MAX_BOUGHT_PRODUCT_PAGE_SIZE +")");
         }
 
         var sorter = sortToBoughtProductSorterConverter.convert(sort);

@@ -6,6 +6,7 @@ import com.sockib.springresourceserver.model.dto.converter.ToDtoConverter;
 import com.sockib.springresourceserver.model.dto.input.ProductInput;
 import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.*;
+import com.sockib.springresourceserver.model.exception.CurrencyNotSupportedException;
 import com.sockib.springresourceserver.model.respository.CategoryRepository;
 import com.sockib.springresourceserver.model.respository.products.ProductRepository;
 import com.sockib.springresourceserver.model.respository.TagRepository;
@@ -99,7 +100,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElse(new Category(productInput.getCategory()));
 
         if (!"USD".equals(productInput.getPrice().getCurrency())) {
-            throw new RuntimeException("TODO: add CurrencyNotSupportedException");
+            throw new CurrencyNotSupportedException("Only supported currency is USD (for now)");
         }
 
         var money = new Money();

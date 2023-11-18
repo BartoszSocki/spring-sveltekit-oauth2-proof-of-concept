@@ -4,6 +4,7 @@ import com.sockib.springresourceserver.model.entity.Category_;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Product_;
 import com.sockib.springresourceserver.model.entity.Tag_;
+import com.sockib.springresourceserver.model.exception.InvalidSearchFilterException;
 import com.sockib.springresourceserver.util.search.filter.SearchFilter;
 import com.sockib.springresourceserver.util.search.filter.SearchOperation;
 import com.sockib.springresourceserver.util.search.filter.Specification;
@@ -42,7 +43,7 @@ public class SearchFilterToProductSpecificationConverterImpl implements SearchFi
             return withTags(tags);
         }
 
-        throw new RuntimeException("combination of field name: " + field + " and operator: " + op + " not found");
+        throw new InvalidSearchFilterException("invalid combination of fieldName: " + field + " and operator: " + op);
     }
 
     @Override

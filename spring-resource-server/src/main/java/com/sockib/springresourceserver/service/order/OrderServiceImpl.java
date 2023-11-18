@@ -7,10 +7,7 @@ import com.sockib.springresourceserver.model.entity.Address;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Order;
 import com.sockib.springresourceserver.model.entity.User;
-import com.sockib.springresourceserver.model.exception.InvalidOrderException;
-import com.sockib.springresourceserver.model.exception.NotEnoughCashException;
-import com.sockib.springresourceserver.model.exception.ProductNotAvailable;
-import com.sockib.springresourceserver.model.exception.ProductNotExistException;
+import com.sockib.springresourceserver.model.exception.*;
 import com.sockib.springresourceserver.model.respository.products.ProductRepository;
 import com.sockib.springresourceserver.model.respository.OrderRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
@@ -102,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
     private boolean canUserBuyProducts(List<Product> products, List<Integer> quantities, User user) {
         var areCurrenciesTheSame = products.stream().allMatch(p -> "USD".equals(p.getPrice().getCurrency()));
         if (!areCurrenciesTheSame) {
-            throw new RuntimeException("TODO: add MixedCurrenciesException");
+            throw new MixedCurrenciesException("mixed currencies");
         }
 
         var priceSum = getProductPriceSum(products, quantities);
