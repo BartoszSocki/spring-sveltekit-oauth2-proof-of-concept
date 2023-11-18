@@ -49,12 +49,4 @@ public class ProductController {
         return productService.findProductsByIds(ids);
     }
 
-    @MutationMapping
-    Boolean addProduct(@Argument @Valid ProductInput product) {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        var email = authentication.getName();
-
-        productService.addNewProduct(product, email);
-        return true;
-    }
 }
