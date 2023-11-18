@@ -27,16 +27,19 @@ public class OrderServiceImpl implements OrderService {
     private UserRepository userRepository;
     private ProductToBoughtProductConverter productToBoughtProductConverter;
     private ModelMapper modelMapper;
+    private final AddressRepository addressRepository;
 
     public OrderServiceImpl(OrderRepository orderRepository,
                             ProductRepository productRepository,
                             UserRepository userRepository,
-                            ModelMapper modelMapper) {
+                            ModelMapper modelMapper,
+                            AddressRepository addressRepository) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.productToBoughtProductConverter = new ProductToBoughtProductConverter();
         this.modelMapper = modelMapper;
+        this.addressRepository = addressRepository;
     }
 
     @Override
@@ -72,22 +75,27 @@ public class OrderServiceImpl implements OrderService {
 
         boughtProducts.forEach(b -> b.setOwner(buyer));
 
-        var address = modelMapper.map(addressInput, Address.class);
+        var address = addressRepository.findByAllFieldsAndUserId(addressInput.getCountry(),
+                        addressInput.getCity(),
+                        addressInput.getAddressLine(),
+                        addressInput.getPostalCode(),
+                        buyer.getId())
+                .orElse(modelMapper.map(addressInput, Address.class));
         address.setUser(buyer);
 
-        var transaction = new Order();
-        transaction.setBuyer(buyer);
-        transaction.setOrderStatus("BOUGHT");
-        transaction.setBoughtProducts(boughtProducts);
-        transaction.setAddress(address);
-        boughtProducts.forEach(bp -> bp.setOrder(transaction));
+        var order = new Order();
+        order.setBuyer(buyer);
+        order.setOrderStatus("BOUGHT");
+        order.setBoughtProducts(boughtProducts);
+        order.setAddress(address);
+        boughtProducts.forEach(bp -> bp.setOrder(order));
 
         var priceSum = getProductPriceSum(products, productsQuantities);
         updateBuyerMoney(buyer, priceSum);
 
         updateProductsQuantities(products, productsQuantities);
 
-        orderRepository.save(transaction);
+        orderRepository.save(order);
     }
 
     private Double getProductPriceSum(List<Product> products, List<Integer> quantities) {
