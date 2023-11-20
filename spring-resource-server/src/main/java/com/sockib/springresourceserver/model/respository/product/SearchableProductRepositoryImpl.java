@@ -102,17 +102,6 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
                 .forEach(pair -> pair.getSt().setProductScore(pair.getNd()));
 
         return products;
-
-//        var productMap = products.stream()
-//                .collect(Collectors.toMap(WithCreationAndUpdateTimestamp::getId, p -> p));
-//
-//        return pairs.stream()
-//                .map(pair -> {
-//                    var p = productMap.get(pair.getSt());
-//                    p.setProductScore(pair.getNd());
-//                    return p;
-//                })
-//                .toList();
     }
 
     private Long getNumberOfProductsMatchingSpecification(Specification<Product> specification) {

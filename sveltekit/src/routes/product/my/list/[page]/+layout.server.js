@@ -9,7 +9,7 @@ export async function load({ cookies, params, url, fetch }) {
     logger.info('user products: fetched user correlated with session: ' + user.email)
 
     const userFilter = filter('user', 'EQ', user.email)
-    logger.info('user filter for products added: ', JSON.stringify(filter))
+    logger.info('user filter for products added: ', JSON.stringify(userFilter))
 
     let filters = [userFilter];
 
