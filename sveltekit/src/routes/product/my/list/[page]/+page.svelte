@@ -1,14 +1,14 @@
 <script>
-	import Product from "$lib/product/Product.svelte";
-    import { addToCart } from '$lib/shared/cart/cart.js'
+	import Product from '$lib/product/Product.svelte';
+    import { PUBLIC_BACKEND_URL } from '$env/static/public'
 
     export let data;
-    // $: console.log(data)
     $: products = data.data.searchProducts.content
-    // $: products = []
 
-    function addItemToCart(id) {
-        addToCart(id)
+    function deleteProduct(id) {
+        fetch(`${PUBLIC_BACKEND_URL}/product/${id}`, { 
+            method: 'DELETE'
+        })
     }
 </script>
 
@@ -17,7 +17,7 @@
         {#each products as product (product.id)}
             <li>
                 <Product product={product}>
-                    <button on:click={() => addItemToCart(product.id)}>add to cart</button>
+                    <button on:click={() => deleteProduct(product.id)}>delete</button>
                 </Product>
             </li>
         {/each}
@@ -44,5 +44,8 @@
         margin: 0;
         padding: 1rem;
         height: fit-content;
+        background: transparent;
+        border: 2px solid red;
+        color: red;
     }
 </style>

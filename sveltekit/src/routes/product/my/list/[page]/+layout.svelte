@@ -51,14 +51,14 @@
 </script>
 
 <main>
-    <!-- <div class="filters">
+    <div class="filters">
         <PriceFilter searchParams={filterParams} isValid={isValid} />
         <CategoryFilter searchParams={filterParams} isValid={isValid} />
         <TagsFilter searchParams={filterParams} />
         <Sorter searchParams={filterParams} />
         
         <button on:click={search} disabled={!isDataValid}>search</button>
-    </div> -->
+    </div>
 
     <slot />
 

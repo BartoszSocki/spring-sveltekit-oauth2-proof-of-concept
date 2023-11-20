@@ -43,7 +43,7 @@ import java.util.List;
 @Entity
 public class Product extends WithCreationAndUpdateTimestamp {
 
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     private String name;
 
