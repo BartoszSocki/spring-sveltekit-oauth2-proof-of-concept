@@ -1,23 +1,19 @@
 package com.sockib.springresourceserver.controllers;
 
-import com.sockib.springresourceserver.model.dto.*;
+import com.sockib.springresourceserver.model.dto.ProductDto;
 import com.sockib.springresourceserver.model.dto.input.PageableInput;
-import com.sockib.springresourceserver.model.dto.input.ProductInput;
 import com.sockib.springresourceserver.model.dto.input.SearchInput;
 import com.sockib.springresourceserver.model.dto.input.SortInput;
 import com.sockib.springresourceserver.service.product.ProductService;
-import com.sockib.springresourceserver.util.search.page.Pageable;
 import com.sockib.springresourceserver.util.search.filter.SearchFilter;
+import com.sockib.springresourceserver.util.search.page.Pageable;
 import com.sockib.springresourceserver.util.search.page.SimplePage;
 import com.sockib.springresourceserver.util.search.sort.Sort;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
