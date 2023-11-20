@@ -2,7 +2,8 @@ import { API_URL } from '$env/static/private'
 import query from './query.gql?raw'
 
 export async function load({ params, url, fetch }) {
-    let filters = [];
+    let filters = [filter('deleted', 'EQ', 'false')];
+
     for (const [key, value] of url.searchParams.entries()) {
         const filter = paramToFilterConverter(key, value)
         if (filter !== undefined && filter !== null) {

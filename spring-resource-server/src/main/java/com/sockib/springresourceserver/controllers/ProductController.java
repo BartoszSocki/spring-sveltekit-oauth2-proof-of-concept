@@ -26,6 +26,7 @@ public class ProductController {
     private final ProductService productService;
     private final ModelMapper modelMapper;
 
+    // TODO: convert list to set
     @QueryMapping
     SimplePage<ProductDto> searchProducts(@Argument @Valid List<SearchInput> filters,
                                           @Argument @Valid PageableInput pageable,
