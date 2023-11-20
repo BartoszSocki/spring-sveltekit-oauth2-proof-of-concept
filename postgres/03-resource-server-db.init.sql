@@ -50,6 +50,8 @@ create table if not exists resource_server.product_catalog (
 	created_at timestamp null default now(),
 	updated_at timestamp null default now(),
 
+	is_deleted boolean not null default false,
+
 	name text not null,
 	price numeric(10, 2) not null check (price > 0),
 	currency text not null,

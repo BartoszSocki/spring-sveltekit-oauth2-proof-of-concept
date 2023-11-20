@@ -5,7 +5,8 @@
 	import ProductQuantity from "../component/ProductQuantity.svelte";
 	import ProductTitle from "../component/ProductTitle.svelte";
 
-	export let product;
+	export let product
+	export let deleted = false
 
 	const { name, category, price, quantity, productScore, tags } = product;
 </script>
@@ -15,7 +16,7 @@
 		<img src="/images/image-not-found.png" alt={name} />
 	</div>
 	<div class="content">
-		<ProductTitle name={name} category={category} />
+		<ProductTitle name={name} category={category} deleted={deleted} />
 
 		<div class="title">
 			{#if productScore.averageScore !== null}

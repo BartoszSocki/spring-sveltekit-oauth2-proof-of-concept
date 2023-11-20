@@ -40,6 +40,7 @@ input PageableInput {
 
 type Product {
     id: ID!
+    isDeleted: Boolean!
     ownerId: Int!
     name: String!
     price: Money!

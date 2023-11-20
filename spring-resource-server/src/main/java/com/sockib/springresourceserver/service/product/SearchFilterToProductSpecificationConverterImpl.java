@@ -1,9 +1,6 @@
 package com.sockib.springresourceserver.service.product;
 
-import com.sockib.springresourceserver.model.entity.Category_;
-import com.sockib.springresourceserver.model.entity.Product;
-import com.sockib.springresourceserver.model.entity.Product_;
-import com.sockib.springresourceserver.model.entity.Tag_;
+import com.sockib.springresourceserver.model.entity.*;
 import com.sockib.springresourceserver.model.exception.InvalidSearchFilterException;
 import com.sockib.springresourceserver.util.search.filter.SearchFilter;
 import com.sockib.springresourceserver.util.search.filter.SearchOperation;
@@ -43,6 +40,15 @@ public class SearchFilterToProductSpecificationConverterImpl implements SearchFi
             return withTags(tags);
         }
 
+        if ("deleted".equals(field) && SearchOperation.EQ.equals(op)) {
+            var isDeleted = Boolean.parseBoolean(value);
+            return withDeleted(isDeleted);
+        }
+
+        if ("user".equals(field) && SearchOperation.EQ.equals(op)) {
+            return withOwner(value);
+        }
+
         throw new InvalidSearchFilterException("invalid combination of fieldName: " + field + " and operator: " + op);
     }
 
@@ -52,6 +58,14 @@ public class SearchFilterToProductSpecificationConverterImpl implements SearchFi
                 .map(this::convert)
                 .reduce(Specification::and)
                 .orElse(Specification.empty());
+    }
+
+    private Specification<Product> withOwner(String email) {
+        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(path.get(Product_.OWNER).get(User_.EMAIL), email);
+    }
+
+    public Specification<Product> withDeleted(boolean isDeleted) {
+        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(path.get(Product_.IS_DELETED), isDeleted);
     }
 
     public Specification<Product> nameLike(String name) {

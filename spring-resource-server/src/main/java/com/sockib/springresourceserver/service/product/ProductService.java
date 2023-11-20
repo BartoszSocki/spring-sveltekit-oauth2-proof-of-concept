@@ -16,4 +16,5 @@ public interface ProductService {
     List<ProductDto> findProductsByIds(List<Long> ids);
     Product addNewProduct(ProductInput productInput, String email);
 
+    void deleteProduct(Long productId, String email);
 }

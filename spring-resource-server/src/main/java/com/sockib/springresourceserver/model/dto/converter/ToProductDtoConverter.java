@@ -16,6 +16,7 @@ public class ToProductDtoConverter implements ToDtoConverter<Product, ProductDto
 
         var productDto = new ProductDto();
         productDto.setId(product.getId());
+        productDto.setIsDeleted(product.getIsDeleted());
         productDto.setOwnerId(product.getOwner().getId());
         productDto.setName(product.getName());
         productDto.setPrice(moneyDto);

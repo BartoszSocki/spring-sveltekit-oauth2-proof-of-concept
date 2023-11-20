@@ -2,6 +2,7 @@ import { Session } from '$lib/db';
 import { getRandomValues } from 'crypto'
 import dayjs from 'dayjs';
 import { anonymousUserId } from '$lib/db';
+import { User } from '../../db';
 
 const base64Alphabet = 'abcdefghijklkmnopqrstuvwxyz12345ABCDEFGHIJKLKMNOPQRSTUVWXYZ67890'
 
@@ -42,6 +43,20 @@ export async function newAnonymousSession({ ipAddress }) {
     })
 
     return session
+}
+
+export async function findUserBySessionId(sessionId) {
+    const session = await findSessionById(sessionId)
+    if (!session) {
+        return null
+    }
+
+    const user = await User.findByPk(session.userId)
+    if (!user) {
+        return null
+    }
+
+    return user
 }
 
 export async function rotateSession({ oldSessionId, userId, ipAddress }) {

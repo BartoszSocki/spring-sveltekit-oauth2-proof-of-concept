@@ -1,8 +1,17 @@
 import { API_URL } from '$env/static/private'
 import query from './query.gql?raw'
+import { findUserBySessionId } from '$lib/server/SessionManagement/index.js';
+import { logger } from '$lib/server/Logger'
 
-export async function load({ params, url, fetch }) {
-    let filters = [filter('deleted', 'EQ', 'false')];
+export async function load({ cookies, params, url, fetch }) {
+    const sessionId = cookies.get('sessionid')
+    const user = await findUserBySessionId(sessionId)
+    logger.info('user products: fetched user correlated with session: ' + user.email)
+
+    const userFilter = filter('user', 'EQ', user.email)
+    logger.info('user filter for products added: ', JSON.stringify(userFilter))
+
+    let filters = [userFilter];
 
     for (const [key, value] of url.searchParams.entries()) {
         const filter = paramToFilterConverter(key, value)
