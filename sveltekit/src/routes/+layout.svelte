@@ -21,6 +21,9 @@
                 <a href="/product/add">add new product</a>
             </li>
             <li>
+                <a href="/product/my/list/0">my products</a>
+            </li>
+            <li>
                 <a href="/bought-product/list/0">bought products</a>
             </li>
             {/if}
