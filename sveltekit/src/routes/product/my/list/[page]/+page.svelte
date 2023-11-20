@@ -5,10 +5,13 @@
     export let data;
     $: products = data.data.searchProducts.content
 
-    function deleteProduct(id) {
-        fetch(`${PUBLIC_BACKEND_URL}/product/${id}`, { 
+    async function deleteProduct(id) {
+        const response = await fetch(`${PUBLIC_BACKEND_URL}/product/${id}`, { 
             method: 'DELETE'
         })
+
+        const data = await response.json()
+        console.log({ data })
     }
 </script>
 

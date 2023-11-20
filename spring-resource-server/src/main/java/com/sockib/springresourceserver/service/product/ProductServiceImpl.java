@@ -126,6 +126,11 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
+    @Override
+    public void deleteProduct(Long productId, String email) {
+        productRepository.softDeleteProductByIdAndOwnerEmail(productId, email);
+    }
+
     private List<Tag> combineExistingTagsWithNewTags(List<String> allTagNames, List<Tag> existingTags) {
         Set<String> alreadyExistingTagNames = existingTags.stream()
                 .map(Tag::getName)
