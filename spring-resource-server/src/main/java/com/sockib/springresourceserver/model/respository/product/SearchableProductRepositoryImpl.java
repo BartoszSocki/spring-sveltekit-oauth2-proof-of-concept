@@ -1,10 +1,11 @@
-package com.sockib.springresourceserver.model.respository.products;
+package com.sockib.springresourceserver.model.respository.product;
 
 import com.sockib.springresourceserver.model.embeddable.ProductScore;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.ProductReview;
 import com.sockib.springresourceserver.model.entity.ProductReview_;
 import com.sockib.springresourceserver.model.entity.Product_;
+import com.sockib.springresourceserver.service.product.SearchFilterToProductSpecificationConverterImpl;
 import com.sockib.springresourceserver.util.search.filter.Specification;
 import com.sockib.springresourceserver.util.search.page.Pageable;
 import com.sockib.springresourceserver.util.search.page.SimplePage;

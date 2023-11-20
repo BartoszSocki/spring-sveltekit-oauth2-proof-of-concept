@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.model.respository.products;
+package com.sockib.springresourceserver.model.respository.product;
 
 import com.sockib.springresourceserver.model.entity.Product;
 import org.springframework.data.jpa.repository.EntityGraph;

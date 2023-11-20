@@ -8,7 +8,7 @@ import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.entity.*;
 import com.sockib.springresourceserver.model.exception.CurrencyNotSupportedException;
 import com.sockib.springresourceserver.model.respository.CategoryRepository;
-import com.sockib.springresourceserver.model.respository.products.ProductRepository;
+import com.sockib.springresourceserver.model.respository.product.ProductRepository;
 import com.sockib.springresourceserver.model.respository.TagRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
 import com.sockib.springresourceserver.util.search.filter.SearchFilter;

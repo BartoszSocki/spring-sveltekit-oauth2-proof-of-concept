@@ -43,6 +43,11 @@ public class SearchFilterToProductSpecificationConverterImpl implements SearchFi
             return withTags(tags);
         }
 
+        if ("deleted".equals(field) && SearchOperation.EQ.equals(op)) {
+            var isDeleted = Boolean.parseBoolean(value);
+            return withDeleted(isDeleted);
+        }
+
         throw new InvalidSearchFilterException("invalid combination of fieldName: " + field + " and operator: " + op);
     }
 
@@ -52,6 +57,10 @@ public class SearchFilterToProductSpecificationConverterImpl implements SearchFi
                 .map(this::convert)
                 .reduce(Specification::and)
                 .orElse(Specification.empty());
+    }
+
+    public Specification<Product> withDeleted(boolean isDeleted) {
+        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(path.get(Product_.IS_DELETED), isDeleted);
     }
 
     public Specification<Product> nameLike(String name) {
