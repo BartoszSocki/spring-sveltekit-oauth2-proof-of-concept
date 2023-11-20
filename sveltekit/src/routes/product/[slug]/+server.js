@@ -12,16 +12,12 @@ export async function DELETE({ params, fetch }) {
     if (response.status >= 400) {
         logger.info('cannot delete product with id: ' + productId)
         return json({
-            data: {
-                status: "error"
-            }
+            status: "error"
         })
     }
 
     logger.info('deleted product with id: ' + productId)
     return json({
-        data: {
-            status: "success"
-        }
+        status: "success"
     })
 }

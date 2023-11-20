@@ -2,10 +2,10 @@ query SearchProducts($filters: [SearchFilterInput]!, $pageable: PageableInput!, 
     searchProducts(filters: $filters, pageable: $pageable, sort: $sort) {
         content {
             id
+            isDeleted
             name
             category
             tags
-            description
             ownerId
             price {
                 amount

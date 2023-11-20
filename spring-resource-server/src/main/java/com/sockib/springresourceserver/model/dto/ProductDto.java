@@ -13,6 +13,7 @@ import java.util.List;
 public class ProductDto {
 
     private Long id;
+    private Boolean isDeleted;
     private Long ownerId;
     private String name;
     private MoneyDto price;
