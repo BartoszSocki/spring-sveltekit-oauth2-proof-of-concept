@@ -12,16 +12,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.cors.CorsConfiguration;
-
-import java.util.List;
 
 @Configuration
 @EnableMethodSecurity
@@ -41,7 +36,7 @@ public class ResourceServerSecurityConfig {
                 .oauth2ResourceServer(x -> x.jwt(y -> y
 //                        .authenticationManager()
 
-                        .jwkSetUri("http://localhost:8080/oauth2/jwks")
+                                .jwkSetUri("http://localhost:8080/oauth2/jwks")
                 ))
                 .csrf(x -> x.disable())
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

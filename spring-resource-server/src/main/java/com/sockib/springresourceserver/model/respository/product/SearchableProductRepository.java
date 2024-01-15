@@ -9,6 +9,7 @@ import com.sockib.springresourceserver.util.search.sort.Sorter;
 public interface SearchableProductRepository {
 
     SimplePage<Product> findProducts(Specification<Product> specification, Pageable pageable, Sorter<Product> sorter, String entityGraph);
+
     SimplePage<Product> findProducts(Specification<Product> specification, Pageable pageable, Sorter<Product> sorter);
 
 }

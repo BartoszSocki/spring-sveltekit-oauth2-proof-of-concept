@@ -1,8 +1,8 @@
 package com.sockib.springresourceserver.model.entity;
 
+import com.sockib.springresourceserver.model.embeddable.Money;
 import com.sockib.springresourceserver.model.embeddable.ProductScore;
 import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreationAndUpdateTimestamp;
-import com.sockib.springresourceserver.model.embeddable.Money;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -51,11 +51,11 @@ public class Product extends WithCreationAndUpdateTimestamp {
     private Money price;
 
     @ToString.Exclude
-    @OneToOne(cascade = CascadeType.ALL, fetch= FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private User owner;
 
     @ToString.Exclude
-    @OneToOne(cascade = CascadeType.ALL, fetch= FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ProductInventory inventory;
 
     @ToString.Exclude
@@ -67,7 +67,7 @@ public class Product extends WithCreationAndUpdateTimestamp {
     )
     private List<Tag> tags;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch= FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     @ToString.Exclude
     private Category category;
@@ -81,7 +81,7 @@ public class Product extends WithCreationAndUpdateTimestamp {
     private String description;
     private String imageUrl;
 
-//    @Transient
+    //    @Transient
     private ProductScore productScore;
 
 }

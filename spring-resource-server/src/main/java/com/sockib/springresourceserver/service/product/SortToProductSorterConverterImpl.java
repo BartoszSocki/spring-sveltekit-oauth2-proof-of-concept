@@ -7,6 +7,7 @@ import com.sockib.springresourceserver.util.search.sort.SortDirection;
 import com.sockib.springresourceserver.util.search.sort.Sorter;
 
 public class SortToProductSorterConverterImpl implements SortToProductSorterConverter {
+
     @Override
     public Sorter<Product> convert(Sort sort) {
         var dir = sort.getSortDirection();

@@ -26,4 +26,5 @@ public class ToBoughtProductDtoConverter implements ToDtoConverter<BoughtProduct
 
         return boughtProductDto;
     }
+
 }

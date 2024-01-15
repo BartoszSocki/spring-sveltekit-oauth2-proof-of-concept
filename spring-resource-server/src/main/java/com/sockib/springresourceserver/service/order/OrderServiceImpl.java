@@ -3,14 +3,14 @@ package com.sockib.springresourceserver.service.order;
 import com.sockib.springresourceserver.model.dto.input.AddressInput;
 import com.sockib.springresourceserver.model.dto.input.OrderProductInput;
 import com.sockib.springresourceserver.model.entity.Address;
-import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Order;
+import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.User;
 import com.sockib.springresourceserver.model.exception.*;
 import com.sockib.springresourceserver.model.respository.AddressRepository;
-import com.sockib.springresourceserver.model.respository.product.ProductRepository;
 import com.sockib.springresourceserver.model.respository.OrderRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
+import com.sockib.springresourceserver.model.respository.product.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,11 +23,11 @@ import java.util.stream.IntStream;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    private OrderRepository orderRepository;
-    private ProductRepository productRepository;
-    private UserRepository userRepository;
-    private ProductToBoughtProductConverter productToBoughtProductConverter;
-    private ModelMapper modelMapper;
+    private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
+    private final ProductToBoughtProductConverter productToBoughtProductConverter;
+    private final ModelMapper modelMapper;
     private final AddressRepository addressRepository;
 
     public OrderServiceImpl(OrderRepository orderRepository,

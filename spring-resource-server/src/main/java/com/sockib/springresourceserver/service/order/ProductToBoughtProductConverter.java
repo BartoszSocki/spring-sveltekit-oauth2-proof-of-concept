@@ -16,4 +16,5 @@ public class ProductToBoughtProductConverter {
 
         return boughtProduct;
     }
+
 }

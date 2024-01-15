@@ -4,6 +4,7 @@ import com.sockib.springresourceserver.model.dto.ProductReviewDto;
 import com.sockib.springresourceserver.model.entity.ProductReview;
 
 public class ToProductReviewDtoConverter implements ToDtoConverter<ProductReview, ProductReviewDto> {
+
     @Override
     public ProductReviewDto convert(ProductReview productReview) {
         var productReviewDto = new ProductReviewDto();
@@ -15,4 +16,5 @@ public class ToProductReviewDtoConverter implements ToDtoConverter<ProductReview
 
         return productReviewDto;
     }
+
 }

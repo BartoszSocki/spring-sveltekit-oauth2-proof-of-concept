@@ -1,16 +1,19 @@
 package com.sockib.springresourceserver.service.product;
 
 import com.sockib.springresourceserver.model.dto.ProductDto;
-import com.sockib.springresourceserver.model.dto.converter.ToProductDtoConverter;
 import com.sockib.springresourceserver.model.dto.converter.ToDtoConverter;
+import com.sockib.springresourceserver.model.dto.converter.ToProductDtoConverter;
 import com.sockib.springresourceserver.model.dto.input.ProductInput;
 import com.sockib.springresourceserver.model.embeddable.Money;
-import com.sockib.springresourceserver.model.entity.*;
+import com.sockib.springresourceserver.model.entity.Category;
+import com.sockib.springresourceserver.model.entity.Product;
+import com.sockib.springresourceserver.model.entity.ProductInventory;
+import com.sockib.springresourceserver.model.entity.Tag;
 import com.sockib.springresourceserver.model.exception.CurrencyNotSupportedException;
 import com.sockib.springresourceserver.model.respository.CategoryRepository;
-import com.sockib.springresourceserver.model.respository.product.ProductRepository;
 import com.sockib.springresourceserver.model.respository.TagRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
+import com.sockib.springresourceserver.model.respository.product.ProductRepository;
 import com.sockib.springresourceserver.util.search.filter.SearchFilter;
 import com.sockib.springresourceserver.util.search.page.Pageable;
 import com.sockib.springresourceserver.util.search.page.SimplePage;

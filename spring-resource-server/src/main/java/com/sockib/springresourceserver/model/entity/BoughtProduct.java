@@ -19,11 +19,11 @@ public class BoughtProduct extends WithCreationAndUpdateTimestamp {
     @AttributeOverride(name = "amount", column = @Column(name = "price"))
     private Money price;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch= FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
     private User owner;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch= FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     @ToString.Exclude
     private Category category;

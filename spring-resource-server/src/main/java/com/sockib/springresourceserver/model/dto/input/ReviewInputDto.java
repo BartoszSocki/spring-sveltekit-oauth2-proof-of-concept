@@ -2,7 +2,6 @@ package com.sockib.springresourceserver.model.dto.input;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 

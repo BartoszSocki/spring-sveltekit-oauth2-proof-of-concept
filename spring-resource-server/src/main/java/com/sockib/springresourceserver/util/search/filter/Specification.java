@@ -19,7 +19,7 @@ public interface Specification<T> {
     }
 
     static <T> Specification<T> empty() {
-       return ((path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.conjunction());
+        return ((path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.conjunction());
     }
 
 }

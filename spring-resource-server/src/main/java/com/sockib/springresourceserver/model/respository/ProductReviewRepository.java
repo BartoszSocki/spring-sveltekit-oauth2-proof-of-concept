@@ -13,4 +13,5 @@ public interface ProductReviewRepository extends JpaRepository<ProductReview, Lo
 
     @Query("select pr from ProductReview pr where pr.product.id =:productId and pr.reviewer.email = :email")
     Optional<ProductReview> findByProductIdAndOwnerEmail(Long productId, String email);
+
 }

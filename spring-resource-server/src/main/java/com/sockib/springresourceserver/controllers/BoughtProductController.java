@@ -34,4 +34,5 @@ public class BoughtProductController {
 
         return page;
     }
+
 }

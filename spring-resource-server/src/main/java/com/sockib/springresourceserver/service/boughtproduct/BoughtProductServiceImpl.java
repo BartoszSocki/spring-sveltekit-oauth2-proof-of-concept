@@ -32,7 +32,7 @@ public class BoughtProductServiceImpl implements BoughtProductService {
                                                              Sort sort,
                                                              String email) {
         if (pageable.getLimit() > MAX_BOUGHT_PRODUCT_PAGE_SIZE) {
-            throw new PageSizeTooLargeException("page size: " + pageable.getLimit() + " too large (>" + MAX_BOUGHT_PRODUCT_PAGE_SIZE +")");
+            throw new PageSizeTooLargeException("page size: " + pageable.getLimit() + " too large (>" + MAX_BOUGHT_PRODUCT_PAGE_SIZE + ")");
         }
 
         var sorter = sortToBoughtProductSorterConverter.convert(sort);

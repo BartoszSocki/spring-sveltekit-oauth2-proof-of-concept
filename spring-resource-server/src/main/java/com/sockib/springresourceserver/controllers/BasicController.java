@@ -29,5 +29,8 @@ public class BasicController {
         return objectMapper.writeValueAsString(new success("success"));
     }
 
-    private record success(String success) {}
+    private record success(String success) {
+
+    }
+
 }

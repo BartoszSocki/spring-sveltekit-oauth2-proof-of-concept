@@ -25,4 +25,5 @@ public class SimplePageImpl<T> implements SimplePage<T> {
     public Boolean isLastPage() {
         return isLastPage;
     }
+
 }
