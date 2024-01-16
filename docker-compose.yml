@@ -24,6 +24,8 @@ services:
       - ecommerce-database
     networks:
       - ecommerce-network
+    volumes:
+      - ./spring-authorization-server/authorization-server-cert-jwk.p12:/tmp/jwk-keystore.p12
 
 networks:
   ecommerce-network:
