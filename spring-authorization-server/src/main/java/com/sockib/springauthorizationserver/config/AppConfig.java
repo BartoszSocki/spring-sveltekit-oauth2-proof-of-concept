@@ -2,6 +2,7 @@ package com.sockib.springauthorizationserver.config;
 
 import com.sockib.springauthorizationserver.handler.FederatedIdentityAuthenticationSuccessHandler;
 import com.sockib.springauthorizationserver.handler.OidcUserSuccessAuthenticationConsumer;
+import com.sockib.springauthorizationserver.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -36,18 +38,18 @@ import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
-
 @Configuration
 @EnableWebSecurity(debug = true)
 public class AppConfig {
 
-    final UserDetailsManager userDetailsManager;
+    final UserService userService;
+    final UserDetailsService userDetailsService;
 
     @Bean
     @Order(1)
     SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-        http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).oidc(Customizer.withDefaults());    // Enable OpenID Connect 1.0
+        http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).oidc(Customizer.withDefaults());
         http
                 // Redirect to the login page when not authenticated from the
                 // authorization endpoint
@@ -88,7 +90,7 @@ public class AppConfig {
     }
 
     AuthenticationSuccessHandler oidcUserAuthenticationSuccessHandler() {
-        var oidcSuccessAuthenticationConsumer = new OidcUserSuccessAuthenticationConsumer(userDetailsManager);
+        var oidcSuccessAuthenticationConsumer = new OidcUserSuccessAuthenticationConsumer(userService);
 
         var authenticationSuccessHandler = new FederatedIdentityAuthenticationSuccessHandler();
         authenticationSuccessHandler.setOidcUserConsumer(oidcSuccessAuthenticationConsumer);
@@ -100,7 +102,7 @@ public class AppConfig {
     DaoAuthenticationProvider daoAuthenticationProvider() {
         var provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(userDetailsManager);
+        provider.setUserDetailsService(userDetailsService);
 
         return provider;
     }
