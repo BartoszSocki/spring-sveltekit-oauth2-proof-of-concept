@@ -1,4 +1,4 @@
-package com.sockib.springauthorizationserver.repositories;
+package com.sockib.springauthorizationserver.repository;
 
 import com.sockib.springauthorizationserver.security.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;

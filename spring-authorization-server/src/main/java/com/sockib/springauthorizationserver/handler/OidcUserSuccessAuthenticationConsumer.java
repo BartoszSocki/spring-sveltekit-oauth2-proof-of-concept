@@ -1,4 +1,4 @@
-package com.sockib.springauthorizationserver.handlers;
+package com.sockib.springauthorizationserver.handler;
 
 import com.sockib.springauthorizationserver.security.AppUser;
 import com.sockib.springauthorizationserver.security.RoleBasedAuthorities;

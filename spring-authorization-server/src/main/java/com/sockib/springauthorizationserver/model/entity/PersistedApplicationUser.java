@@ -1,4 +1,4 @@
-package com.sockib.springauthorizationserver.models.entities;
+package com.sockib.springauthorizationserver.model.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

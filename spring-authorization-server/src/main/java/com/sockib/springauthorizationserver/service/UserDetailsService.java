@@ -1,6 +1,6 @@
-package com.sockib.springauthorizationserver.services;
+package com.sockib.springauthorizationserver.service;
 
-import com.sockib.springauthorizationserver.repositories.UserDetailsRepository;
+import com.sockib.springauthorizationserver.repository.UserDetailsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

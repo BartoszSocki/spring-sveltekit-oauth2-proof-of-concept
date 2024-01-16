@@ -1,7 +1,7 @@
 package com.sockib.springauthorizationserver.config;
 
-import com.sockib.springauthorizationserver.handlers.FederatedIdentityAuthenticationSuccessHandler;
-import com.sockib.springauthorizationserver.handlers.OidcUserSuccessAuthenticationConsumer;
+import com.sockib.springauthorizationserver.handler.FederatedIdentityAuthenticationSuccessHandler;
+import com.sockib.springauthorizationserver.handler.OidcUserSuccessAuthenticationConsumer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;

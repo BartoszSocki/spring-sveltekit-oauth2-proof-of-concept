@@ -1,4 +1,4 @@
-package com.sockib.springauthorizationserver.handlers;
+package com.sockib.springauthorizationserver.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,6 +1,6 @@
 package com.sockib.springauthorizationserver.security;
 
-import com.sockib.springauthorizationserver.models.entities.Role;
+import com.sockib.springauthorizationserver.model.entity.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
