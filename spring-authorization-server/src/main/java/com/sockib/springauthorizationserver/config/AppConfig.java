@@ -79,9 +79,6 @@ public class AppConfig {
                         .requestMatchers("/oauth2/callback/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults())
-//                .formLogin(x -> x
-//                        .successHandler((req, res, auth) -> log.info("success " +  auth.getName() + " " + auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(", "))))
-//                )
                 .oauth2Login(x -> x
                         .authorizationEndpoint(w -> w.baseUri("/oauth2/login"))
                         .redirectionEndpoint(w -> w.baseUri("/oauth2/callback/**"))
@@ -96,59 +93,6 @@ public class AppConfig {
         authenticationSuccessHandler.setOidcUserConsumer(oidcSuccessAuthenticationConsumer);
 
         return authenticationSuccessHandler;
-    }
-
-    @Bean
-    DaoAuthenticationProvider daoAuthenticationProvider() {
-        var provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(userDetailsService);
-
-        return provider;
-    }
-
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
-
-
-//    @Bean
-//    UserDetailsManager userDetailsManager() {
-//        UserDetails userDetails = User.withDefaultPasswordEncoder()
-//                .username("user")
-//                .password("password")
-//                .roles("USER")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(userDetails);
-//    }
-
-    TokenSettings tokenSettings() {
-        return TokenSettings.builder()
-                .accessTokenTimeToLive(Duration.of(1, ChronoUnit.DAYS))
-                .reuseRefreshTokens(true)
-                .build();
-    }
-
-    @Bean
-    RegisteredClientRepository registeredClientRepository() {
-        RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("client")
-//                .clientSecret("{noop}secret")
-                .clientSecret("secret")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://localhost:3000/login/oauth2/code/client")
-                .postLogoutRedirectUri("http://localhost:3000")
-//                .scope(OidcScopes.EMAIL)
-                .scope("test.read")
-                .tokenSettings(tokenSettings())
-                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
-                .build();
-
-        return new InMemoryRegisteredClientRepository(oidcClient);
     }
 
 }
