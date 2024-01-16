@@ -1,7 +1,7 @@
 services:
-  db:
+  ecommerce-database:
+    container_name: ecommerce-database
     image: postgres
-    container_name: postgress
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: admin
@@ -9,7 +9,27 @@ services:
       - 5432:5432
     volumes:
       - ./postgres:/docker-entrypoint-initdb.d
-      # - ./sveltekit/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ecommerce-network
+
+  ecommerce-authorization-server:
+    container_name: ecommerce-authorization-server
+    image: ecommerce-authentication-server:latest
+    build:
+      context: spring-authorization-server
+      dockerfile: local.Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - ecommerce-database
+    networks:
+      - ecommerce-network
+
+networks:
+  ecommerce-network:
+    driver: bridge
+
+    # - ./sveltekit/init.sql:/docker-entrypoint-initdb.d/init.sql
       # - pgdata:/var/lib/postgresql/data
 # volumes:
 #   pgdata:
