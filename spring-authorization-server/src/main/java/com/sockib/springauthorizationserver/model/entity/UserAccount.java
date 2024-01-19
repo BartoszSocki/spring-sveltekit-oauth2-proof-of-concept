@@ -1,7 +1,9 @@
 package com.sockib.springauthorizationserver.model.entity;
 
+import com.sockib.springauthorizationserver.model.embedded.AccountProvider;
 import com.sockib.springauthorizationserver.model.embedded.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,21 +16,25 @@ import java.util.UUID;
 
 @Entity
 @Builder
-@Table(name = "users")
+@Table(name = "user_account")
 @Getter
+@AllArgsConstructor
 public class UserAccount implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private User user;
 
     @Enumerated(value = EnumType.STRING)
     private Role role;
     private String password;
+    @Enumerated(value = EnumType.STRING)
+    private AccountProvider accountProvider;
+    private boolean isPasswordSupplied;
     private boolean isAccountNonLocked;
     private boolean isAccountEnabled;
 
