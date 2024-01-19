@@ -2,6 +2,7 @@ package com.sockib.springauthorizationserver.service;
 
 import com.github.javafaker.Faker;
 import com.github.javafaker.Name;
+import com.sockib.springauthorizationserver.model.embedded.AccountProvider;
 import com.sockib.springauthorizationserver.model.embedded.Role;
 import com.sockib.springauthorizationserver.model.entity.User;
 import com.sockib.springauthorizationserver.model.entity.UserAccount;
@@ -15,21 +16,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
 
-    final private UserAccountRepository userDetailsRepository;
+    final private UserAccountRepository userAccountRepository;
     final private Name fakerName;
 
-    public UserServiceImpl(UserAccountRepository userDetailsRepository) {
-        this.userDetailsRepository = userDetailsRepository;
+    public UserServiceImpl(UserAccountRepository userAccountRepository) {
+        this.userAccountRepository = userAccountRepository;
         this.fakerName = new Faker().name();
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userDetailsRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
+        return userAccountRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
     }
 
     @Override
     public void createUser(OidcUser oidcUser) {
+        if (userAccountRepository.findByEmail(retrieveEmail(oidcUser)).isPresent()) {
+            return;
+        }
+
         User user = User.builder()
                 .name(retrieveName(oidcUser))
                 .surname(retrieveSurname(oidcUser))
@@ -37,13 +42,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                 .build();
 
         UserAccount userAccount = UserAccount.builder()
-                .role(Role.USER)
                 .user(user)
+                .role(Role.USER)
+                .accountProvider(AccountProvider.GOOGLE)
+                .isPasswordSupplied(false)
                 .isAccountEnabled(isEmailVerified(oidcUser))
                 .isAccountNonLocked(true)
                 .build();
 
-        userDetailsRepository.save(userAccount);
+        userAccountRepository.save(userAccount);
     }
 
     private String retrieveEmail(OidcUser oidcUser) {
@@ -63,9 +70,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     private boolean isEmailVerified(OidcUser oidcUser) {
-        String isEmailVerified = oidcUser.getAttribute("email_verified");
+        Boolean isEmailVerified = oidcUser.getAttribute("email_verified");
 
-        return isEmailVerified != null && Boolean.getBoolean(isEmailVerified);
+        return isEmailVerified != null && isEmailVerified;
     }
 
 }
