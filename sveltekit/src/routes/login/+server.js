@@ -15,7 +15,7 @@ export async function GET({ url, cookies }) {
     redirectURL.searchParams.set('response_type', 'code')
     redirectURL.searchParams.set('client_id', CLIENT_ID)
     redirectURL.searchParams.set('redirect_uri', REDIRECT_URI)
-    redirectURL.searchParams.set('scope', ['test.read'].join(' '))
+    // redirectURL.searchParams.set('scope', ['test.read'].join(' '))
     redirectURL.searchParams.set('state', state)
 
     throw redirect(302, redirectURL)
