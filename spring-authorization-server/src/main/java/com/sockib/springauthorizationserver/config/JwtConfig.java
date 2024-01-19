@@ -7,6 +7,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -38,10 +39,10 @@ public class JwtConfig {
     @Value("${com.sockib.keystore.key.password}")
     private String KEY_PASSWORD;
 
-    @Value("${com.sockib.client.secret:secret}")
+    @Value("${com.sockib.client-secret}")
     private String CLIENT_SECRET;
 
-    @Value("${com.sockib.client.id:client}")
+    @Value("${com.sockib.client-id}")
     private String CLIENT_ID;
 
     @Value("${com.sockib.redirect-uri}")
@@ -49,6 +50,12 @@ public class JwtConfig {
 
     @Value("${com.sockib.post-logout.redirect-uri}")
     private String POST_LOGOUT_REDIRECT_URI;
+
+    private final PasswordEncoder passwordEncoder;
+
+    public JwtConfig(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     RSAKey rsaKey() throws Exception {
         var ks = KeyStore.getInstance(new File(KEYSTORE_URI), KEYSTORE_PASSPHRASE.toCharArray());
@@ -77,7 +84,7 @@ public class JwtConfig {
     RegisteredClientRepository registeredClientRepository() {
         RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId(CLIENT_ID)
-                .clientSecret(CLIENT_SECRET)
+                .clientSecret(passwordEncoder.encode(CLIENT_SECRET))
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
