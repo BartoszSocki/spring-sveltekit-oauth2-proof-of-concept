@@ -8,7 +8,7 @@
 <body>
 <h1>Login</h1>
 
-<form action="#" method="POST" autocomplete="off">
+<form action="/login" method="POST" autocomplete="off">
     <label for="username">email</label>
     <input type="text" id="username" autocomplete="off" />
 
@@ -16,9 +16,10 @@
     <input type="password" id="password" autocomplete="off" />
 
     <input type="submit" value="submit">
-
-    <a href="/oauth2/login/google">Google</a>
 </form>
+
+<a href="/oauth2/login/google">Google</a>
+<a href="/login/guest">Continue as Guest</a>
 
 </body>
 </html>
