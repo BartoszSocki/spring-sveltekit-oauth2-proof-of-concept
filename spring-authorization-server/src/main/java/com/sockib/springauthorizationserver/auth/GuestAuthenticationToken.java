@@ -3,10 +3,8 @@ package com.sockib.springauthorizationserver.auth;
 import com.sockib.springauthorizationserver.model.entity.UserAccount;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
-import java.util.List;
 
 public class GuestAuthenticationToken extends AbstractAuthenticationToken {
 
@@ -18,8 +16,15 @@ public class GuestAuthenticationToken extends AbstractAuthenticationToken {
 
     public static GuestAuthenticationToken authenticated(UserAccount userAccount) {
         GuestAuthenticationToken token = new GuestAuthenticationToken(userAccount.getAuthorities());
-        token.principal = userAccount;
+        token.setPrincipal(userAccount);
         token.setAuthenticated(true);
+        return token;
+    }
+
+    public static GuestAuthenticationToken unauthenticated(UserAccount userAccount) {
+        GuestAuthenticationToken token = new GuestAuthenticationToken(userAccount.getAuthorities());
+        token.setPrincipal(userAccount);
+        token.setAuthenticated(false);
         return token;
     }
 
@@ -30,7 +35,11 @@ public class GuestAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getPrincipal() {
-        return null;
+        return principal;
+    }
+
+    private void setPrincipal(Object principal) {
+        this.principal = principal;
     }
 
 }
