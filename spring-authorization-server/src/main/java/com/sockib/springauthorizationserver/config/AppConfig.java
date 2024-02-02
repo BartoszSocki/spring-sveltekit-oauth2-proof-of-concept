@@ -63,7 +63,9 @@ public class AppConfig {
                 .authorizeHttpRequests(x -> x
                         .requestMatchers("/oauth2/callback/**").permitAll()
                         .anyRequest().authenticated())
-                .formLogin(Customizer.withDefaults())
+                .formLogin(x -> x
+                        .loginPage("/signin").permitAll()
+                )
                 .oauth2Login(x -> x
                         .authorizationEndpoint(w -> w.baseUri("/oauth2/login"))
                         .redirectionEndpoint(w -> w.baseUri("/oauth2/callback/**"))
