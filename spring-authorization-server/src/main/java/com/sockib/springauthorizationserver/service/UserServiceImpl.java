@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public UserAccount createUser(OidcUser oidcUser) {
+    public UserAccount saveUserAccount(OidcUser oidcUser) {
         User user = User.builder()
                 .name(retrieveName(oidcUser))
                 .surname(retrieveSurname(oidcUser))
@@ -47,11 +47,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                 .isAccountNonLocked(true)
                 .build();
 
-        return createUser(userAccount);
+        return saveUserAccount(userAccount);
     }
 
     @Override
-    public UserAccount createUser(UserAccount userAccount) {
+    public UserAccount saveUserAccount(UserAccount userAccount) {
         var email = userAccount.getUser().getEmail();
 
         if (userAccountRepository.findByEmail(email).isPresent()) {
