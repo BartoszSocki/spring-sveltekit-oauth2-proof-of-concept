@@ -15,7 +15,7 @@ public class OidcUserSuccessAuthenticationConsumer implements Consumer<OidcUser>
 
     @Override
     public void accept(OidcUser oidcUser) {
-        userService.createUser(oidcUser);
+        userService.saveUserAccount(oidcUser);
     }
 
 }

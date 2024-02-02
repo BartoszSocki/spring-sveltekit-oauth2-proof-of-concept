@@ -38,7 +38,7 @@ public class UserInit implements CommandLineRunner {
                 .password(passwordEncoder.encode("password"))
                 .build();
 
-        userService.createUser(userAccount);
+        userService.saveUserAccount(userAccount);
     }
 
 }
