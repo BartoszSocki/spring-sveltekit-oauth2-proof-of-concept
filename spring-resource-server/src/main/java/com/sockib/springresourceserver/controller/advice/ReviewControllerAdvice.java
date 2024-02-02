@@ -1,6 +1,6 @@
 package com.sockib.springresourceserver.controller.advice;
 
-import com.sockib.springresourceserver.model.exception.ProductReviewNotFoundException;
+import com.sockib.springresourceserver.exception.ProductReviewNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

@@ -2,7 +2,7 @@ package com.sockib.springresourceserver.service.boughtproduct;
 
 import com.sockib.springresourceserver.model.dto.BoughtProductDto;
 import com.sockib.springresourceserver.model.dto.converter.ToBoughtProductDtoConverter;
-import com.sockib.springresourceserver.model.exception.PageSizeTooLargeException;
+import com.sockib.springresourceserver.exception.PageSizeTooLargeException;
 import com.sockib.springresourceserver.model.respository.boughtproduct.BoughtProductRepository;
 import com.sockib.springresourceserver.util.search.page.Pageable;
 import com.sockib.springresourceserver.util.search.page.SimplePage;

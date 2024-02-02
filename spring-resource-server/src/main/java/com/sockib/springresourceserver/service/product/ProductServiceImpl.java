@@ -9,7 +9,7 @@ import com.sockib.springresourceserver.model.entity.Category;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.ProductInventory;
 import com.sockib.springresourceserver.model.entity.Tag;
-import com.sockib.springresourceserver.model.exception.CurrencyNotSupportedException;
+import com.sockib.springresourceserver.exception.CurrencyNotSupportedException;
 import com.sockib.springresourceserver.model.respository.CategoryRepository;
 import com.sockib.springresourceserver.model.respository.TagRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;

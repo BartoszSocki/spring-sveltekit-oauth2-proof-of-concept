@@ -5,7 +5,7 @@ import com.sockib.springresourceserver.model.dto.converter.ToProductReviewDtoCon
 import com.sockib.springresourceserver.model.dto.input.ReviewInputDto;
 import com.sockib.springresourceserver.model.embeddable.FiveStarScore;
 import com.sockib.springresourceserver.model.entity.ProductReview;
-import com.sockib.springresourceserver.model.exception.ProductReviewNotFoundException;
+import com.sockib.springresourceserver.exception.ProductReviewNotFoundException;
 import com.sockib.springresourceserver.model.respository.ProductReviewRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
 import com.sockib.springresourceserver.model.respository.product.ProductRepository;

@@ -1,7 +1,7 @@
 package com.sockib.springresourceserver.service.product;
 
 import com.sockib.springresourceserver.model.entity.*;
-import com.sockib.springresourceserver.model.exception.InvalidSearchFilterException;
+import com.sockib.springresourceserver.exception.InvalidSearchFilterException;
 import com.sockib.springresourceserver.util.search.filter.SearchFilter;
 import com.sockib.springresourceserver.util.search.filter.SearchOperation;
 import com.sockib.springresourceserver.util.search.filter.Specification;

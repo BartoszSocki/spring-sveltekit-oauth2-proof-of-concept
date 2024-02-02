@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.model.exception;
+package com.sockib.springresourceserver.exception;
 
 public class InvalidOrderException extends RuntimeException {
 
