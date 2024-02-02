@@ -2,6 +2,7 @@ package com.sockib.springauthorizationserver.service;
 
 import com.github.javafaker.Faker;
 import com.github.javafaker.Name;
+import com.sockib.springauthorizationserver.exception.UserAccountException;
 import com.sockib.springauthorizationserver.model.embedded.AccountProvider;
 import com.sockib.springauthorizationserver.model.embedded.Role;
 import com.sockib.springauthorizationserver.model.entity.User;
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public void createUser(OidcUser oidcUser) {
+    public UserAccount createUser(OidcUser oidcUser) {
         User user = User.builder()
                 .name(retrieveName(oidcUser))
                 .surname(retrieveSurname(oidcUser))
@@ -46,18 +47,18 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                 .isAccountNonLocked(true)
                 .build();
 
-        createUser(userAccount);
+        return createUser(userAccount);
     }
 
     @Override
-    public void createUser(UserAccount userAccount) {
+    public UserAccount createUser(UserAccount userAccount) {
         var email = userAccount.getUser().getEmail();
 
         if (userAccountRepository.findByEmail(email).isPresent()) {
-            return;
+            throw new UserAccountException(String.format("user %s already exists", userAccount.getUser().getEmail()));
         }
 
-        userAccountRepository.save(userAccount);
+        return userAccountRepository.save(userAccount);
     }
 
     private String retrieveEmail(OidcUser oidcUser) {

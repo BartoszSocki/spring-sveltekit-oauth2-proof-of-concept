@@ -5,7 +5,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 public interface UserService {
 
-    void createUser(OidcUser oidcUser);
-    void createUser(UserAccount userAccount);
+    UserAccount createUser(OidcUser oidcUser);
+    UserAccount createUser(UserAccount userAccount);
 
 }
