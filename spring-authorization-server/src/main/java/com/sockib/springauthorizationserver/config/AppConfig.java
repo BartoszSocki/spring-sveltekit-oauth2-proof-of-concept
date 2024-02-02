@@ -1,17 +1,26 @@
 package com.sockib.springauthorizationserver.config;
 
+import com.sockib.springauthorizationserver.auth.GuestAuthenticationFilter;
+import com.sockib.springauthorizationserver.auth.GuestAuthenticationProvider;
 import com.sockib.springauthorizationserver.handler.FederatedIdentityAuthenticationSuccessHandler;
 import com.sockib.springauthorizationserver.handler.OidcUserSuccessAuthenticationConsumer;
 import com.sockib.springauthorizationserver.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
@@ -19,7 +28,11 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,7 +53,7 @@ public class AppConfig {
                 // authorization endpoint
                 .exceptionHandling((exceptions) -> exceptions
                         .defaultAuthenticationEntryPointFor(
-                                new LoginUrlAuthenticationEntryPoint("/login"),
+                                new LoginUrlAuthenticationEntryPoint("/signin"),
                                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                         )
                 )
@@ -62,10 +75,12 @@ public class AppConfig {
         return http
                 .authorizeHttpRequests(x -> x
                         .requestMatchers("/oauth2/callback/**").permitAll()
+                        .requestMatchers("/login/guest").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(x -> x
                         .loginPage("/signin").permitAll()
                 )
+                .addFilterAfter(guestAuthenticationFilter(), LogoutFilter.class)
                 .oauth2Login(x -> x
                         .authorizationEndpoint(w -> w.baseUri("/oauth2/login"))
                         .redirectionEndpoint(w -> w.baseUri("/oauth2/callback/**"))
@@ -80,6 +95,24 @@ public class AppConfig {
         authenticationSuccessHandler.setOidcUserConsumer(oidcSuccessAuthenticationConsumer);
 
         return authenticationSuccessHandler;
+    }
+
+    GuestAuthenticationFilter guestAuthenticationFilter() {
+        var sessionSecurityContextRepository = new HttpSessionSecurityContextRepository();
+
+        var filter = new GuestAuthenticationFilter("/login/guest", userService);
+        filter.setAuthenticationManager(authenticationManager());
+        filter.setSecurityContextRepository(sessionSecurityContextRepository);
+
+        return filter;
+    }
+
+    AuthenticationManager authenticationManager() {
+        return new ProviderManager(List.of(guestAuthenticationProvider()));
+    }
+
+    AuthenticationProvider guestAuthenticationProvider() {
+        return new GuestAuthenticationProvider();
     }
 
 }
