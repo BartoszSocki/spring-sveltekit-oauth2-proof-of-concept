@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.controllers;
+package com.sockib.springresourceserver.controller;
 
 import com.sockib.springresourceserver.model.dto.input.OrderInput;
 import com.sockib.springresourceserver.service.order.OrderService;

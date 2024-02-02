@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.controllers;
+package com.sockib.springresourceserver.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.controllers.advice;
+package com.sockib.springresourceserver.controller.advice;
 
 import com.sockib.springresourceserver.model.exception.ProductReviewNotFoundException;
 import org.springframework.http.HttpStatus;
