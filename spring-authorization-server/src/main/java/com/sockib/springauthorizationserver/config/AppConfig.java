@@ -75,7 +75,7 @@ public class AppConfig {
         return http
                 .authorizeHttpRequests(x -> x
                         .requestMatchers("/oauth2/callback/**").permitAll()
-                        .requestMatchers("/login/guest").permitAll()
+                        .requestMatchers("/login/guest", "/login").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(x -> x
                         .loginPage("/signin").permitAll()
