@@ -1,6 +1,6 @@
 package com.sockib.springresourceserver.model.entity;
 
-import com.sockib.springresourceserver.model.embeddable.Money;
+import com.sockib.springresourceserver.model.value.Money;
 import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreationTimestamp;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;

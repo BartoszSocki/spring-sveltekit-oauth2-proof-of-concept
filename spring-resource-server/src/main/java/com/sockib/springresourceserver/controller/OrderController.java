@@ -1,12 +1,11 @@
 package com.sockib.springresourceserver.controller;
 
-import com.sockib.springresourceserver.model.dto.input.OrderInput;
+import com.sockib.springresourceserver.model.dto.request.OrderRequestDto;
 import com.sockib.springresourceserver.service.order.OrderService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +21,9 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping
-    ResponseEntity<Void> buyProducts(@Valid @RequestBody OrderInput transaction,
-                                     @AuthenticationPrincipal Principal principal) {
-        orderService.buyProducts(transaction.getProducts(), transaction.getAddress(), principal.getName());
+    ResponseEntity<Void> placeOrder(@Valid @RequestBody OrderRequestDto orderRequestDto,
+                                    @AuthenticationPrincipal Principal principal) {
+        orderService.buyProducts(orderRequestDto, principal.getName());
 
         return ResponseEntity.ok().build();
     }

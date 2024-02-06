@@ -1,12 +1,9 @@
 package com.sockib.springresourceserver.service.order;
 
-import com.sockib.springresourceserver.model.dto.input.AddressInput;
-import com.sockib.springresourceserver.model.dto.input.OrderProductInput;
-
-import java.util.List;
+import com.sockib.springresourceserver.model.dto.request.OrderRequestDto;
 
 public interface OrderService {
 
-    void buyProducts(List<OrderProductInput> productsIds, AddressInput address, String email);
+    void buyProducts(OrderRequestDto orderRequestDto, String buyerEmail);
 
 }

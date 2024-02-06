@@ -1,11 +1,12 @@
 package com.sockib.springresourceserver.model.entity;
 
-import com.sockib.springresourceserver.model.embeddable.Money;
-import com.sockib.springresourceserver.model.embeddable.ProductScore;
+import com.sockib.springresourceserver.model.value.Money;
+import com.sockib.springresourceserver.model.value.ProductScore;
 import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreationAndUpdateTimestamp;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -15,9 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 
-@NamedEntityGraph(name = "product[owner]",
-        attributeNodes = @NamedAttributeNode("owner")
-)
 @NamedEntityGraph(name = "product[category]",
         attributeNodes = @NamedAttributeNode("category")
 )
@@ -26,14 +24,12 @@ import java.util.List;
 )
 @NamedEntityGraph(name = "product[ForDisplay]",
         attributeNodes = {
-                @NamedAttributeNode("owner"),
                 @NamedAttributeNode("category"),
                 @NamedAttributeNode("inventory")
         }
 )
 @NamedEntityGraph(name = "product[all]",
         attributeNodes = {
-                @NamedAttributeNode("owner"),
                 @NamedAttributeNode("category"),
                 @NamedAttributeNode("inventory"),
                 @NamedAttributeNode("tags"),
@@ -49,10 +45,6 @@ public class Product extends WithCreationAndUpdateTimestamp {
 
     @AttributeOverride(name = "amount", column = @Column(name = "price"))
     private Money price;
-
-    @ToString.Exclude
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private User owner;
 
     @ToString.Exclude
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -81,7 +73,19 @@ public class Product extends WithCreationAndUpdateTimestamp {
     private String description;
     private String imageUrl;
 
-    //    @Transient
+    @Transient
     private ProductScore productScore;
+
+    @Transient
+    public void addTags(List<String> tags) {
+        this.tags = tags.stream()
+                .map(Tag::new)
+                .toList();
+    }
+
+    @Transient
+    public void addCategory(String category) {
+        this.category = new Category(category);
+    }
 
 }

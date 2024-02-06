@@ -3,6 +3,7 @@ package com.sockib.springresourceserver.model.entity;
 import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreationTimestamp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,11 +11,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-
 @Entity
-public class Category extends WithCreationTimestamp {
+public class Category {
 
-    @Column(unique = true)
+    @Id
     private String name;
 
     public Category(String name) {

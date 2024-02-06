@@ -18,7 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Searcha
     List<Product> findProductsWithIdInFetchAllColumns(List<Long> ids);
 
     @Modifying
-    @Query("update Product p set p.isDeleted = true where p.id = :id and p.owner.email = :email")
-    void softDeleteProductByIdAndOwnerEmail(Long id, String email);
+    @Query("update Product p set p.isDeleted = true where p.id = :id")
+    void deleteProductById(long id);
 
 }

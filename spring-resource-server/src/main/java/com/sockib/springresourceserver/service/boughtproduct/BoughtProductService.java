@@ -1,14 +1,14 @@
 package com.sockib.springresourceserver.service.boughtproduct;
 
-import com.sockib.springresourceserver.model.dto.BoughtProductDto;
-import com.sockib.springresourceserver.util.search.page.Pageable;
-import com.sockib.springresourceserver.util.search.page.SimplePage;
-import com.sockib.springresourceserver.util.search.sort.Sort;
+import com.sockib.springresourceserver.model.dto.response.BoughtProductResponseDto;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface BoughtProductService {
 
-    SimplePage<BoughtProductDto> searchBoughtProducts(Pageable pageable, Sort sort, String email);
+    List<BoughtProductResponseDto> queryBoughtProductsForUserWithEmail(String email, Pageable pageable);
 
-    Boolean isUserOwnerOfBoughtProduct(Long userId, Long productId);
+    boolean isUserOwnerOfBoughtProduct(long userId, long productId);
 
 }

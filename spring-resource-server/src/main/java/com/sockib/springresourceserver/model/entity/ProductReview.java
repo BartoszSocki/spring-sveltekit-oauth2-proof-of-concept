@@ -1,6 +1,6 @@
 package com.sockib.springresourceserver.model.entity;
 
-import com.sockib.springresourceserver.model.embeddable.FiveStarScore;
+import com.sockib.springresourceserver.model.value.FiveStarScore;
 import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreationAndUpdateTimestamp;
 import jakarta.persistence.*;
 import lombok.Getter;

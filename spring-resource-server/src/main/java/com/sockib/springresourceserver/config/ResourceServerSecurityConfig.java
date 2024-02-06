@@ -32,7 +32,8 @@ public class ResourceServerSecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .addFilterBefore(userRegistrationFilter(), ExceptionTranslationFilter.class)
-                .authorizeHttpRequests(x -> x.anyRequest().authenticated())
+//                .authorizeHttpRequests(x -> x.anyRequest().authenticated())
+                .authorizeHttpRequests(x -> x.anyRequest().permitAll())
                 .oauth2ResourceServer(x -> x
                         .jwt(y -> y
                                 .jwkSetUri(jwkUri)

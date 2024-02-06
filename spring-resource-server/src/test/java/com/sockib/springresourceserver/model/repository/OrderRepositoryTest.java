@@ -1,8 +1,8 @@
 package com.sockib.springresourceserver.model.repository;
 
-import com.sockib.springresourceserver.model.embeddable.Money;
-import com.sockib.springresourceserver.model.entity.Address;
-import com.sockib.springresourceserver.model.entity.BoughtProduct;
+import com.sockib.springresourceserver.model.value.Money;
+import com.sockib.springresourceserver.model.value.Address;
+import com.sockib.springresourceserver.model.entity.LineItem;
 import com.sockib.springresourceserver.model.entity.Order;
 import com.sockib.springresourceserver.model.respository.CategoryRepository;
 import com.sockib.springresourceserver.model.respository.OrderRepository;
@@ -48,7 +48,7 @@ public class OrderRepositoryTest {
         address.setUser(user);
         transaction.setAddress(address);
 
-        var boughtProduct1 = new BoughtProduct();
+        var boughtProduct1 = new LineItem();
         boughtProduct1.setName("AAA");
         boughtProduct1.setOwner(user);
 
@@ -61,13 +61,13 @@ public class OrderRepositoryTest {
         var category = categoryRepository.findCategoryByName("AAA").orElseThrow(RuntimeException::new);
         boughtProduct1.setCategory(category);
 
-        transaction.setBoughtProducts(List.of(boughtProduct1));
+        transaction.setLineItems(List.of(boughtProduct1));
 
         var persistedTransaction = orderRepository.save(transaction);
 
         assertThat(persistedTransaction).isNotNull();
-        assertThat(persistedTransaction.getBoughtProducts()).isNotNull();
-        assertThat(persistedTransaction.getBoughtProducts()).isNotEmpty();
+        assertThat(persistedTransaction.getLineItems()).isNotNull();
+        assertThat(persistedTransaction.getLineItems()).isNotEmpty();
 
     }
 
