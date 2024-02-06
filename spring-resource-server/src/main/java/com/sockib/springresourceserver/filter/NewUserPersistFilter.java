@@ -8,11 +8,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Slf4j
 @AllArgsConstructor
 public class NewUserPersistFilter extends OncePerRequestFilter {
 
@@ -23,15 +25,14 @@ public class NewUserPersistFilter extends OncePerRequestFilter {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.isAuthenticated()) {
             var user = userRepository.findUserByEmail(authentication.getName());
-            if (user.isEmpty()) {
-                var newUser = new User();
-                newUser.setUserMoney(new Money(1000.0, "USD"));
-                newUser.setEmail(authentication.getName());
-
-                userRepository.save(newUser);
+            if (user.isPresent()) {
+                filterChain.doFilter(request, response);
+                return;
             }
-        }
 
+            userRepository.save(new User(authentication.getName(), new Money(1000.0, "USD")));
+            log.info("registered new user %s", authentication.getName());
+        }
         filterChain.doFilter(request, response);
     }
 
