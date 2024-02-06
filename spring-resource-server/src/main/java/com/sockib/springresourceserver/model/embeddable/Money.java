@@ -12,9 +12,18 @@ import lombok.Setter;
 @Setter
 
 @Embeddable
-public class Money {
+public class Money implements Cloneable {
 
     private Double amount;
     private String currency;
+
+    @Override
+    public Money clone() {
+        try {
+            return (Money) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 
 }
