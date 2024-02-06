@@ -1,7 +1,7 @@
 package com.sockib.springresourceserver.config;
 
-import com.sockib.springresourceserver.filter.NewUserPersistFilter;
-import com.sockib.springresourceserver.model.respository.UserRepository;
+import com.sockib.springresourceserver.filter.UserRegistrationFilter;
+import com.sockib.springresourceserver.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.AuthorizationFilter;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 
 @Configuration
 @EnableMethodSecurity
@@ -21,19 +21,18 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 @Slf4j
 public class ResourceServerSecurityConfig {
 
-    private UserRepository userRepository;
+    private final UserService userService;
     @Value("${com.sockib.jwk.uri}")
     private String jwkUri;
-
-    public ResourceServerSecurityConfig(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public ResourceServerSecurityConfig(UserService userService) {
+        this.userService = userService;
     }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .addFilterAfter(newUserPersistFilter(), AuthorizationFilter.class)
-                .authorizeHttpRequests(x -> x.anyRequest().permitAll())
+                .addFilterBefore(userRegistrationFilter(), ExceptionTranslationFilter.class)
+                .authorizeHttpRequests(x -> x.anyRequest().authenticated())
                 .oauth2ResourceServer(x -> x
                         .jwt(y -> y
                                 .jwkSetUri(jwkUri)
@@ -45,8 +44,8 @@ public class ResourceServerSecurityConfig {
     }
 
     @Bean
-    NewUserPersistFilter newUserPersistFilter() {
-        return new NewUserPersistFilter(userRepository);
+    UserRegistrationFilter userRegistrationFilter() {
+        return new UserRegistrationFilter(userService);
     }
 
     @Bean
