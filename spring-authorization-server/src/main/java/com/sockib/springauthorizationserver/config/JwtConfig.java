@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
@@ -92,7 +93,7 @@ public class JwtConfig {
                 .postLogoutRedirectUri(POST_LOGOUT_REDIRECT_URI)
 //                .redirectUri("http://localhost:3000/login/oauth2/code/client")
 //                .postLogoutRedirectUri("http://localhost:3000")
-//                .scope(OidcScopes.EMAIL)
+                .scope(OidcScopes.EMAIL)
 //                .scope("test.read")
                 .tokenSettings(tokenSettings())
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())

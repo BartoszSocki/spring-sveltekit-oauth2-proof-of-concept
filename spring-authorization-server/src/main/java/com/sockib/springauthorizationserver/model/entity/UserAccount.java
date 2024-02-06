@@ -54,7 +54,7 @@ public class UserAccount implements UserDetails {
 
     @Override
     public String getUsername() {
-        return String.format("%s %s", user.getName(), user.getSurname());
+        return user.getEmail();
     }
 
     @Override
