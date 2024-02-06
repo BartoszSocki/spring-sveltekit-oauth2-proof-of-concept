@@ -7,8 +7,10 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @AllArgsConstructor
 @RequestMapping("/api")
@@ -20,21 +22,17 @@ public class ProductReviewController {
     @PutMapping("/product/{productId}/review")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     ResponseEntity<Void> addReview(@Valid @RequestBody ReviewInputDto reviewInputDto,
-                                   @PathVariable Long productId) {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        var email = authentication.getName();
-
-        productReviewService.putReview(reviewInputDto, productId, email);
+                                   @PathVariable Long productId,
+                                   @AuthenticationPrincipal Principal principal) {
+        productReviewService.putReview(reviewInputDto, productId, principal.getName());
 
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/product/{productId}/review")
-    ResponseEntity<ProductReviewDto> getReviewForUser(@PathVariable Long productId) {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        var email = authentication.getName();
-
-        var productReviewDto = productReviewService.getProductReviewByProductIdAndUserEmail(productId, email);
+    ResponseEntity<ProductReviewDto> getReviewForUser(@PathVariable Long productId,
+                                                      @AuthenticationPrincipal Principal principal) {
+        var productReviewDto = productReviewService.getProductReviewByProductIdAndUserEmail(productId, principal.getName());
 
         return ResponseEntity.ok(productReviewDto);
     }
