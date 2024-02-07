@@ -45,12 +45,10 @@ public class OrderRepositoryTest {
         address.setCity("warsaw");
         address.setPostalCode("00-000");
         address.setAddressLine("street 1");
-        address.setUser(user);
         transaction.setAddress(address);
 
         var boughtProduct1 = new LineItem();
         boughtProduct1.setName("AAA");
-        boughtProduct1.setOwner(user);
 
         var price = new Money();
         price.setAmount(100.0);
@@ -68,7 +66,6 @@ public class OrderRepositoryTest {
         assertThat(persistedTransaction).isNotNull();
         assertThat(persistedTransaction.getLineItems()).isNotNull();
         assertThat(persistedTransaction.getLineItems()).isNotEmpty();
-
     }
 
 }

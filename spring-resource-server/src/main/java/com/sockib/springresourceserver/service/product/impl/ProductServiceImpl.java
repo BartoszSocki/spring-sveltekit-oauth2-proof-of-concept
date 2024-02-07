@@ -1,7 +1,8 @@
 package com.sockib.springresourceserver.service.product.impl;
 
-import com.sockib.springresourceserver.domain.product.ProductSpecificationFactory;
-import com.sockib.springresourceserver.domain.product.data.ProductQueryCriteria;
+import com.sockib.springresourceserver.domain.product.factory.ProductSorterFactory;
+import com.sockib.springresourceserver.domain.product.factory.ProductSpecificationFactory;
+import com.sockib.springresourceserver.domain.product.query.ProductQueryCriteria;
 import com.sockib.springresourceserver.exception.PageSizeTooLargeException;
 import com.sockib.springresourceserver.model.dto.response.ProductResponseDto;
 import com.sockib.springresourceserver.model.dto.converter.DtoConverter;
@@ -38,8 +39,9 @@ public class ProductServiceImpl implements ProductService {
 
         var whereSpecification = ProductSpecificationFactory.where(criteria);
         var havingSpecification = ProductSpecificationFactory.having(criteria);
+        var sorter = ProductSorterFactory.create(criteria);
 
-        return productRepository.findProducts(whereSpecification, havingSpecification, pageable, "")
+        return productRepository.findProducts(whereSpecification, havingSpecification, sorter, pageable)
                 .stream()
                 .map(productConverter::convert)
                 .toList();

@@ -16,6 +16,9 @@ public class Money implements Cloneable {
         this.currency = currency;
     }
 
+    public Money() {
+    }
+
     public static Money USD(double amount) {
         return new Money(amount, "USD");
     }

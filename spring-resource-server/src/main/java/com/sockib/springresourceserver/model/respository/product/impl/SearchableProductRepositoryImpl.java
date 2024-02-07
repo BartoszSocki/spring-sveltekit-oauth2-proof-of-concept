@@ -5,6 +5,7 @@ import com.sockib.springresourceserver.model.value.ProductScore;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.ProductReview_;
 import com.sockib.springresourceserver.model.entity.Product_;
+import com.sockib.springresourceserver.util.search.sort.Sorter;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
 import jakarta.persistence.criteria.*;
@@ -20,7 +21,7 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
     private final EntityManager entityManager;
 
     @Override
-    public List<Product> findProducts(Specification<Product> whereSpecification, Specification<Product> havingSpecification, Pageable pageable, String entityGraph) {
+    public List<Product> findProducts(Specification<Product> whereSpecification, Specification<Product> havingSpecification, Sorter<Product> sorter, Pageable pageable) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> criteriaQuery = criteriaBuilder.createTupleQuery();
         Root<Product> root = criteriaQuery.from(Product.class);
@@ -28,8 +29,7 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
         var wherePredicate = whereSpecification.toPredicate(root, criteriaQuery, criteriaBuilder);
         var havingPredicate = havingSpecification.toPredicate(root, criteriaQuery, criteriaBuilder);
 
-        // TODO: find nice way to implement product orders
-        Order order = criteriaBuilder.asc(criteriaBuilder.avg(root.get(Product_.PRODUCT_REVIEWS).get(ProductReview_.FIVE_STAR_SCORE)));
+        var order = sorter.toOrder(root, criteriaBuilder);
 
         var query = criteriaQuery
                 .multiselect(
@@ -53,7 +53,7 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();
 
-        var products = list.stream()
+        return list.stream()
                 .map(tuple -> {
                     Product product = (Product) tuple.get(0);
                     product.setProductScore(new ProductScore((Long) tuple.get(2), (Double) tuple.get(1)));
@@ -61,8 +61,6 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
                     return product;
                 })
                 .toList();
-
-        return products;
     }
 
 }

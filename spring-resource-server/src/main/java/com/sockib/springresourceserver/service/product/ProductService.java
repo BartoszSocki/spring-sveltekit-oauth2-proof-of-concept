@@ -1,6 +1,6 @@
 package com.sockib.springresourceserver.service.product;
 
-import com.sockib.springresourceserver.domain.product.data.ProductQueryCriteria;
+import com.sockib.springresourceserver.domain.product.query.ProductQueryCriteria;
 import com.sockib.springresourceserver.model.dto.response.ProductResponseDto;
 import com.sockib.springresourceserver.model.dto.request.AddProductRequestDto;
 import com.sockib.springresourceserver.model.entity.Product;

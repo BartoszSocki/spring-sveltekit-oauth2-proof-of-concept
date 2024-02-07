@@ -1,10 +1,12 @@
-package com.sockib.springresourceserver.domain.product.data;
+package com.sockib.springresourceserver.domain.product.query;
 
 import com.sockib.springresourceserver.model.value.ProductScore;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.ProductReview_;
 import com.sockib.springresourceserver.model.entity.Product_;
 import org.springframework.data.jpa.domain.Specification;
+
+import java.util.List;
 
 public class ProductSpecification {
 
@@ -28,6 +30,14 @@ public class ProductSpecification {
         return (path, criteriaQuery, criteriaBuilder) -> {
             return criteriaBuilder.between(criteriaBuilder.avg(path.get(Product_.PRODUCT_REVIEWS).get(ProductReview_.FIVE_STAR_SCORE)), lower, upper);
         };
+    }
+
+    public static Specification<Product> tags(List<String> tags) {
+        throw new RuntimeException("TODO");
+    }
+
+    public static Specification<Product> category(String category) {
+        throw new RuntimeException("TODO");
     }
 
 }

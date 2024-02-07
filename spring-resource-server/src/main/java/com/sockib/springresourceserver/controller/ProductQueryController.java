@@ -1,6 +1,6 @@
 package com.sockib.springresourceserver.controller;
 
-import com.sockib.springresourceserver.domain.product.data.ProductQueryCriteria;
+import com.sockib.springresourceserver.domain.product.query.ProductQueryCriteria;
 import com.sockib.springresourceserver.model.dto.response.ProductResponseDto;
 import com.sockib.springresourceserver.service.product.ProductService;
 import lombok.AllArgsConstructor;

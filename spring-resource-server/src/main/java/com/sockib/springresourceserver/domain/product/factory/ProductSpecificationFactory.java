@@ -1,7 +1,7 @@
-package com.sockib.springresourceserver.domain.product;
+package com.sockib.springresourceserver.domain.product.factory;
 
-import com.sockib.springresourceserver.domain.product.data.ProductQueryCriteria;
-import com.sockib.springresourceserver.domain.product.data.ProductSpecification;
+import com.sockib.springresourceserver.domain.product.query.ProductQueryCriteria;
+import com.sockib.springresourceserver.domain.product.query.ProductSpecification;
 import com.sockib.springresourceserver.model.entity.Product;
 import org.springframework.data.jpa.domain.Specification;
 

@@ -7,6 +7,6 @@ import jakarta.persistence.criteria.Path;
 
 public interface Sorter<T> {
 
-    Order toOrder(Path<T> path, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder);
+    Order toOrder(Path<T> path, CriteriaBuilder criteriaBuilder);
 
 }

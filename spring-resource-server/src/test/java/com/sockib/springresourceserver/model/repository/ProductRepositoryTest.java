@@ -2,11 +2,6 @@ package com.sockib.springresourceserver.model.repository;
 
 import com.sockib.springresourceserver.model.respository.product.ProductRepository;
 import com.sockib.springresourceserver.model.respository.UserRepository;
-import com.sockib.springresourceserver.service.product.SearchFilterToProductSpecificationConverter;
-import com.sockib.springresourceserver.service.product.impl.SearchFilterToProductSpecificationConverterImpl;
-import com.sockib.springresourceserver.service.product.SortToProductSorterConverter;
-import com.sockib.springresourceserver.service.product.impl.SortToProductSorterConverterImpl;
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

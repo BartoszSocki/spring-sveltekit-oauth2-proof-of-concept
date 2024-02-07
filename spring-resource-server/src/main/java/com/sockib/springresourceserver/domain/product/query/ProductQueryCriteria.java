@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.domain.product.data;
+package com.sockib.springresourceserver.domain.product.query;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +11,6 @@ import java.util.Set;
 @Builder
 public class ProductQueryCriteria {
 
-    private Long ownerId;
     private String name;
     private Double minPrice;
     private Double maxPrice;
@@ -20,7 +19,6 @@ public class ProductQueryCriteria {
     private Set<String> tags;
     private String category;
 
-    private String sortField;
-    private String sortDirection;
+    private ProductSortCriteria sortCriteria;
 
 }
