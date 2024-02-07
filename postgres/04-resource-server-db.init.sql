@@ -61,10 +61,9 @@ insert into resource_server.product_catalog_tag (product_catalog_id, tag_id) val
 insert into resource_server.product_catalog_tag (product_catalog_id, tag_id) values (1, 'Bio');
 insert into resource_server.product_catalog_tag (product_catalog_id, tag_id) values (1, 'No Added Sugars');
 
-/* insert into resource_server.product_catalog_tag (product_catalog_id, tag_id) values (2, 6); */
-/* insert into resource_server.product_catalog_tag (product_catalog_id, tag_id) values (2, 10); */
-/* insert into resource_server.product_catalog_tag (product_catalog_id, tag_id) values (2, 11); */
-/* insert into resource_server.product_catalog_tag (product_catalog_id, tag_id) values (2, 12); */
+insert into resource_server.product_catalog_tag (product_catalog_id, tag_id) values (2, 'Fruits');
+insert into resource_server.product_catalog_tag (product_catalog_id, tag_id) values (2, 'Organic');
+insert into resource_server.product_catalog_tag (product_catalog_id, tag_id) values (2, 'No Added Sugars');
 
 /* insert into resource_server.product_catalog_tag (product_catalog_id, tag_id) values (3, 6); */
 /* insert into resource_server.product_catalog_tag (product_catalog_id, tag_id) values (3, 10); */
