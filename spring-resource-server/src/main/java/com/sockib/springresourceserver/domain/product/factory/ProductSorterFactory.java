@@ -11,8 +11,8 @@ public class ProductSorterFactory {
         boolean isAscending = criteria.getSortCriteria().isAscending();
 
         return switch (criteria.getSortCriteria().getSortField()) {
-            case SCORE -> ProductSorter.byScore(isAscending);
-            case PRICE -> ProductSorter.byPrice(isAscending);
+            case SCORE -> ProductSorter.score(isAscending);
+            case PRICE -> ProductSorter.price(isAscending);
         };
     }
 
