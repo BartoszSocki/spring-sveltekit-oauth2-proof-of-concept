@@ -1,5 +1,7 @@
 package com.sockib.springresourceserver.model.respository.product.impl;
 
+import com.sockib.springresourceserver.domain.product.query.ProductSpecification;
+import com.sockib.springresourceserver.domain.product.query.ProductSpecifications;
 import com.sockib.springresourceserver.model.respository.product.SearchableProductRepository;
 import com.sockib.springresourceserver.model.value.ProductScore;
 import com.sockib.springresourceserver.model.entity.Product;
@@ -21,13 +23,13 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
     private final EntityManager entityManager;
 
     @Override
-    public List<Product> findProducts(Specification<Product> whereSpecification, Specification<Product> havingSpecification, Sorter<Product> sorter, Pageable pageable) {
+    public List<Product> findProducts(ProductSpecification specification, Sorter<Product> sorter, Pageable pageable) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> criteriaQuery = criteriaBuilder.createTupleQuery();
         Root<Product> root = criteriaQuery.from(Product.class);
 
-        var wherePredicate = whereSpecification.toPredicate(root, criteriaQuery, criteriaBuilder);
-        var havingPredicate = havingSpecification.toPredicate(root, criteriaQuery, criteriaBuilder);
+        var wherePredicate = specification.getWhereSpecification().toPredicate(root, criteriaQuery, criteriaBuilder);
+        var havingPredicate = specification.getHavingSpecification().toPredicate(root, criteriaQuery, criteriaBuilder);
 
         var order = sorter.toOrder(root, criteriaBuilder);
 

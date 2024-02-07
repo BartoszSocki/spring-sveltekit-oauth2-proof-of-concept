@@ -1,12 +1,15 @@
 package com.sockib.springresourceserver.domain.product.repository;
 
-import com.sockib.springresourceserver.domain.product.query.ProductSortCriteria;
 import com.sockib.springresourceserver.domain.product.factory.ProductSorterFactory;
 import com.sockib.springresourceserver.domain.product.factory.ProductSpecificationFactory;
 import com.sockib.springresourceserver.domain.product.query.ProductQueryCriteria;
+import com.sockib.springresourceserver.domain.product.query.ProductSortCriteria;
+import com.sockib.springresourceserver.domain.product.query.ProductSpecification;
+import com.sockib.springresourceserver.domain.product.query.ProductSpecifications;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.respository.product.SearchableProductRepository;
 import com.sockib.springresourceserver.util.search.sort.Sorter;
+import graphql.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -36,11 +40,10 @@ class SearchableProductRepositoryImplTest {
                 .build();
 
         // when
-        Specification<Product> whereSpecification = ProductSpecificationFactory.where(criteria);
-        Specification<Product> havingSpecification = ProductSpecificationFactory.having(criteria);
+        ProductSpecification specification = ProductSpecificationFactory.where(criteria);
         Sorter<Product> sorter = ProductSorterFactory.create(criteria);
 
-        List<Product> products = productRepository.findProducts(whereSpecification, havingSpecification, sorter, PageRequest.of(0, 10));
+        List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
 
         // then
         Assertions.assertNotNull(products);
@@ -54,6 +57,25 @@ class SearchableProductRepositoryImplTest {
     }
 
     @Test
+    void givenName_whenQuery_thenReturnSpecifiedProducts() {
+        // given
+        ProductQueryCriteria criteria = ProductQueryCriteria.builder()
+                .name("1KG")
+                .build();
+
+        // when
+        ProductSpecification specification = ProductSpecificationFactory.where(criteria);
+        Sorter<Product> sorter = ProductSorterFactory.noSort();
+
+        List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
+
+        // then
+        Assertions.assertNotNull(products);
+        Assertions.assertFalse(products.isEmpty());
+        System.out.println(products);
+    }
+
+    @Test
     void givenCategory_whenQuery_thenReturnSpecifiedProducts() {
         // given
         ProductQueryCriteria criteria = ProductQueryCriteria.builder()
@@ -61,16 +83,34 @@ class SearchableProductRepositoryImplTest {
                 .build();
 
         // when
-        Specification<Product> whereSpecification = ProductSpecificationFactory.where(criteria);
-        Specification<Product> havingSpecification = ProductSpecificationFactory.empty();
+        ProductSpecification specification = ProductSpecificationFactory.where(criteria);
         Sorter<Product> sorter = ProductSorterFactory.noSort();
 
-        List<Product> products = productRepository.findProducts(whereSpecification, havingSpecification, sorter, PageRequest.of(0, 10));
+        List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
 
         // then
         Assertions.assertNotNull(products);
         Assertions.assertFalse(products.isEmpty());
         Assertions.assertTrue(products.stream().allMatch(p -> "Games".equals(p.getCategory().getName())));
+    }
+
+    @Test
+    void givenTags_whenQuery_thenReturnSpecifiedProducts() {
+        // given
+        ProductQueryCriteria criteria = ProductQueryCriteria.builder()
+                .tags(Set.of("Bio", "Organic"))
+                .build();
+
+        // when
+        ProductSpecification specification = ProductSpecificationFactory.where(criteria);
+        Sorter<Product> sorter = ProductSorterFactory.noSort();
+
+        List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
+
+        // then
+        Assertions.assertNotNull(products);
+        Assertions.assertFalse(products.isEmpty());
+        Assertions.assertEquals(1, products.size());
     }
 
 }
