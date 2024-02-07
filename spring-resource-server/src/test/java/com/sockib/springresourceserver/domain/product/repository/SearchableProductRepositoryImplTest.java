@@ -53,4 +53,24 @@ class SearchableProductRepositoryImplTest {
         Assertions.assertTrue(products.stream().allMatch(p -> p.getPrice().getAmount() >= 3.0));
     }
 
+    @Test
+    void givenCategory_whenQuery_thenReturnSpecifiedProducts() {
+        // given
+        ProductQueryCriteria criteria = ProductQueryCriteria.builder()
+                .category("Games")
+                .build();
+
+        // when
+        Specification<Product> whereSpecification = ProductSpecificationFactory.where(criteria);
+        Specification<Product> havingSpecification = ProductSpecificationFactory.empty();
+        Sorter<Product> sorter = ProductSorterFactory.noSort();
+
+        List<Product> products = productRepository.findProducts(whereSpecification, havingSpecification, sorter, PageRequest.of(0, 10));
+
+        // then
+        Assertions.assertNotNull(products);
+        Assertions.assertFalse(products.isEmpty());
+        Assertions.assertTrue(products.stream().allMatch(p -> "Games".equals(p.getCategory().getName())));
+    }
+
 }

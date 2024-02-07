@@ -16,4 +16,8 @@ public class ProductSorterFactory {
         };
     }
 
+    public static Sorter<Product> noSort() {
+        return ProductSorter.score(true);
+    }
+
 }

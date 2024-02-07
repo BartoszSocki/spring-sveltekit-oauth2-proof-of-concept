@@ -1,5 +1,6 @@
 package com.sockib.springresourceserver.domain.product.query;
 
+import com.sockib.springresourceserver.model.entity.Category_;
 import com.sockib.springresourceserver.model.value.ProductScore;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.ProductReview_;
@@ -37,7 +38,13 @@ public class ProductSpecification {
     }
 
     public static Specification<Product> category(String category) {
-        throw new RuntimeException("TODO");
+        return category == null ? null : (path, criteriaQuery, criteriaBuilder) -> {
+            return criteriaBuilder.equal(criteriaBuilder.upper(path.get(Product_.CATEGORY).get(Category_.NAME)), category.toUpperCase());
+        };
+    }
+
+    public static Specification<Product> empty() {
+        return (path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.and();
     }
 
 }
