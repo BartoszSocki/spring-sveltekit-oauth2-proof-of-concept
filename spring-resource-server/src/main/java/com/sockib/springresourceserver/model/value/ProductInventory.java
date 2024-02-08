@@ -1,6 +1,7 @@
-package com.sockib.springresourceserver.model.entity;
+package com.sockib.springresourceserver.model.value;
 
 import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreationAndUpdateTimestamp;
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
@@ -11,17 +12,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 
-@Entity
-public class ProductInventory extends WithCreationAndUpdateTimestamp {
+@Embeddable
+public class ProductInventory {
 
     private Integer quantity;
     private Integer productsBought = 0;
 
-    @OneToOne(mappedBy = "inventory")
-    private Product product;
-
     public ProductInventory(Integer quantity) {
         this.quantity = quantity;
+        this.productsBought = 0;
     }
 
 }

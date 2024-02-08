@@ -3,7 +3,7 @@ package com.sockib.springresourceserver.service.product;
 import com.sockib.springresourceserver.exception.CurrencyNotSupportedException;
 import com.sockib.springresourceserver.model.dto.request.AddProductRequestDto;
 import com.sockib.springresourceserver.model.entity.Product;
-import com.sockib.springresourceserver.model.entity.ProductInventory;
+import com.sockib.springresourceserver.model.value.ProductInventory;
 import com.sockib.springresourceserver.model.value.Money;
 
 public class ProductFactory {

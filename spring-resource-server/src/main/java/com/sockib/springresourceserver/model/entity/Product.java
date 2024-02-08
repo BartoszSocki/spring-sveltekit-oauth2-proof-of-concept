@@ -1,12 +1,12 @@
 package com.sockib.springresourceserver.model.entity;
 
 import com.sockib.springresourceserver.model.value.Money;
+import com.sockib.springresourceserver.model.value.ProductInventory;
 import com.sockib.springresourceserver.model.value.ProductScore;
 import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreationAndUpdateTimestamp;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -47,7 +47,6 @@ public class Product extends WithCreationAndUpdateTimestamp {
     private Money price;
 
     @ToString.Exclude
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ProductInventory inventory;
 
     @ToString.Exclude
