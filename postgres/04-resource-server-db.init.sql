@@ -29,32 +29,20 @@ insert into resource_server.tag (name) values ('Factory builder');
 insert into resource_server.tag (name) values ('Russian Literature');
 insert into resource_server.tag (name) values ('Romantic');
 
-insert into resource_server.product_inventory (id, quantity) values (1, 100);
-insert into resource_server.product_inventory (id, quantity) values (2, 200);
-insert into resource_server.product_inventory (id, quantity) values (3, 300);
-insert into resource_server.product_inventory (id, quantity) values (4, 400);
-insert into resource_server.product_inventory (id, quantity) values (5, 100);
-insert into resource_server.product_inventory (id, quantity) values (6, 200);
-insert into resource_server.product_inventory (id, quantity) values (7, 300);
-insert into resource_server.product_inventory (id, quantity) values (8, 400);
-insert into resource_server.product_inventory (id, quantity) values (9, 50);
-insert into resource_server.product_inventory (id, quantity) values (10, 80);
-insert into resource_server.product_inventory (id, quantity) values (11, 10);
+insert into resource_server.product_catalog (id, name, price, currency, quantity, category_id, description) values (1, 'Apples 1KG', 10, 'USD', 100, 'Food', 'Very good and tastefull organic apples');
+insert into resource_server.product_catalog (id, name, price, currency, quantity, category_id, description) values (2, 'Oranges 1KG', 20, 'USD', 200, 'Food', 'Very good ogranges');
+insert into resource_server.product_catalog (id, name, price, currency, quantity, category_id, description) values (3, 'Pears 1KG', 25, 'USD', 300, 'Food', 'Very good and sweet pears');
 
-insert into resource_server.product_catalog (id, name, price, currency, inventory_id, category_id, description) values (1, 'Apples 1KG', 10, 'USD', 1, 'Food', 'Very good and tastefull organic apples');
-insert into resource_server.product_catalog (id, name, price, currency, inventory_id, category_id, description) values (2, 'Oranges 1KG', 20, 'USD', 2, 'Food', 'Very good ogranges');
-insert into resource_server.product_catalog (id, name, price, currency, inventory_id, category_id, description) values (3, 'Pears 1KG', 25, 'USD', 3, 'Food', 'Very good and sweet pears');
+insert into resource_server.product_catalog (id, name, price, currency, quantity, category_id, description) values (4, 'Coca-Cola bottle', 2, 'USD', 400, 'Beverages', 'Everybody knows what coke is');
+insert into resource_server.product_catalog (id, name, price, currency, quantity, category_id, description) values (5, 'Beer', 3.50, 'USD', 500, 'Beverages', 'Home made bear');
 
-insert into resource_server.product_catalog (id, name, price, currency, inventory_id, category_id, description) values (4, 'Coca-Cola bottle', 2, 'USD', 4, 'Beverages', 'Everybody knows what coke is');
-insert into resource_server.product_catalog (id, name, price, currency, inventory_id, category_id, description) values (5, 'Beer', 3.50, 'USD', 5, 'Beverages', 'Home made bear');
+insert into resource_server.product_catalog (id, name, price, currency, quantity, category_id, description) values (6, 'Counter Strike Global Offensive', 10, 'USD', 600, 'Games', 'Everybody played CS once in their life');
+insert into resource_server.product_catalog (id, name, price, currency, quantity, category_id, description) values (7, 'Minecraft', 19.99, 'USD', 700, 'Games', 'Everybody played this once in their life');
+insert into resource_server.product_catalog (id, name, price, currency, quantity, category_id, description) values (8, 'Factorio', 19.99, 'USD', 800, 'Games', 'Very good game');
 
-insert into resource_server.product_catalog (id, name, price, currency, inventory_id, category_id, description) values (6, 'Counter Strike Global Offensive', 10, 'USD', 6, 'Games', 'Everybody played CS once in their life');
-insert into resource_server.product_catalog (id, name, price, currency, inventory_id, category_id, description) values (7, 'Minecraft', 19.99, 'USD', 7, 'Games', 'Everybody played this once in their life');
-insert into resource_server.product_catalog (id, name, price, currency, inventory_id, category_id, description) values (8, 'Factorio', 19.99, 'USD', 8, 'Games', 'Very good game');
-
-insert into resource_server.product_catalog (id, name, price, currency, inventory_id, category_id, description) values (9, '1984', 9.99, 'USD', 9, 'Books', 'Literaly 1984');
-insert into resource_server.product_catalog (id, name, price, currency, inventory_id, category_id, description) values (10, 'Solaris', 9.99, 'USD', 10, 'Books', 'Written by stanislaw lem');
-insert into resource_server.product_catalog (id, name, price, currency, inventory_id, category_id, description) values (11, 'Crime and Punishment', 8.99, 'USD', 11, 'Books', 'You should read this');
+insert into resource_server.product_catalog (id, name, price, currency, quantity, category_id, description) values (9, '1984', 9.99, 'USD', 900, 'Books', 'Literaly 1984');
+insert into resource_server.product_catalog (id, name, price, currency, quantity, category_id, description) values (10, 'Solaris', 9.99, 'USD', 100, 'Books', 'Written by stanislaw lem');
+insert into resource_server.product_catalog (id, name, price, currency, quantity, category_id, description) values (11, 'Crime and Punishment', 8.99, 'USD', 100, 'Books', 'You should read this');
 
 insert into resource_server.product_catalog_tag (product_catalog_id, tag_id) values (1, 'Fruits');
 insert into resource_server.product_catalog_tag (product_catalog_id, tag_id) values (1, 'Organic');
@@ -124,6 +112,5 @@ insert into resource_server.product_review (product_catalog_id, reviewer_id, fiv
 -- -- -- -- --
 
 alter table resource_server.user alter column id restart with 2000;
-alter table resource_server.product_inventory alter column id restart with 2000;
 alter table resource_server.product_catalog alter column id restart with 2000;
 alter table resource_server.product_review alter column id restart with 2000;
