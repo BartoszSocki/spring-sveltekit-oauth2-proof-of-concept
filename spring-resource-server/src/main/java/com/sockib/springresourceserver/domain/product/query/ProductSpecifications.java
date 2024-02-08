@@ -1,10 +1,14 @@
 package com.sockib.springresourceserver.domain.product.query;
 
-import com.sockib.springresourceserver.model.entity.Category_;
-import com.sockib.springresourceserver.model.entity.Product;
-import com.sockib.springresourceserver.model.entity.ProductReview_;
-import com.sockib.springresourceserver.model.entity.Product_;
+import com.sockib.springresourceserver.model.entity.*;
 import com.sockib.springresourceserver.model.value.ProductScore;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
+import org.springframework.security.core.parameters.P;
+
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
 
 public class ProductSpecifications {
 
@@ -33,19 +37,23 @@ public class ProductSpecifications {
                 (path, criteriaQuery, criteriaBuilder) ->
                         criteriaBuilder.between(criteriaBuilder.avg(path.get(Product_.PRODUCT_REVIEWS).get(ProductReview_.FIVE_STAR_SCORE)), lower, upper));
     }
-    
-//    public static Specification<Product> tags(Set<String> tags) {
-//        System.out.println(tags);
-//        return tags == null || tags.isEmpty() ? null : (path, criteriaQuery, criteriaBuilder) -> {
-//            return criteriaBuilder.equal(criteriaBuilder.sum(
-//                            criteriaBuilder.selectCase()
-//                                    .when(criteriaBuilder.in(path.get(Product_.TAGS)).value(tags), 1)
-//                                    .otherwise(0).as(Long.class)
-//                    ), tags.size()
-//            );
-//        };
-//    }
-//
+
+    // God forgive me for those sql sins, amen
+    public static ProductSpecification tags(Set<String> tags) {
+        return tags == null || tags.isEmpty() ? ProductSpecification.empty() : ProductSpecification.where((root, criteriaQuery, criteriaBuilder) -> {
+            Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
+            Root<Product> subqueryRoot = subquery.from(Product.class);
+
+            subquery.select(criteriaBuilder.count(subqueryRoot.get(Product_.ID)))
+                    .where(
+                            criteriaBuilder.equal(subqueryRoot.get(Product_.ID), root.get(Product_.ID)),
+                            criteriaBuilder.in(subqueryRoot.get(Product_.TAGS).get(Tag_.NAME)).value(tags)
+                    );
+
+            return criteriaBuilder.equal(subquery, tags.size());
+        });
+    }
+
     public static ProductSpecification category(String category) {
         return category == null ? ProductSpecification.empty() : ProductSpecification.where(
                 (path, criteriaQuery, criteriaBuilder) ->

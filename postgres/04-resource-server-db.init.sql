@@ -99,7 +99,7 @@ insert into resource_server.product_review (product_catalog_id, reviewer_id, fiv
 
 insert into resource_server.product_review (product_catalog_id, reviewer_id, five_star_score) values (2, 1, 5);
 insert into resource_server.product_review (product_catalog_id, reviewer_id, five_star_score) values (2, 2, 5);
-insert into resource_server.product_review (product_catalog_id, reviewer_id, five_star_score) values (2, 3, 5);
+/* insert into resource_server.product_review (product_catalog_id, reviewer_id, five_star_score) values (2, 3, 5); */
 
 insert into resource_server.product_review (product_catalog_id, reviewer_id, five_star_score) values (3, 1, 4);
 insert into resource_server.product_review (product_catalog_id, reviewer_id, five_star_score) values (3, 2, 4);

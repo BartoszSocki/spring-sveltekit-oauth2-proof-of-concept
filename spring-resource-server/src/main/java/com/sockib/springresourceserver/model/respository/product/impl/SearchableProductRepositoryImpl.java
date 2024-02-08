@@ -1,19 +1,19 @@
 package com.sockib.springresourceserver.model.respository.product.impl;
 
 import com.sockib.springresourceserver.domain.product.query.ProductSpecification;
-import com.sockib.springresourceserver.domain.product.query.ProductSpecifications;
-import com.sockib.springresourceserver.model.respository.product.SearchableProductRepository;
-import com.sockib.springresourceserver.model.value.ProductScore;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.ProductReview_;
 import com.sockib.springresourceserver.model.entity.Product_;
+import com.sockib.springresourceserver.model.respository.product.SearchableProductRepository;
+import com.sockib.springresourceserver.model.value.ProductScore;
 import com.sockib.springresourceserver.util.search.sort.Sorter;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 

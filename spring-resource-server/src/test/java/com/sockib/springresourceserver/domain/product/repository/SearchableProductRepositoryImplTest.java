@@ -90,6 +90,9 @@ class SearchableProductRepositoryImplTest {
 
         // then
         Assertions.assertNotNull(products);
+        System.out.println(products.size());
+        products.forEach(p -> System.out.println(p.getName() + " " + p.getDescription()));
+
         Assertions.assertFalse(products.isEmpty());
         Assertions.assertTrue(products.stream().allMatch(p -> "Games".equals(p.getCategory().getName())));
     }
@@ -98,7 +101,7 @@ class SearchableProductRepositoryImplTest {
     void givenTags_whenQuery_thenReturnSpecifiedProducts() {
         // given
         ProductQueryCriteria criteria = ProductQueryCriteria.builder()
-                .tags(Set.of("Bio", "Organic"))
+                .tags(Set.of("Fruits", "Bio"))
                 .build();
 
         // when

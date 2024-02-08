@@ -12,6 +12,7 @@ public class ProductSpecificationFactory {
         return ProductSpecifications.priceBetween(criteria.getMinPrice(), criteria.getMaxPrice())
                 .and(ProductSpecifications.nameLike(criteria.getName()))
                 .and(ProductSpecifications.category(criteria.getCategory()))
+                .and(ProductSpecifications.tags(criteria.getTags()))
                 .and(ProductSpecifications.scoreBetween(criteria.getMinScore(), criteria.getMaxScore()));
     }
 
