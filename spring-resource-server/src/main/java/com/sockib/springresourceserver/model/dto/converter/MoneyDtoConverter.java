@@ -1,5 +1,6 @@
 package com.sockib.springresourceserver.model.dto.converter;
 
+import com.sockib.springresourceserver.core.util.DtoConverter;
 import com.sockib.springresourceserver.model.dto.response.MoneyResponseDto;
 import com.sockib.springresourceserver.model.value.Money;
 

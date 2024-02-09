@@ -4,7 +4,7 @@ import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.ProductReview_;
 import com.sockib.springresourceserver.model.entity.Product_;
 import com.sockib.springresourceserver.model.value.Money_;
-import com.sockib.springresourceserver.util.search.sort.Sorter;
+import com.sockib.springresourceserver.core.util.Sorter;
 import jakarta.persistence.criteria.Expression;
 
 public class ProductSorter {

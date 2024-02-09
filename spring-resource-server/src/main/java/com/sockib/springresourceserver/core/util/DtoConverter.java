@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.model.dto.converter;
+package com.sockib.springresourceserver.core.util;
 
 public interface DtoConverter<T, U> {
 

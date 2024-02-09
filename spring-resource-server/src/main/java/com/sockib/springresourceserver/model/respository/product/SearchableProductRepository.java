@@ -2,9 +2,8 @@ package com.sockib.springresourceserver.model.respository.product;
 
 import com.sockib.springresourceserver.domain.product.query.ProductSpecification;
 import com.sockib.springresourceserver.model.entity.Product;
-import com.sockib.springresourceserver.util.search.sort.Sorter;
+import com.sockib.springresourceserver.core.util.Sorter;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 

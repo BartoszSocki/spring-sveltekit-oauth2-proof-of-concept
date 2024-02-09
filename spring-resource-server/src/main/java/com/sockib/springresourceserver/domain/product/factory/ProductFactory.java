@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.service.product;
+package com.sockib.springresourceserver.domain.product.factory;
 
 import com.sockib.springresourceserver.exception.CurrencyNotSupportedException;
 import com.sockib.springresourceserver.model.dto.request.AddProductRequestDto;

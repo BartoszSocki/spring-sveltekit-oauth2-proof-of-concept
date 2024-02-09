@@ -3,7 +3,7 @@ package com.sockib.springresourceserver.domain.product.factory;
 import com.sockib.springresourceserver.domain.product.query.ProductQueryCriteria;
 import com.sockib.springresourceserver.domain.product.query.ProductSorter;
 import com.sockib.springresourceserver.model.entity.Product;
-import com.sockib.springresourceserver.util.search.sort.Sorter;
+import com.sockib.springresourceserver.core.util.Sorter;
 
 public class ProductSorterFactory {
 

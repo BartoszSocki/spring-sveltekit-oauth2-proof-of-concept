@@ -5,18 +5,15 @@ import com.sockib.springresourceserver.domain.product.factory.ProductSpecificati
 import com.sockib.springresourceserver.domain.product.query.ProductQueryCriteria;
 import com.sockib.springresourceserver.domain.product.query.ProductSortCriteria;
 import com.sockib.springresourceserver.domain.product.query.ProductSpecification;
-import com.sockib.springresourceserver.domain.product.query.ProductSpecifications;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.respository.product.SearchableProductRepository;
-import com.sockib.springresourceserver.util.search.sort.Sorter;
-import graphql.Assert;
+import com.sockib.springresourceserver.core.util.Sorter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -5,12 +5,12 @@ import com.sockib.springresourceserver.domain.product.factory.ProductSpecificati
 import com.sockib.springresourceserver.domain.product.query.ProductQueryCriteria;
 import com.sockib.springresourceserver.exception.PageSizeTooLargeException;
 import com.sockib.springresourceserver.model.dto.response.ProductResponseDto;
-import com.sockib.springresourceserver.model.dto.converter.DtoConverter;
+import com.sockib.springresourceserver.core.util.DtoConverter;
 import com.sockib.springresourceserver.model.dto.converter.ProductDtoConverter;
 import com.sockib.springresourceserver.model.dto.request.AddProductRequestDto;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.respository.product.ProductRepository;
-import com.sockib.springresourceserver.service.product.ProductFactory;
+import com.sockib.springresourceserver.domain.product.factory.ProductFactory;
 import com.sockib.springresourceserver.service.product.ProductService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;

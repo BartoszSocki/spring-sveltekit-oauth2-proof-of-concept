@@ -6,7 +6,7 @@ import com.sockib.springresourceserver.model.entity.ProductReview_;
 import com.sockib.springresourceserver.model.entity.Product_;
 import com.sockib.springresourceserver.model.respository.product.SearchableProductRepository;
 import com.sockib.springresourceserver.model.value.ProductScore;
-import com.sockib.springresourceserver.util.search.sort.Sorter;
+import com.sockib.springresourceserver.core.util.Sorter;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -39,7 +39,7 @@ public class SearchableProductRepositoryImpl implements SearchableProductReposit
                         criteriaBuilder.avg(
                                 root.get(Product_.PRODUCT_REVIEWS).get(ProductReview_.FIVE_STAR_SCORE)
                         ),
-                        criteriaBuilder.count(
+                        criteriaBuilder.countDistinct(
                                 root.get(Product_.PRODUCT_REVIEWS).get(ProductReview_.FIVE_STAR_SCORE)
                         )
                 )

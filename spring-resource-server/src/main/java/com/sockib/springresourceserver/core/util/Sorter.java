@@ -1,4 +1,4 @@
-package com.sockib.springresourceserver.util.search.sort;
+package com.sockib.springresourceserver.core.util;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
