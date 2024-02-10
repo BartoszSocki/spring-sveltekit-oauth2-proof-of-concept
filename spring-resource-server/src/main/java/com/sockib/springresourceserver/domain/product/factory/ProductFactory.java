@@ -14,6 +14,7 @@ public class ProductFactory {
         }
 
         var product = Product.builder()
+                .isDeleted(false)
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .inventory(new ProductInventory(dto.getQuantity()))

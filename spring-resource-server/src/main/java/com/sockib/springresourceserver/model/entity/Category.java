@@ -1,7 +1,5 @@
 package com.sockib.springresourceserver.model.entity;
 
-import com.sockib.springresourceserver.model.entity.mappedsuperclass.WithCreationTimestamp;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Getter;

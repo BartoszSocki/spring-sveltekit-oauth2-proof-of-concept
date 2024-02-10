@@ -2,7 +2,7 @@ package com.sockib.springresourceserver.controller;
 
 import com.sockib.springresourceserver.domain.product.query.ProductQueryCriteria;
 import com.sockib.springresourceserver.model.dto.response.ProductResponseDto;
-import com.sockib.springresourceserver.service.product.ProductService;
+import com.sockib.springresourceserver.service.product.ProductQueryService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +15,11 @@ import java.util.List;
 @RestController
 public class ProductQueryController {
 
-    private final ProductService productService;
+    private final ProductQueryService productQueryService;
 
     @GetMapping("/api/products")
     List<ProductResponseDto> queryProducts(ProductQueryCriteria criteria, Pageable pageable) {
-        return productService.searchProduct(criteria, pageable);
+        return productQueryService.searchProduct(criteria, pageable);
     }
 
 }
