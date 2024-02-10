@@ -50,7 +50,7 @@ public class Product extends WithCreationAndUpdateTimestamp {
     private ProductInventory inventory;
 
     @ToString.Exclude
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "product_catalog_tag",
             joinColumns = @JoinColumn(name = "product_catalog_id"),
@@ -58,7 +58,7 @@ public class Product extends WithCreationAndUpdateTimestamp {
     )
     private List<Tag> tags;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     @ToString.Exclude
     private Category category;
