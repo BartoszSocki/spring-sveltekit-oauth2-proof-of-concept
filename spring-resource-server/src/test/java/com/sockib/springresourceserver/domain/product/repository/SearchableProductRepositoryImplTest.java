@@ -6,6 +6,7 @@ import com.sockib.springresourceserver.domain.product.query.ProductQueryCriteria
 import com.sockib.springresourceserver.domain.product.query.ProductSortCriteria;
 import com.sockib.springresourceserver.domain.product.query.ProductSpecification;
 import com.sockib.springresourceserver.model.entity.Product;
+import com.sockib.springresourceserver.model.entity.Tag;
 import com.sockib.springresourceserver.model.respository.product.SearchableProductRepository;
 import com.sockib.springresourceserver.core.util.Sorter;
 import org.junit.jupiter.api.Assertions;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BooleanSupplier;
+import java.util.stream.Collectors;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -54,10 +57,11 @@ class SearchableProductRepositoryImplTest {
     }
 
     @Test
-    void givenName_whenQuery_thenReturnSpecifiedProducts() {
+    void givenNameCriteria_whenQuery_thenReturnSpecifiedProducts() {
         // given
+        final String name = "1KG";
         ProductQueryCriteria criteria = ProductQueryCriteria.builder()
-                .name("1KG")
+                .name(name)
                 .build();
 
         // when
@@ -69,14 +73,15 @@ class SearchableProductRepositoryImplTest {
         // then
         Assertions.assertNotNull(products);
         Assertions.assertFalse(products.isEmpty());
-        System.out.println(products);
+        Assertions.assertTrue(products.stream().allMatch(p -> p.getName().contains(name)));
     }
 
     @Test
-    void givenCategory_whenQuery_thenReturnSpecifiedProducts() {
+    void givenCategoryCriteria_whenQuery_thenReturnSpecifiedProducts() {
         // given
+        final String category = "Games";
         ProductQueryCriteria criteria = ProductQueryCriteria.builder()
-                .category("Games")
+                .category(category)
                 .build();
 
         // when
@@ -87,18 +92,16 @@ class SearchableProductRepositoryImplTest {
 
         // then
         Assertions.assertNotNull(products);
-        System.out.println(products.size());
-        products.forEach(p -> System.out.println(p.getName() + " " + p.getDescription()));
-
         Assertions.assertFalse(products.isEmpty());
-        Assertions.assertTrue(products.stream().allMatch(p -> "Games".equals(p.getCategory().getName())));
+        Assertions.assertTrue(products.stream().allMatch(p -> category.equals(p.getCategory().getName())));
     }
 
     @Test
-    void givenTags_whenQuery_thenReturnSpecifiedProducts() {
+    void givenTagsCriteria_whenQuery_thenReturnSpecifiedProducts() {
         // given
+        final Set<String> tags = Set.of("Fruits", "Bio");
         ProductQueryCriteria criteria = ProductQueryCriteria.builder()
-                .tags(Set.of("Fruits", "Bio"))
+                .tags(tags)
                 .build();
 
         // when
@@ -111,6 +114,10 @@ class SearchableProductRepositoryImplTest {
         Assertions.assertNotNull(products);
         Assertions.assertFalse(products.isEmpty());
         Assertions.assertEquals(1, products.size());
+        Assertions.assertTrue(products.stream()
+                .map(p -> p.getTags().stream().map(Tag::getName).toList())
+                .allMatch(pt -> pt.containsAll(tags))
+        );
     }
 
 }
