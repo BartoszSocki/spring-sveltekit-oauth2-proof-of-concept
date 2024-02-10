@@ -16,12 +16,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.function.BooleanSupplier;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -40,7 +35,7 @@ class SearchableProductRepositoryImplTest {
                 .build();
 
         // when
-        ProductSpecification specification = ProductSpecificationFactory.where(criteria);
+        ProductSpecification specification = ProductSpecificationFactory.create(criteria);
         Sorter<Product> sorter = ProductSorterFactory.create(criteria);
 
         List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
@@ -65,7 +60,7 @@ class SearchableProductRepositoryImplTest {
                 .build();
 
         // when
-        ProductSpecification specification = ProductSpecificationFactory.where(criteria);
+        ProductSpecification specification = ProductSpecificationFactory.create(criteria);
         Sorter<Product> sorter = ProductSorterFactory.noSort();
 
         List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
@@ -85,7 +80,7 @@ class SearchableProductRepositoryImplTest {
                 .build();
 
         // when
-        ProductSpecification specification = ProductSpecificationFactory.where(criteria);
+        ProductSpecification specification = ProductSpecificationFactory.create(criteria);
         Sorter<Product> sorter = ProductSorterFactory.noSort();
 
         List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
@@ -105,7 +100,7 @@ class SearchableProductRepositoryImplTest {
                 .build();
 
         // when
-        ProductSpecification specification = ProductSpecificationFactory.where(criteria);
+        ProductSpecification specification = ProductSpecificationFactory.create(criteria);
         Sorter<Product> sorter = ProductSorterFactory.noSort();
 
         List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
@@ -118,6 +113,97 @@ class SearchableProductRepositoryImplTest {
                 .map(p -> p.getTags().stream().map(Tag::getName).toList())
                 .allMatch(pt -> pt.containsAll(tags))
         );
+    }
+
+    @Test
+    void givenPriceCriteria_whenQuery_thenReturnSpecifiedProducts() {
+        // given
+        final double minPrice = 10;
+        ProductQueryCriteria criteria = ProductQueryCriteria.builder()
+                .minPrice(minPrice)
+                .build();
+
+        // when
+        ProductSpecification specification = ProductSpecificationFactory.create(criteria);
+        Sorter<Product> sorter = ProductSorterFactory.noSort();
+
+        List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
+
+        // then
+        Assertions.assertNotNull(products);
+        Assertions.assertFalse(products.isEmpty());
+        Assertions.assertTrue(products.stream().allMatch(p -> p.getPrice().getAmount() >= minPrice));
+    }
+
+    @Test
+    void givenScoreCriteria_whenQuery_thenReturnSpecifiedProducts() {
+        // given
+        final int minScore = 3;
+        ProductQueryCriteria criteria = ProductQueryCriteria.builder()
+                .minScore(minScore)
+                .build();
+
+        // when
+        ProductSpecification specification = ProductSpecificationFactory.create(criteria);
+        Sorter<Product> sorter = ProductSorterFactory.noSort();
+
+        List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
+
+        // then
+        Assertions.assertNotNull(products);
+        Assertions.assertFalse(products.isEmpty());
+        Assertions.assertTrue(products.stream().allMatch(p -> p.getProductScore().getAverageScore() >= minScore));
+
+    }
+
+    @Test
+    void givenPriceSortCriteria_whenQuery_thenReturnProductsInSpecifiedOrder() {
+        // given
+        final ProductSortCriteria sortCriteria = ProductSortCriteria.asc(ProductSortCriteria.Field.PRICE);
+        ProductQueryCriteria criteria = ProductQueryCriteria.builder()
+                .sortCriteria(sortCriteria)
+                .build();
+
+        // when
+        ProductSpecification specification = ProductSpecificationFactory.create(criteria);
+        Sorter<Product> sorter = ProductSorterFactory.create(criteria);
+
+        List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
+
+        // then
+        Assertions.assertNotNull(products);
+        Assertions.assertFalse(products.isEmpty());
+
+        var prices = products.stream().map(p -> p.getPrice().getAmount()).toList();
+        var sortedPrices = new ArrayList<>(prices);
+        Collections.sort(sortedPrices);
+
+        Assertions.assertEquals(prices, sortedPrices);
+    }
+
+    @Test
+    void givenScoreSortCriteria_whenQuery_thenReturnProductsInSpecifiedOrder() {
+        // given
+        final ProductSortCriteria sortCriteria = ProductSortCriteria.asc(ProductSortCriteria.Field.SCORE);
+        ProductQueryCriteria criteria = ProductQueryCriteria.builder()
+                .sortCriteria(sortCriteria)
+                .build();
+
+        // when
+        ProductSpecification specification = ProductSpecificationFactory.create(criteria);
+        Sorter<Product> sorter = ProductSorterFactory.create(criteria);
+
+        List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
+
+        // then
+        Assertions.assertNotNull(products);
+        Assertions.assertFalse(products.isEmpty());
+
+        var scores = products.stream().map(p -> p.getProductScore().getAverageScore()).toList();
+        var sortedScores = new ArrayList<>(scores);
+        Collections.sort(sortedScores);
+
+        Assertions.assertEquals(scores, sortedScores);
     }
 
 }

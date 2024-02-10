@@ -37,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
             throw new PageSizeTooLargeException("page size: " + pageable.getPageSize() + " too large (>" + MAX_PRODUCT_PAGE_SIZE + ")");
         }
 
-        var specification = ProductSpecificationFactory.where(criteria);
+        var specification = ProductSpecificationFactory.create(criteria);
         var sorter = ProductSorterFactory.create(criteria);
 
         return productRepository.findProducts(specification, sorter, pageable)
