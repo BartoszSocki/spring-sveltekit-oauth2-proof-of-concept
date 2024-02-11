@@ -4,13 +4,13 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation'
 
-    import PriceFilter from '$lib/search/PriceFilter.svelte';
-    import CategoryFilter from '$lib/search/CategoryFilter.svelte';
-	import Sorter from '$lib/search/Sorter.svelte';
-	import TagsFilter from '$lib/search/TagsFilter.svelte';
+    import PriceCriteria from '../../../../lib/product/query/PriceCriteria.svelte';
+    import CategoryCriteria from '../../../../lib/product/query/CategoryCriteria.svelte'
+	import SortCriteria from '../../../../lib/product/query/SortCriteria.svelte';
+	import TagsCriteria from '../../../../lib/product/query/TagsCriteria.svelte';
 
     export let data;
-    const filterParams = writable({})
+    const criteria = writable({})
     const isValid = writable({})
 
     // $: isLastPage = data.data.searchProducts
@@ -19,15 +19,14 @@
     $: nextUrl = $page.url.origin + '/product/list/' + (parseInt($page.params.page) + 1) + $page.url.search;
 
     function search() {
-        const map = $filterParams
+        const map = $criteria
         const search = Object.entries(map)
             .filter(([_, value]) => value !== null && value !== undefined && value !== "")
             .map(([key, value]) => key + '=' + value)
             .join('&')
         
         const url = '/product/list/0?' + search;
-        goto(url)
-        
+        goto(url) 
     }
 
     onMount(() => {
@@ -35,7 +34,7 @@
         const tagsInUrl = urlParams.get('tags')
         const tags = tagsInUrl === null || tagsInUrl === "" ? [] : tagsInUrl.split(',')
 
-        filterParams.set({
+        criteria.set({
             priceFrom: urlParams.get('priceFrom'),
             priceTo: urlParams.get('priceTo'),
             category: urlParams.get('category'),
@@ -51,11 +50,11 @@
 </script>
 
 <main>
-    <div class="filters">
-        <PriceFilter searchParams={filterParams} isValid={isValid} />
-        <CategoryFilter searchParams={filterParams} isValid={isValid} />
-        <TagsFilter searchParams={filterParams} />
-        <Sorter searchParams={filterParams} />
+    <div class="criteria">
+        <PriceCriteria criteria={criteria} isValid={isValid} />
+        <CategoryCriteria searchParams={criteria} isValid={isValid} />
+        <TagsCriteria searchParams={criteria} />
+        <SortCriteria searchParams={criteria} />
         
         <button on:click={search} disabled={!isDataValid}>search</button>
     </div>
@@ -73,7 +72,7 @@
 </main>
 
 <style>
-    div.filters {
+    div.criteria {
         display: flex;
         flex-direction: column;
         border: 1px solid white;

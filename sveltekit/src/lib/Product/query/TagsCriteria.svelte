@@ -1,5 +1,5 @@
 <script>
-	import EditableTagList from "../component/EditableTagList.svelte";
+	import EditableTagList from "../../component/EditableTagList.svelte";
     export let searchParams;
 
     function updateFunc(tags) {
