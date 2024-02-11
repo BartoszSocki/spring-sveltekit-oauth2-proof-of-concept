@@ -15,6 +15,8 @@ a {
     --bg: #65789b;
     --border-primary: black;
     --product-height: 8rem;
+    --link-primary: #81d7ff;
+    --link-primary-hover: #4da6d0;
 }
 
 html {

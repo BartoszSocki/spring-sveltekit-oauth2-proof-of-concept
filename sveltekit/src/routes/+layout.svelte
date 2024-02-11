@@ -1,45 +1,46 @@
 <script>
     // import "@picocss/pico/css/pico.css"
     import "../style.css"
+    import NavLink from "../lib/component/NavLink.svelte";
 
     export let data;
-    $: isUserAuthenticated = data.isUserAuthenticated;
+    $: ({ isUserAuthenticated } = data);
 </script>
 
 <main>
     <nav>
         <ul>
             <li>
-                <a href="/">
+                <NavLink href="/">
                     <h1>Allegrissimo</h1>
-                </a>
+                </NavLink>
             </li>
             <li>
-                <a href="/product/list/0">search</a>
+                <NavLink href="/product/list/0">search</NavLink>
             </li>
             {#if isUserAuthenticated}
             <li>
-                <a href="/product/add">add new product</a>
+                <NavLink href="/product/add">add new product</NavLink>
             </li>
             <li>
-                <a href="/product/my/list/0">my products</a>
+                <NavLink href="/product/my/list/0">my products</NavLink>
             </li>
             <li>
-                <a href="/bought-product/list/0">bought products</a>
+                <NavLink href="/bought-product/list/0">bought products</NavLink>
             </li>
             {/if}
             <div class="space" />
             <li>
-                <a href="/cart">cart</a>
+                <NavLink href="/cart">cart</NavLink>
             </li>
             <li>
-                <a href="/profile">profile</a>
+                <NavLink href="/profile">profile</NavLink>
             </li>
             <li>
             {#if !isUserAuthenticated}
-                <a href="/login">sign in</a>
+                <NavLink href="/login">sign in</NavLink>
             {:else}
-                <a href="/logout">sign out</a>
+                <NavLink href="/logout">sign out</NavLink>
             {/if}
             </li>
         </ul>
@@ -53,18 +54,25 @@
     }
 
     main {
-        padding: 1rem;
+        padding-inline: 1rem;
         height: 100vh;
         width: clamp(40rem, 100%, 90rem);
         margin-inline: auto;
     }
+    
+    nav {
+        padding-block: 1rem;
+    }
 
     ul {
-        width: 100%;
         display: flex;
         flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+
+        width: 100%;
     }
-    
+
     h1 {
         margin: 0;
     }
