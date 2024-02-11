@@ -25,7 +25,7 @@
         border: 2px solid var(--border-primary);
         border-bottom: none;
 
-        height: var(--product-height);
+        /* height: var(--product-height); */
         
         padding: 1rem;
     }

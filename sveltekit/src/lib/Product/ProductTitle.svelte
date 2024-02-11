@@ -14,4 +14,8 @@
         font-weight: bold;
         color: #fff;
     }
+
+    .category {
+        font-style: italic;
+    }
 </style>

@@ -1,12 +1,12 @@
 <script>
 	import Price from "../component/Price.svelte";
 	import TagList from "../component/TagList.svelte"
-	import ProductQuantity from "./ProductQuantity.svelte";
 	import ProductTitle from "./ProductTitle.svelte";
 	import ProductScore from "./ProductScore.svelte";
+	import ProductDescription from "./ProductDescription.svelte";
 
 	export let product
-	const { name, category, price, quantity, productScore, tags } = product;
+	const { name, description, category, price, quantity, productScore, tags } = product;
 	const IMAGE_NOT_FOUND_URL = "/images/image-not-found.png";
 </script>
 
@@ -16,8 +16,8 @@
 	<!-- </div> -->
 	<div class="product__content">
 		<ProductTitle name={name} category={category} />
+		<ProductDescription description={description} />
 		<ProductScore score={productScore} />
-		<ProductQuantity quantity={quantity} />
 		<TagList tags={tags} />
 		<Price price={price} />
 	</div>
@@ -53,7 +53,7 @@
 
 	.product__cover__img {
 		object-fit: cover;
-		height: calc(var(--product-height) - 2rem);
+		height: calc(var(--product-height));
 		aspect-ratio: 1;
 	}
 </style>
