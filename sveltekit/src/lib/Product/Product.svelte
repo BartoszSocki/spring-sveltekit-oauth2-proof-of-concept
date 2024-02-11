@@ -1,46 +1,34 @@
 <script>
-	import FiveStarScore from "../component/FiveStarScore.svelte"
 	import Price from "../component/Price.svelte";
-	import TagList from "../component/TagList.svelte";
-	import ProductQuantity from "../component/ProductQuantity.svelte";
-	import ProductTitle from "../component/ProductTitle.svelte";
+	import TagList from "../component/TagList.svelte"
+	import ProductQuantity from "./ProductQuantity.svelte";
+	import ProductTitle from "./ProductTitle.svelte";
+	import ProductScore from "./ProductScore.svelte";
 
 	export let product
-	export let deleted = false
-
 	const { name, category, price, quantity, productScore, tags } = product;
+	const IMAGE_NOT_FOUND_URL = "/images/image-not-found.png";
 </script>
 
-<div class="wrapper">
-	<div class="img">
-		<img src="/images/image-not-found.png" alt={name} />
+<div class="product">
+	<div class="product__img">
+		<img src={IMAGE_NOT_FOUND_URL} alt={name} />
 	</div>
-	<div class="content">
-		<ProductTitle name={name} category={category} deleted={deleted} />
-
-		<div class="title">
-			{#if productScore.averageScore !== null}
-				<div class="product-score">
-					<FiveStarScore score={productScore.averageScore} />
-					<span class="reviews-count">({productScore.reviewsCount})</span>
-				</div>
-			{:else}
-				<div class="product-score"><i>No Reviews</i></div>
-			{/if}
-		</div>
-
+	<div class="product__content">
+		<ProductTitle name={name} category={category} />
+		<ProductScore score={productScore} />
 		<ProductQuantity quantity={quantity} />
 		<TagList tags={tags} />
-		<Price amount={price.amount} currency={price.currency} />
+		<Price price={price} />
 	</div>
 
-	<div class="add-to-cart">
+	<div class="product__cart">
 		<slot />
 	</div>
 </div>
 
 <style>
-	div.wrapper {
+	.product {
 		display: grid;
 		grid-template-columns: minmax(min-content, max-content) auto minmax(8rem, 10rem);
 		gap: 1rem;
@@ -49,26 +37,21 @@
 		border: 1px solid gray;
 	}
 
-    div.content {
+    .product__content {
         display: flex;
 		flex-direction: column;
 		gap: 1ch;
     }
 
-    img {
+	.product__cart {
+		align-self: center;
+	}
+
+    .product__img {
+		/* TODO: fix this mess */
         object-fit: cover;
         width: 12rem;
         height: 12rem;
     }
 
-	div.product-score {
-		font-size: 0.8rem;
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-	}
-
-	.add-to-cart {
-		align-self: center;
-	}
 </style>
