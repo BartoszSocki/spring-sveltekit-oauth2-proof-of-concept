@@ -59,4 +59,8 @@ public class ProductSpecifications {
                         criteriaBuilder.equal(criteriaBuilder.upper(path.get(Product_.CATEGORY).get(Category_.NAME)), category.toUpperCase()));
     }
 
+    public static ProductSpecification deleted(boolean deleted) {
+        return ProductSpecification.where((path, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(path.get(Product_.IS_DELETED), deleted));
+    }
+
 }
