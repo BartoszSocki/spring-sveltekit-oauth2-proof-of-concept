@@ -1,18 +1,20 @@
 package com.sockib.springresourceserver.service.product.impl;
 
+import com.sockib.springresourceserver.core.util.DtoConverter;
+import com.sockib.springresourceserver.domain.product.factory.ProductFactory;
 import com.sockib.springresourceserver.domain.product.factory.ProductSorterFactory;
 import com.sockib.springresourceserver.domain.product.factory.ProductSpecificationFactory;
 import com.sockib.springresourceserver.domain.product.query.ProductQueryCriteria;
 import com.sockib.springresourceserver.exception.PageSizeTooLargeException;
-import com.sockib.springresourceserver.model.dto.response.ProductResponseDto;
-import com.sockib.springresourceserver.core.util.DtoConverter;
 import com.sockib.springresourceserver.model.dto.converter.ProductDtoConverter;
 import com.sockib.springresourceserver.model.dto.request.AddProductRequestDto;
+import com.sockib.springresourceserver.model.dto.response.ProductResponseDto;
+import com.sockib.springresourceserver.model.entity.Category;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Tag;
+import com.sockib.springresourceserver.model.respository.CategoryRepository;
 import com.sockib.springresourceserver.model.respository.TagRepository;
 import com.sockib.springresourceserver.model.respository.product.ProductRepository;
-import com.sockib.springresourceserver.domain.product.factory.ProductFactory;
 import com.sockib.springresourceserver.service.product.ProductCrudService;
 import com.sockib.springresourceserver.service.product.ProductQueryService;
 import jakarta.transaction.Transactional;
@@ -27,14 +29,16 @@ import java.util.List;
 public class ProductServiceImpl implements ProductCrudService, ProductQueryService {
 
     private final static int MAX_PRODUCT_PAGE_SIZE = 10;
+    private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final TagRepository tagRepository;
     private final DtoConverter<Product, ProductResponseDto> productConverter;
 
-    public ProductServiceImpl(ProductRepository productRepository, TagRepository tagRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, TagRepository tagRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.tagRepository = tagRepository;
         this.productConverter = new ProductDtoConverter();
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -55,8 +59,11 @@ public class ProductServiceImpl implements ProductCrudService, ProductQueryServi
     @Override
     @Transactional
     public Product saveProduct(AddProductRequestDto addProductRequestDto) {
-        List<Tag> productTags = addProductRequestDto.getTags().stream().map(Tag::new).toList();
-        tagRepository.saveAll(productTags);
+//        List<Tag> productTags = addProductRequestDto.getTags().stream().map(Tag::new).toList();
+//        tagRepository.saveAll(productTags);
+//
+//        Category category = new Category(addProductRequestDto.getCategory());
+//        categoryRepository.save(category);
 
         var product = ProductFactory.create(addProductRequestDto);
 
