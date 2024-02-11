@@ -38,7 +38,6 @@ public class ProductSpecifications {
                         criteriaBuilder.between(criteriaBuilder.avg(path.get(Product_.PRODUCT_REVIEWS).get(ProductReview_.FIVE_STAR_SCORE)), lower, upper));
     }
 
-    // God forgive me for those sql sins, amen
     public static ProductSpecification tags(Set<String> tags) {
         if (tags == null || tags.isEmpty()) {
             return ProductSpecification.empty();
@@ -52,18 +51,6 @@ public class ProductSpecifications {
                 criteriaBuilder.in(root.get(Product_.TAGS).get(Tag_.NAME)).value(tags));
 
         return specification;
-//        return tags == null || tags.isEmpty() ? ProductSpecification.empty() : ProductSpecification.where((root, criteriaQuery, criteriaBuilder) -> {
-//            Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
-//            Root<Product> subqueryRoot = subquery.from(Product.class);
-//
-//            subquery.select(criteriaBuilder.count(subqueryRoot.get(Product_.ID)))
-//                    .where(
-//                            criteriaBuilder.equal(subqueryRoot.get(Product_.ID), root.get(Product_.ID)),
-//                            criteriaBuilder.in(subqueryRoot.get(Product_.TAGS).get(Tag_.NAME)).value(tags)
-//                    );
-//
-//            return criteriaBuilder.equal(subquery, tags.size());
-//        });
     }
 
     public static ProductSpecification category(String category) {
