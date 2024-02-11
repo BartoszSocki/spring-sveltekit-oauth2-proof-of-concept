@@ -40,8 +40,6 @@ class ProductServiceImplTest {
         productDto.setTags(tags.stream().toList());
 
         // when
-        // check if there is a constraint violation for tags or category
-        productCrudService.saveProduct(productDto);
         var persistedProduct = productCrudService.saveProduct(productDto);
 
         // then

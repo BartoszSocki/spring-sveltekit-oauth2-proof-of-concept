@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -28,13 +29,13 @@ public class ProductServiceImpl implements ProductCrudService, ProductQueryServi
 
     private final static int MAX_PRODUCT_PAGE_SIZE = 10;
     private final ProductRepository productRepository;
-    private final TagRepository tagRepository;
+    private final ProductFactory productFactory;
     private final DtoConverter<Product, ProductResponseDto> productConverter;
 
     public ProductServiceImpl(ProductRepository productRepository, TagRepository tagRepository) {
         this.productRepository = productRepository;
-        this.tagRepository = tagRepository;
         this.productConverter = new ProductDtoConverter();
+        this.productFactory = new ProductFactory(tagRepository, categoryRepository);
     }
 
     @Override
@@ -55,12 +56,9 @@ public class ProductServiceImpl implements ProductCrudService, ProductQueryServi
     @Override
     @Transactional
     public Product saveProduct(AddProductRequestDto addProductRequestDto) {
-        List<Tag> productTags = addProductRequestDto.getTags().stream().map(Tag::new).toList();
-        tagRepository.saveAll(productTags);
-
-        var product = ProductFactory.create(addProductRequestDto);
-
+        var product = productFactory.create(addProductRequestDto);
         var persistedProduct = productRepository.save(product);
+
         log.info("saved new product " + persistedProduct);
         return persistedProduct;
     }
