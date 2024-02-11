@@ -11,9 +11,9 @@
 </script>
 
 <div class="product">
-	<div class="product__img">
-		<img src={IMAGE_NOT_FOUND_URL} alt={name} />
-	</div>
+	<!-- <div class="product__cover"> -->
+	<img class="product__cover__img" src={IMAGE_NOT_FOUND_URL} alt={name} />
+	<!-- </div> -->
 	<div class="product__content">
 		<ProductTitle name={name} category={category} />
 		<ProductScore score={productScore} />
@@ -33,8 +33,7 @@
 		grid-template-columns: minmax(min-content, max-content) auto minmax(8rem, 10rem);
 		gap: 1rem;
 
-		padding: 1rem;
-		border: 1px solid gray;
+		height: 100%;
 	}
 
     .product__content {
@@ -43,15 +42,18 @@
 		gap: 1ch;
     }
 
-	.product__cart {
-		align-self: center;
-	}
-
-    .product__img {
-		/* TODO: fix this mess */
-        object-fit: cover;
-        width: 12rem;
-        height: 12rem;
+    .product__cover {
+		/* display: inline-block;
+		height: fit-content;
+		object-fit: cover; */
+		height: 100%;
+		aspect-ratio: 1;
+		/* padding-right: 100%; */
     }
 
+	.product__cover__img {
+		object-fit: cover;
+		height: calc(var(--product-height) - 2rem);
+		aspect-ratio: 1;
+	}
 </style>

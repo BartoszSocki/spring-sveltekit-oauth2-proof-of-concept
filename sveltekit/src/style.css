@@ -3,4 +3,20 @@
     margin: 0;
     box-sizing: border-box;
     font-family: sans-serif;
+    list-style: none;
+    list-style-position: inside;
+}
+
+a {
+    text-decoration: none;
+}
+
+:root {
+    --bg: #65789b;
+    --border-primary: black;
+    --product-height: 8rem;
+}
+
+html {
+    background: var(--bg);
 }

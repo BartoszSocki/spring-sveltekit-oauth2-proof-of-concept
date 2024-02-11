@@ -1,5 +1,6 @@
 <script>
-    import "@picocss/pico/css/pico.css"
+    // import "@picocss/pico/css/pico.css"
+    import "../style.css"
 
     export let data;
     $: isUserAuthenticated = data.isUserAuthenticated;
