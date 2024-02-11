@@ -3,13 +3,7 @@
     import { addToCart } from '$lib/shared/cart/cart.js'
 
     export let data;
-    // $: console.log(data)
-    $: products = data.data.searchProducts.content
-    // $: products = []
-
-    function addItemToCart(id) {
-        addToCart(id)
-    }
+    $: ({ products } = data);
 </script>
 
 <ul>
@@ -17,7 +11,7 @@
         {#each products as product (product.id)}
             <li>
                 <Product product={product}>
-                    <button on:click={() => addItemToCart(product.id)}>add to cart</button>
+                    <button on:click={() => addToCart(product.id)}>add to cart</button>
                 </Product>
             </li>
         {/each}

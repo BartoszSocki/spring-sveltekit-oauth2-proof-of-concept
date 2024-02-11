@@ -13,8 +13,8 @@
     const filterParams = writable({})
     const isValid = writable({})
 
-    $: isLastPage = data.data.searchProducts.isLastPage
-    $: isFirstPage = data.data.searchProducts.isFirstPage
+    // $: isLastPage = data.data.searchProducts
+    // $: isFirstPage = data.data.searchProducts
     $: prevUrl = $page.url.origin + '/product/list/' + (parseInt($page.params.page) - 1) + $page.url.search;
     $: nextUrl = $page.url.origin + '/product/list/' + (parseInt($page.params.page) + 1) + $page.url.search;
 
@@ -63,12 +63,12 @@
     <slot />
 
     <footer>
-        {#if !isFirstPage}
+        <!-- {#if !isFirstPage}
             <a href={prevUrl}>prev</a>
         {/if}
         {#if !isLastPage}
             <a href={nextUrl}>next</a>
-        {/if}
+        {/if} -->
     </footer>
 </main>
 
