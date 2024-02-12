@@ -61,7 +61,7 @@ class SearchableProductRepositoryImplTest {
 
         // when
         ProductSpecification specification = ProductSpecificationFactory.create(criteria);
-        Sorter<Product> sorter = ProductSorterFactory.noSort();
+        Sorter<Product> sorter = ProductSorterFactory.defaultSort();
 
         List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
 
@@ -81,7 +81,7 @@ class SearchableProductRepositoryImplTest {
 
         // when
         ProductSpecification specification = ProductSpecificationFactory.create(criteria);
-        Sorter<Product> sorter = ProductSorterFactory.noSort();
+        Sorter<Product> sorter = ProductSorterFactory.defaultSort();
 
         List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
 
@@ -101,7 +101,7 @@ class SearchableProductRepositoryImplTest {
 
         // when
         ProductSpecification specification = ProductSpecificationFactory.create(criteria);
-        Sorter<Product> sorter = ProductSorterFactory.noSort();
+        Sorter<Product> sorter = ProductSorterFactory.defaultSort();
 
         List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
 
@@ -125,7 +125,7 @@ class SearchableProductRepositoryImplTest {
 
         // when
         ProductSpecification specification = ProductSpecificationFactory.create(criteria);
-        Sorter<Product> sorter = ProductSorterFactory.noSort();
+        Sorter<Product> sorter = ProductSorterFactory.defaultSort();
 
         List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
 
@@ -145,7 +145,7 @@ class SearchableProductRepositoryImplTest {
 
         // when
         ProductSpecification specification = ProductSpecificationFactory.create(criteria);
-        Sorter<Product> sorter = ProductSorterFactory.noSort();
+        Sorter<Product> sorter = ProductSorterFactory.defaultSort();
 
         List<Product> products = productRepository.findProducts(specification, sorter, PageRequest.of(0, 10));
 

@@ -1,22 +1,26 @@
 package com.sockib.springresourceserver.domain.product.factory;
 
 import com.sockib.springresourceserver.domain.product.query.ProductQueryCriteria;
+import com.sockib.springresourceserver.domain.product.query.ProductSortCriteria;
 import com.sockib.springresourceserver.domain.product.query.ProductSorter;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.core.util.Sorter;
 
+import java.util.Optional;
+
 public class ProductSorterFactory {
 
     public static Sorter<Product> create(ProductQueryCriteria criteria) {
-        boolean isAscending = criteria.getSortCriteria().isAscending();
+        ProductSortCriteria sortCriteria = Optional.ofNullable(criteria.getSortCriteria())
+                .orElse(ProductSortCriteria.asc(ProductSortCriteria.Field.PRICE));
 
-        return switch (criteria.getSortCriteria().getSortField()) {
-            case SCORE -> ProductSorter.score(isAscending);
-            case PRICE -> ProductSorter.price(isAscending);
+        return switch (sortCriteria.getSortField()) {
+            case SCORE -> ProductSorter.score(sortCriteria.isAscending());
+            case PRICE -> ProductSorter.price(sortCriteria.isAscending());
         };
     }
 
-    public static Sorter<Product> noSort() {
+    public static Sorter<Product> defaultSort() {
         return ProductSorter.score(true);
     }
 

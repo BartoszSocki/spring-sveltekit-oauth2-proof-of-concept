@@ -1,11 +1,10 @@
 <script>
-    export let amount;
-    export let currency;
+    export let price;
 </script>
 
 <div class="price">
-    <span>{amount.toFixed(2)}</span>
-    <span>{currency}</span>
+    <span>{price.amount.toFixed(2)}</span>
+    <span>{price.currency}</span>
 </div>
 
 <style>

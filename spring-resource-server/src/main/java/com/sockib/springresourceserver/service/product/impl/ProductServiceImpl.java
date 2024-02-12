@@ -1,19 +1,20 @@
 package com.sockib.springresourceserver.service.product.impl;
 
+import com.sockib.springresourceserver.core.util.DtoConverter;
+import com.sockib.springresourceserver.domain.product.factory.ProductFactory;
 import com.sockib.springresourceserver.domain.product.factory.ProductSorterFactory;
 import com.sockib.springresourceserver.domain.product.factory.ProductSpecificationFactory;
 import com.sockib.springresourceserver.domain.product.query.ProductQueryCriteria;
 import com.sockib.springresourceserver.exception.PageSizeTooLargeException;
-import com.sockib.springresourceserver.model.dto.response.ProductResponseDto;
-import com.sockib.springresourceserver.core.util.DtoConverter;
 import com.sockib.springresourceserver.model.dto.converter.ProductDtoConverter;
 import com.sockib.springresourceserver.model.dto.request.AddProductRequestDto;
+import com.sockib.springresourceserver.model.dto.response.ProductResponseDto;
+import com.sockib.springresourceserver.model.entity.Category;
 import com.sockib.springresourceserver.model.entity.Product;
 import com.sockib.springresourceserver.model.entity.Tag;
 import com.sockib.springresourceserver.model.respository.CategoryRepository;
 import com.sockib.springresourceserver.model.respository.TagRepository;
 import com.sockib.springresourceserver.model.respository.product.ProductRepository;
-import com.sockib.springresourceserver.domain.product.factory.ProductFactory;
 import com.sockib.springresourceserver.service.product.ProductCrudService;
 import com.sockib.springresourceserver.service.product.ProductQueryService;
 import jakarta.transaction.Transactional;

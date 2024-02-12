@@ -1,15 +1,11 @@
 <script>
     export let name
     export let category
-    export let deleted = false
 </script>
 
 <span>
     <span class="name">{name}</span>
     <span class="category">{category}</span>
-    {#if deleted}
-        <span class="deleted">(deleted)</span>
-    {/if}
 </span>
 
 <style>
@@ -19,7 +15,7 @@
         color: #fff;
     }
 
-    .deleted {
-        color: red;
+    .category {
+        font-style: italic;
     }
 </style>

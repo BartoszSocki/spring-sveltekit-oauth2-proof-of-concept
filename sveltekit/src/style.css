@@ -3,4 +3,22 @@
     margin: 0;
     box-sizing: border-box;
     font-family: sans-serif;
+    list-style: none;
+    list-style-position: inside;
+}
+
+a {
+    text-decoration: none;
+}
+
+:root {
+    --bg: #65789b;
+    --border-primary: black;
+    --product-height: 8rem;
+    --link-primary: #81d7ff;
+    --link-primary-hover: #4da6d0;
+}
+
+html {
+    background: var(--bg);
 }
