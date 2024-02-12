@@ -20,7 +20,7 @@ public class ProductSorterFactory {
         };
     }
 
-    public static Sorter<Product> noSort() {
+    public static Sorter<Product> defaultSort() {
         return ProductSorter.score(true);
     }
 

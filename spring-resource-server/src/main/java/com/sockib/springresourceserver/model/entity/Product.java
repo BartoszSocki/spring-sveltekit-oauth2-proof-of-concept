@@ -75,16 +75,4 @@ public class Product extends WithCreationAndUpdateTimestamp {
     @Transient
     private ProductScore productScore;
 
-    @Transient
-    public void addTags(List<String> tags) {
-        this.tags = tags.stream()
-                .map(Tag::new)
-                .toList();
-    }
-
-    @Transient
-    public void addCategory(String category) {
-        this.category = new Category(category);
-    }
-
 }
